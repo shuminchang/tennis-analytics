@@ -80,3 +80,42 @@ docker compose down 會移除容器與網路，預設保留此 volume。
 - 容器內 SQL 查詢成功，版本為 16.15。
 
 尚未驗證從主機以密碼連線。
+
+## 後端
+
+使用 Java 21、Spring Boot 3.5.16。
+Maven Wrapper 固定使用 Maven 3.10.0。
+
+以下指令在 backend 目錄執行。
+
+啟動：
+
+```bash
+./mvnw spring-boot:run
+```
+
+本機預設使用 127.0.0.1:8081。
+可透過環境變數 SERVER_PORT 覆寫連接埠；
+正式部署規劃使用 8080。
+
+驗證 API：
+
+```bash
+curl -i http://127.0.0.1:8081/tennis/api/v1/health
+```
+
+預期 HTTP 200，內容為 {"status":"UP"}。
+此端點只檢查應用回應，尚未檢查資料庫。
+
+執行測試：
+
+```bash
+./mvnw test
+```
+
+測試會啟動獨立的應用並使用隨機連接埠。
+注入的 TestRestTemplate 已包含 context path，
+因此測試請求使用 /v1/health。
+
+設定檔位置為 src/main/resources/application.properties，
+注意 resources 結尾有 s。
