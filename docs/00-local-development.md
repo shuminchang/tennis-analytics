@@ -119,3 +119,26 @@ curl -i http://127.0.0.1:8081/tennis/api/v1/health
 
 設定檔位置為 src/main/resources/application.properties，
 注意 resources 結尾有 s。
+
+## 後端打包與執行
+
+在 backend 目錄執行完整建置：
+
+```bash
+./mvnw clean verify
+```
+
+直接執行產出的 JAR：
+
+```bash
+java -jar target/tennis-0.0.1-SNAPSHOT.jar
+```
+
+啟動前先停止占用相同連接埠的本專案開發服務。
+按 Ctrl + C 停止應用。
+
+已驗證：從 JAR 啟動後，GET /tennis/api/v1/health
+回傳 HTTP 200 與 {"status":"UP"}。
+
+目前前端、後端、資料庫均已分別啟動驗證；
+尚未完成前後端串接及後端資料庫連線。
