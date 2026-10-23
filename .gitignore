@@ -1,0 +1,26 @@
+# Frontend dependencies and build output
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# Java build output
+target/
+build/
+.gradle/
+*.class
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Logs
+*.log
+
+# Editor and operating system files
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
