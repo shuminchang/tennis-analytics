@@ -17,4 +17,6 @@
 
 協作方式更新：文件新增與修改由 agent 處理；進入程式碼、SQL 或實際資料庫操作時，恢復使用者操作的逐步教學。
 
-2026-10-25 更新：後端 JDBC 實際連線與全部兩個測試已由使用者執行通過；設定及 Docker 排錯見本機開發速查與完整手冊。測試目前依賴本機 PostgreSQL，尚未完成測試隔離或 migration。
+2026-10-25 更新：後端 JDBC 實際連線與全部兩個測試已由使用者執行通過；設定及 Docker 排錯見本機開發速查與完整手冊。此為當時本機連線驗證；後續已改為下述 Testcontainers 測試。
+
+Testcontainers 階段：兩個測試已在未提供 DB_URL、DB_USERNAME、DB_PASSWORD 的情況下通過，使用獨立 PostgreSQL 測試容器，仍需 Docker。開發應用仍使用原連線變數；尚未加入 migration 或建立業務表。

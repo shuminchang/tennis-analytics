@@ -3,11 +3,13 @@ package com.shuminapp.tennis;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@Import(TestDatabaseConfiguration.class)
 class DatabaseConnectionTest {
 
     @Autowired
@@ -25,7 +27,7 @@ class DatabaseConnectionTest {
             Integer.class
         );
 
-        assertThat(database).isEqualTo("tennis");
+        assertThat(database).isEqualTo("tennis_test");
         assertThat(result).isEqualTo(1);
     }
 

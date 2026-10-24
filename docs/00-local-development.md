@@ -86,7 +86,8 @@ docker compose down 會移除容器與網路，預設保留此 volume。
 使用 Java 21、Spring Boot 3.5.16。
 Maven Wrapper 固定使用 Maven 3.10.0。
 
-啟動、測試與含測試的建置前，先確認 Docker Desktop 可用及 db 容器健康。
+啟動開發應用前，先確認 Docker Desktop 可用及 Compose 的 db 容器健康。
+測試改用 Testcontainers，只需 Docker 可用，不需 Compose 的 db 或下列開發連線變數。
 在要執行後端的同一個 Bash 終端機設定：
 
 ```bash
@@ -130,14 +131,25 @@ curl -i http://127.0.0.1:8081/tennis/api/v1/health
 
 目前共兩個測試，使用者已驗證 2 tests、0 failures、0 errors。
 HealthControllerTest 啟動獨立應用並使用隨機連接埠；
-DatabaseConnectionTest 不啟動 HTTP，透過 JdbcTemplate 實際查詢本機 PostgreSQL。
+DatabaseConnectionTest 不啟動 HTTP，透過 JdbcTemplate 實際查詢 Testcontainers 的 tennis_test。
+兩個測試都以 @Import 載入 TestDatabaseConfiguration，容器由 Spring 管理生命週期，
+@ServiceConnection 提供動態連接埠與帳密，不使用開發資料 volume。
 單獨執行連線測試：
 
 ```bash
 ./mvnw -Dtest=DatabaseConnectionTest test
 ```
 
-目前測試依賴本機資料庫及上述環境變數，尚未完成隔離的測試環境。
+2026-10-25 使用者以以下指令驗證，未提供三個 DB_* 變數仍為 2 tests、0 failures、0 errors：
+
+```bash
+env -u DB_URL -u DB_USERNAME -u DB_PASSWORD ./mvnw test
+```
+
+env -u 只影響該次子程序，不清除目前 shell 的變數。
+測試仍需可用的 Docker；初次可能下載 PostgreSQL 與輔助映像。
+兩個測試的 WebEnvironment 不同，不能假設共用同一 Spring context 或同一個容器。
+目前未另做停止 Compose db 後的驗證，也未驗證 CI 環境。
 應用啟動成功不等於資料庫連線成功；連線測試才實際驗證查詢。
 注入的 TestRestTemplate 已包含 context path，
 因此測試請求使用 /v1/health。
