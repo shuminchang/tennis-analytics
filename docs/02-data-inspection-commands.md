@@ -1629,3 +1629,63 @@ git status --short
 `git diff --check` 正常時沒有輸出。新增且未追蹤的 `docs/04-match-inspection-commands.md` 不會出現在一般 git diff，需直接開啟檢視。這些指令不暫存或提交。
 
 階段 1 尚未完成；接下來確認賽事納入範圍、未知球員、品質儲存與最終欄位對照／DDL。若既有探索已留有級別分布，先讀既有結果，只有缺少結果或需要新分類才再掃描。排名預期筆數仍非實際匯入成果。
+
+## 賽事範圍、球員身分與排名涵蓋補充檢查（2026-10-24）
+
+本輪由使用者授權 agent 執行並提交。前後端及資料庫工作仍恢復逐步教學。
+完整結果、品質處理方向與待辦見 [檢查交接](06-data-inspection-handoff.md)。
+原始 CSV 未修改，未建立資料表或匯入資料。
+
+### 重現指令
+
+工作目錄：`/home/shumin/tennis-analytics`。以下是重現方式，已驗證的資料不需再次執行。
+
+```bash
+cd /home/shumin/tennis-analytics
+python3 scripts/data/inspect_scope_identity.py \
+  --data-root /home/shumin/tennis-sackmann-archive \
+  --scope docs/05-tournament-scope.md > /tmp/tennis-inspection.json
+```
+
+腳本僅使用 Python 標準函式庫；檢查快照、來源追蹤檔修改狀態與檔案雜湊，
+再檢查賽事例外、名稱候選、生日對照、排名日期涵蓋與 WTA tours。
+不修改 CSV，也不連線資料庫。遇到快照不符或規則清單不符會停止，
+應先審查新版本差異，不要為了通過而直接改預期數字。
+
+本輪先完成全量補充檢查，再新增 2023 A 級別 Finals 例外；
+規則變動後只重驗受影響的比賽與身分報告，不重掃數百萬排名列：
+
+```bash
+python3 scripts/data/inspect_scope_identity.py \
+  --data-root /home/shumin/tennis-sackmann-archive \
+  --scope docs/05-tournament-scope.md \
+  --skip-rankings > /tmp/tennis-scope-identity.json
+```
+
+最終保存 [賽事身分報告](reports/scope-identity.json) 與先前完成的
+[排名涵蓋報告](reports/ranking-coverage.json)。完整執行時後者內容位於各巡迴的
+`ranking_coverage`、`tours_values`、`tours_invalid_examples` 欄位，
+輸入雜湊位於 `input_sha256`；兩份報告的分開保存不代表排名重新掃描。
+
+### 結果與排錯
+
+- 104 個賽事例外鍵全部通過；2023 ATP Finals 存在於 A，而非 F。
+- ATP 分類 INCLUDE/EXCLUDE/REVIEW 為 199290/92/7；WTA 為 89882/587/71713。
+- 主檔生日晚於賽事日期：ATP 141 場、WTA 24 場，不自行修改來源身分。
+- ATP Unknown 占位 ID 涉及 90 場、93 次角色出現；角色數不等於場數。
+- WTA 1968 檔中的 Valencia 是 5 場，與 Port Elizabeth 16 場合計 21，已更正附錄表格。
+- 排名不同日期數 ATP 2333、WTA 2179；WTA tours 缺值 1074709，零值 111434。
+- 全部數字是探索結果；尚未套用所有品質規則，不可寫成已匯入成果。
+
+### 提交檢查方式
+
+```bash
+git diff --check
+git diff --stat
+git status --short
+```
+
+未追蹤的新檔不會出現在一般 `git diff`，需讀取檔案並納入暫存後，
+用 `git diff --cached` 審查將提交的內容；它與 `git diff` 的比較範圍不同。
+本輪由 agent 依授權完成暫存與 commit；沒有推送或部署。
+下一步為欄位保存與品質標記設計，開始資料庫工作時回到每次一個可驗證小步驟。
