@@ -227,3 +227,18 @@ env -u DB_URL -u DB_USERNAME -u DB_PASSWORD ./mvnw clean verify
 前文兩個測試為早期階段紀錄，當前案例數以本節為準。
 後續已統一 JUnit 5 匯入與 COUNT 的 Long 型別，並重驗球員表 12 個案例通過。
 14 個案例與 JAR 建置紀錄為修正前驗收；修正後只重跑受影響的球員表測試。
+
+
+## V2 排名表驗收（2026-10-25）
+
+V2__create_rankings.sql 已在 Testcontainers 中與 V1 依序套用成功。
+目前整套為 24 個案例（球員 12、排名 10、連線 1、健康檢查 1）。
+使用者執行移除三個 DB_* 變數的 ./mvnw clean verify 全數通過，並完成 JAR repackage。
+前文 14 個案例為 V1 階段紀錄；本次未驗證新 JAR 啟動或開發資料庫套用 V2。
+單獨驗證排名表可在 backend 執行：
+
+```bash
+env -u DB_URL -u DB_USERNAME -u DB_PASSWORD ./mvnw -Dtest=RankingsSchemaTest test
+```
+
+預期 10 個案例通過。測試資料隨交易回滾，未匯入來源排名資料。
