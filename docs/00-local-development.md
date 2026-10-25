@@ -258,3 +258,20 @@ env -u DB_URL -u DB_USERNAME -u DB_PASSWORD ./mvnw -Dtest=MatchesSchemaTest test
 
 預期 24 個案例通過。這些為測試容器中的人工測試資料，並非原始資料匯入。
 尚未驗證開發資料庫套用 V3 或執行本次新 JAR；品質排除與匯入流程尚未實作。
+
+
+## V4 來源登錄表驗收（2026-10-25）
+
+V1～V4 已在 Testcontainers 依序套用成功。
+最新整套測試共 62 個案例（球員 12、排名 10、比賽 24、來源登錄 14、連線 1、健康檢查 1）。
+使用者在 backend 執行移除 DB_* 的 ./mvnw clean verify 通過，完成 JAR 建置與 repackage。
+較早 48 個案例為 V3 階段結果，本節為最新驗收。
+單獨驗證來源登錄：
+
+```bash
+cd /home/shumin/tennis-analytics/backend
+env -u DB_URL -u DB_USERNAME -u DB_PASSWORD ./mvnw -Dtest=SourceRegistrySchemaTest test
+```
+
+預期 14 個案例通過。尚未驗證開發資料庫套用 V4、新 JAR 啟動或真實檔案備份。
+測試使用人工資料，不表示已完成來源登錄程式或正式資料匯入。
