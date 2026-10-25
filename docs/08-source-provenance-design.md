@@ -150,3 +150,52 @@ agent 已核對 SQL 與測試，未代為重跑測試。
 未驗證開發資料庫套用 V5、新 JAR 啟動或實際資料匯入。
 CHECK 只保證欄位組合，不保證狀態轉移、重試冪等、程序中斷恢復或發布。
 下一步收斂來源對照的跨快照一致性，再安排後續 migration。
+
+
+## V6 球員來源對照設計與表格實作
+
+player_sources 連結一次匯入執行、一份球員來源檔的一筆 CSV 紀錄，以及正式 players 複合鍵。
+主鍵採 (run_id, source_file_id, record_number)；同次執行同來源列只能對應一位球員，
+但多個來源列可以對應同一球員，相同位置也可在重試的新 run 再記錄。
+
+| 欄位 | 型別方向 | 意義 |
+| --- | --- | --- |
+| run_id | bigint，必填 | 匯入執行 |
+| snapshot_id | bigint，必填 | run 與檔案必須共用的快照 |
+| source_file_id | bigint，必填 | 來源檔案 |
+| record_number | bigint，必填且大於零 | 不含標頭的 CSV 紀錄序號 |
+| tour | varchar(3)，必填 | 檔案與正式球員共用的巡迴 |
+| data_kind | text，必填，預設 PLAYERS | 固定為 PLAYERS，用於複合外鍵 |
+| player_id | integer，必填 | 正式球員 ID |
+
+在 import_runs 增加 UNIQUE (id, snapshot_id)，source_files 增加
+UNIQUE (id, snapshot_id, tour, data_kind)，供複合外鍵引用。
+這兩個限制不增加來源的業務唯一性（id 本已唯一），但讓資料庫可驗證整組關聯；
+會增加索引成本，僅在較小的執行／檔案登錄表使用，後續來源對照可重用。
+不修改已提交 V4/V5，由 V6 使用 ALTER TABLE 增加限制。
+
+player_sources 的 (run_id, snapshot_id) 必須參照同一 import_runs 列；
+(source_file_id, snapshot_id, tour, data_kind) 必須參照同一 source_files 列；
+(tour, player_id) 必須參照 players。所有欄位 NOT NULL，避免部分 NULL 跳過複合外鍵檢查。
+data_kind CHECK 固定 PLAYERS，因此不能拿排名／比賽檔當球員來源；
+共用 snapshot_id 與 tour 可阻擋混用快照及巡迴。
+
+資料庫只限制 record_number > 0；不能用跨表 CHECK 驗證它小於等於 source_files.record_count。
+上限、實際 CSV 內容是否對應球員、雜湊及 run 是否仍允許寫入，由後續匯入流程驗證。
+來源登錄完成後禁止應用任意修改內容／紀錄數；實際權限與寫入流程另行實作。
+品質隔離列可能沒有合法球員，不能硬塞此對照表；留待 quality_issues 保存來源位置。
+對照存在也不代表球員已通過所有品質規則或資料已發布。
+
+索引規劃 (tour, player_id) 供球員反查來源，source_file_id 供檔案反查及外鍵維護。
+主鍵以 run_id 開頭可支援執行批次查詢，不重複增加相同前綴索引。
+V6 與球員來源對照測試已完成；實際 CSV 驗證與來源對照寫入流程尚未實作。
+
+
+## V6 實際驗收（2026-10-25）
+
+使用者單獨執行 PlayerSourcesSchemaTest，11 個案例通過；
+整套移除 DB_* 的 clean verify 共 91 個案例通過，JAR 建置與 repackage 成功。
+agent 已核對 SQL 與測試，沒有代改程式或重跑測試。
+實際 CSV 內容、紀錄序號上限、來源不可變性及匯入狀態的寫入控制仍待驗證。
+未驗證開發資料庫套用 V6 或執行本次新 JAR，也未匯入真實資料。
+下一步為排名來源對照，重用 V6 的父表複合唯一限制，保留一致重複排名的全部來源位置。
