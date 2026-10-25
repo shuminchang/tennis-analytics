@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.List;
 import java.util.Objects;
 
 public final class SourceFileInspector {
@@ -15,9 +14,9 @@ public final class SourceFileInspector {
 
     public InspectionResult inspect(
             Path snapshotRoot,
-            Path relativePath,
-            List<String> expectedHeader
+            Path relativePath
     ) throws IOException {
+        SourceFileType type = SourceFileType.fromPath(relativePath);
         Path file = pathResolver.resolve(snapshotRoot, relativePath);
 
         BasicFileAttributes before = Files.readAttributes(
@@ -25,7 +24,9 @@ public final class SourceFileInspector {
         );
 
         String sha256 = hasher.sha256(file);
-        long recordCount = csvInspector.countRecords(file, expectedHeader);
+        long recordCount = csvInspector.countRecords(
+                file, type.expectedHeader()
+        );
 
         Path checkedFile = pathResolver.resolve(snapshotRoot, relativePath);
 
@@ -44,6 +45,7 @@ public final class SourceFileInspector {
 
         return new InspectionResult(
                 relativePath.normalize(),
+                type,
                 sha256,
                 before.size(),
                 recordCount
@@ -52,6 +54,7 @@ public final class SourceFileInspector {
 
     public record InspectionResult(
             Path relativePath,
+            SourceFileType type,
             String sha256,
             long byteSize,
             long recordCount

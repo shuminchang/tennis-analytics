@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,8 +16,17 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class SourceFileInspectorTest {
 
-    private static final List<String> HEADER = List.of("id", "name");
-    private static final String CONTENT = "id,name\n1,Alice\n2,Bob\n";
+    private static final Path RANKINGS =
+            Path.of("atp/atp_rankings_current.csv");
+
+    private static final String RANKING_HEADER =
+            "ranking_date,rank,player,points\n";
+
+    private static final String RANKING_CONTENT =
+            RANKING_HEADER + "20260105,1,100001,100\n";
+
+    private static final String RANKING_SHA256 =
+            "ec8cbd5cb820c7ed90fa73107a72b194bb67659046947942fb93720bc3507a3a";
 
     @TempDir
     Path root;
@@ -25,136 +34,155 @@ class SourceFileInspectorTest {
     private final SourceFileInspector inspector = new SourceFileInspector();
 
     @Test
-    void returnsCompleteInspectionResult() throws IOException {
-        writeCsv(CONTENT);
+    void returnsCompleteTypedResult() throws IOException {
+        writeCsv(RANKINGS, RANKING_CONTENT);
 
-        var result = inspector.inspect(
-                root, Path.of("atp/./players.csv"), HEADER
-        );
+        var result = inspector.inspect(root, RANKINGS);
 
-        assertThat(result.relativePath())
-                .isEqualTo(Path.of("atp/players.csv"));
-        assertThat(result.sha256()).isEqualTo(
-                "2e9f445b06e5ca0fb9638798078f6a239ea1fcace10e1dcfb70ceb3a3322ad44"
-        );
-        assertThat(result.byteSize()).isEqualTo(22L);
-        assertThat(result.recordCount()).isEqualTo(2L);
-    }
-
-    @Test
-    void measuresUtf8BytesAndCountsMultilineRecord() throws IOException {
-        writeCsv("id,name\n1,\"王,\n小明\"\n");
-
-        var result = inspector.inspect(
-                root, Path.of("atp/players.csv"), HEADER
-        );
-
-        assertThat(result.sha256()).isEqualTo(
-                "7ffd65f5bf5524b75b067f2643653bf01ba4319c22af93dfb463dc1ab08f2de3"
-        );
-        assertThat(result.byteSize()).isEqualTo(24L);
+        assertThat(result.relativePath()).isEqualTo(RANKINGS);
+        assertThat(result.type()).isEqualTo(SourceFileType.ATP_RANKINGS);
+        assertThat(result.type().tour()).isEqualTo("ATP");
+        assertThat(result.type().dataKind()).isEqualTo("RANKINGS");
+        assertThat(result.sha256()).isEqualTo(RANKING_SHA256);
+        assertThat(result.byteSize()).isEqualTo(54L);
         assertThat(result.recordCount()).isEqualTo(1L);
     }
 
-    @Test
-    void acceptsHeaderOnlyFile() throws IOException {
-        writeCsv("id,name\n");
+    @ParameterizedTest
+    @CsvSource({
+            "atp/atp_players.csv, ATP_PLAYERS",
+            "wta/wta_players.csv, WTA_PLAYERS",
+            "atp/atp_matches_2024.csv, ATP_MATCHES",
+            "wta/wta_matches_2024.csv, WTA_MATCHES",
+            "atp/atp_rankings_current.csv, ATP_RANKINGS",
+            "wta/wta_rankings_current.csv, WTA_RANKINGS"
+    })
+    void acceptsHeaderOnlyFileForEachType(
+            String filename,
+            SourceFileType expectedType
+    ) throws IOException {
+        Path path = Path.of(filename);
+        writeCsv(path, String.join(",", expectedType.expectedHeader()) + "\n");
 
-        var result = inspector.inspect(
-                root, Path.of("atp/players.csv"), HEADER
-        );
+        var result = inspector.inspect(root, path);
 
-        assertThat(result.sha256()).isEqualTo(
-                "40d6bfdc74eae2ed68a97137ce414fa4ca6de1b3831cfd9a73c4622d8a8942c1"
-        );
-        assertThat(result.byteSize()).isEqualTo(8L);
+        assertThat(result.type()).isEqualTo(expectedType);
+        assertThat(result.relativePath()).isEqualTo(path);
         assertThat(result.recordCount()).isZero();
     }
 
     @Test
-    void returnsSameResultForUnchangedFile() throws IOException {
-        writeCsv(CONTENT);
-        Path relativePath = Path.of("atp/players.csv");
+    void measuresUtf8BytesAndCountsMultilineRecord() throws IOException {
+        Path path = Path.of("atp/atp_players.csv");
+        writeCsv(
+                path,
+                "player_id,name_first,name_last,hand,dob,ioc,height,wikidata_id\n"
+                        + "100001,\"王,\n小明\",Test,R,20000101,TPE,180,Q1\n"
+        );
 
-        var first = inspector.inspect(root, relativePath, HEADER);
-        var second = inspector.inspect(root, relativePath, HEADER);
+        var result = inspector.inspect(root, path);
+
+        assertThat(result.type()).isEqualTo(SourceFileType.ATP_PLAYERS);
+        assertThat(result.sha256()).isEqualTo(
+                "c148ff51c71f169b2c7991a5083cec41657e88bc6aa5d65ff0cc8665f4a5cd09"
+        );
+        assertThat(result.byteSize()).isEqualTo(111L);
+        assertThat(result.recordCount()).isEqualTo(1L);
+    }
+
+    @Test
+    void returnsSameResultForUnchangedFile() throws IOException {
+        writeCsv(RANKINGS, RANKING_CONTENT);
+
+        var first = inspector.inspect(root, RANKINGS);
+        var second = inspector.inspect(root, RANKINGS);
 
         assertThat(second).isEqualTo(first);
     }
 
     @Test
     void preservesLogicalPathOfInternalSymbolicLink() throws IOException {
-        writeCsv(CONTENT);
-        Files.createSymbolicLink(
-                root.resolve("players-link.csv"),
-                Path.of("atp/players.csv")
-        );
+        Path target = writeCsv(Path.of("stored/rankings.csv"), RANKING_CONTENT);
+        Files.createDirectories(root.resolve("atp"));
+        Files.createSymbolicLink(root.resolve(RANKINGS), target.toAbsolutePath());
 
-        var result = inspector.inspect(
-                root, Path.of("players-link.csv"), HEADER
-        );
+        var result = inspector.inspect(root, RANKINGS);
 
-        assertThat(result.relativePath())
-                .isEqualTo(Path.of("players-link.csv"));
-        assertThat(result.sha256()).isEqualTo(
-                "2e9f445b06e5ca0fb9638798078f6a239ea1fcace10e1dcfb70ceb3a3322ad44"
-        );
-        assertThat(result.recordCount()).isEqualTo(2L);
+        assertThat(result.relativePath()).isEqualTo(RANKINGS);
+        assertThat(result.type()).isEqualTo(SourceFileType.ATP_RANKINGS);
+        assertThat(result.sha256()).isEqualTo(RANKING_SHA256);
     }
 
     @Test
     void rejectsSymbolicLinkOutsideSnapshot() throws IOException {
         Path snapshot = Files.createDirectory(root.resolve("snapshot"));
-        Path outside = Files.writeString(
-                root.resolve("outside.csv"),
-                CONTENT,
-                StandardCharsets.UTF_8
-        );
+        Path outside = writeCsv(Path.of("outside.csv"), RANKING_CONTENT);
+        Files.createDirectories(snapshot.resolve("atp"));
         Files.createSymbolicLink(
-                snapshot.resolve("linked.csv"),
+                snapshot.resolve(RANKINGS),
                 outside.toAbsolutePath()
         );
 
-        assertThrows(
+        IllegalArgumentException error = assertThrows(
                 IllegalArgumentException.class,
-                () -> inspector.inspect(
-                        snapshot, Path.of("linked.csv"), HEADER
-                )
+                () -> inspector.inspect(snapshot, RANKINGS)
         );
+
+        assertThat(error.getMessage()).contains("outside the snapshot root");
     }
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "id,name\n1\n",
-            "id,name\n1,\"unfinished"
+            "20260105,1\n",
+            "20260105,1,100001,\"unfinished"
     })
-    void propagatesCsvInspectionFailure(String content) throws IOException {
-        writeCsv(content);
+    void propagatesCsvInspectionFailure(String row) throws IOException {
+        writeCsv(RANKINGS, RANKING_HEADER + row);
 
         assertThrows(
                 IOException.class,
-                () -> inspector.inspect(
-                        root, Path.of("atp/players.csv"), HEADER
-                )
+                () -> inspector.inspect(root, RANKINGS)
         );
     }
 
     @Test
-    void reportsMissingFile() {
+    void reportsMissingSupportedFile() {
         assertThrows(
                 IOException.class,
-                () -> inspector.inspect(
-                        root, Path.of("missing.csv"), HEADER
-                )
+                () -> inspector.inspect(root, RANKINGS)
         );
     }
 
-    private void writeCsv(String content) throws IOException {
-        Path directory = Files.createDirectories(root.resolve("atp"));
-        Files.writeString(
-                directory.resolve("players.csv"),
-                content,
-                StandardCharsets.UTF_8
+    @Test
+    void rejectsAtpHeaderInWtaRankingFile() throws IOException {
+        Path path = Path.of("wta/wta_rankings_current.csv");
+        writeCsv(path, RANKING_CONTENT);
+
+        IOException error = assertThrows(
+                IOException.class,
+                () -> inspector.inspect(root, path)
         );
+
+        assertThat(error.getMessage())
+                .contains("header names or order do not match");
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "atp/atp_matches_qual_chall_2024.csv",
+            "atp/./atp_rankings_current.csv",
+            "atp/wta_rankings_current.csv"
+    })
+    void rejectsUnsupportedSourcePath(String filename) {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> inspector.inspect(root, Path.of(filename))
+        );
+    }
+
+    private Path writeCsv(Path relativePath, String content) throws IOException {
+        Path file = root.resolve(relativePath);
+        Files.createDirectories(file.getParent());
+        return Files.writeString(file, content, StandardCharsets.UTF_8);
     }
 }
