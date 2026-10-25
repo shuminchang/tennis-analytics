@@ -20,3 +20,12 @@
 2026-10-25 更新：後端 JDBC 實際連線與全部兩個測試已由使用者執行通過；設定及 Docker 排錯見本機開發速查與完整手冊。此為當時本機連線驗證；後續已改為下述 Testcontainers 測試。
 
 Testcontainers 階段：兩個測試已在未提供 DB_URL、DB_USERNAME、DB_PASSWORD 的情況下通過，使用獨立 PostgreSQL 測試容器，仍需 Docker。開發應用仍使用原連線變數；尚未加入 migration 或建立業務表。
+
+
+## V1 實作進度（2026-10-25）
+
+Flyway V1 球員表已在獨立測試容器套用成功；球員表 12 個案例、整套 14 個案例通過，
+clean verify 與 JAR 打包成功。尚未驗證開發資料庫套用、啟動新 JAR 或匯入來源資料。
+其餘來源保存、品質、比賽及排名結構仍為設計草案；前文「未建立業務表」是較早進度。
+驗收後已統一 JUnit 5 的 assertThrows 與 Long 型別的 COUNT 結果；使用者重驗 PlayersSchemaTest，12 個案例全通過。
+詳見 [完整教學手冊](完整教學步驟與指令.md)。

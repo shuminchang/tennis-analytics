@@ -206,3 +206,24 @@ docker compose up -d --wait db
 
 接著在原先保有 DB_* 變數的終端機，單獨連線測試通過，再執行全部兩個測試亦通過。
 若重啟後仍異常，依實際錯誤查日誌，不直接刪除容器資料或重新初始化。
+
+
+## Flyway 與球員表驗收（2026-10-25）
+
+已加入 Flyway core/PostgreSQL 模組 11.7.2。
+V1__create_players.sql 已在 Testcontainers 中成功建立 players；
+尚未驗證套用至 Compose 開發資料庫，未匯入來源資料。
+啟動正式應用現在會自動執行尚未套用的 migration，不再只是驗證連線。
+
+目前測試共 14 個案例（連線 1、健康檢查 1、球員表 12），
+使用者已執行以下完整建置成功：
+
+```bash
+cd /home/shumin/tennis-analytics/backend
+env -u DB_URL -u DB_USERNAME -u DB_PASSWORD ./mvnw clean verify
+```
+
+已確認新 JAR 打包與 repackage 成功，尚未實際啟動該 JAR。
+前文兩個測試為早期階段紀錄，當前案例數以本節為準。
+後續已統一 JUnit 5 匯入與 COUNT 的 Long 型別，並重驗球員表 12 個案例通過。
+14 個案例與 JAR 建置紀錄為修正前驗收；修正後只重跑受影響的球員表測試。
