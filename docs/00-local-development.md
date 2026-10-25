@@ -306,3 +306,16 @@ env -u DB_URL -u DB_USERNAME -u DB_PASSWORD ./mvnw -Dtest=PlayerSourcesSchemaTes
 
 預期 11 個案例通過。未驗證真實 CSV 內容、紀錄序號上限或執行匯入。
 未驗證開發資料庫套用 V6 或本次新 JAR 啟動；前段 80 個案例為 V5 歷史進度。
+
+## 本輪 migration 驗收與交接（2026-10-25）
+
+依使用者最新授權，agent 已完成 V7 排名來源、V8 比賽來源、V9 品質問題與影響用途、
+V10 賽事判斷；只在獨立 Testcontainers 驗證，未套用開發資料庫或匯入真實資料。
+完整 clean verify：158 tests、0 failures、0 errors、0 skipped，JAR 建置及 repackage 成功。
+包含新建資料庫套用 V1～V10，以及有人工球員／比賽資料的 V6→V10 升級、
+Flyway validate 和再次 migrate 無變更驗證。這不是正式資料量的效能或備份還原測試。
+
+目前資料保存結構已完成本輪 migration 範圍；下一步為匯入程式，恢復使用者操作的教學模式。
+先定稿候選資料庫、發布／回復邊界及版本化規則，再以來源檔案驗證／登錄的一個完整變更開始。
+CSV 解析、雜湊驗證、隔離／分類規則執行、統計資格、重試及發布仍未實作。
+帳號與 Elo 等功能表留待相關功能需求定稿，並非本輪來源保存 migration 的未完成項。

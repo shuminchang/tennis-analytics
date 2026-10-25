@@ -1,6 +1,6 @@
 # 來源追溯與品質紀錄：實體設計
 
-日期：2026-10-25。V4 的來源登錄表已在測試容器實作並驗證；其餘匯入與品質流程仍為設計。
+日期：2026-10-25。V4～V10 的來源、執行、品質與分類保存表已在測試容器驗證；匯入與品質判定流程尚未實作。
 先建立來源快照與檔案登錄，再處理匯入批次、來源對照及品質問題。
 不更動已提交的 V1～V3，也不直接匯入資料。
 
@@ -210,3 +210,67 @@ V8 新增 matches 的 (id, tour) 唯一限制供複合外鍵使用，不修改 V
 排名衝突隔離列不建立虛構正式排名或來源對照。紀錄上限與內容一致性仍由匯入器檢查。
 排名來源 12、比賽來源 11 個專屬測試全通過；此處是單獨測試結果，未宣稱全套驗收。
 測試使用人工資料與 Testcontainers；未操作開發資料庫或匯入 CSV。
+
+## V9：品質問題與影響用途
+
+quality_issues 只參照 run 與原始來源位置，不要求 players/rankings/matches 已存在。
+因此無效 ID、缺少球員參照、排名衝突等隔離列也能保存。
+與來源對照相同，以複合外鍵驗證 run/file 快照及檔案巡迴／種類。
+
+| 欄位／限制 | 決定 |
+| --- | --- |
+| id | bigint 內部主鍵 |
+| run_id、snapshot_id、source_file_id、record_number、tour、data_kind | 必填；紀錄序號大於零 |
+| rule_code | 必填非空白；版本透過 run 的品質／轉換規則雜湊追溯 |
+| field_name | 必填；空字串表示整列，其他值不得全空白 |
+| role | RECORD、PLAYER、WINNER、LOSER，預設 RECORD |
+| action | FLAG：保留正式資料並標記；QUARANTINE：隔離來源列 |
+| reason | 必填非空白原因 |
+| evidence | 可空 JSON object，補充少量原值；匯入器須以字串保留原值，不取代 CSV |
+| status | OPEN（預設）、RESOLVED、DISMISSED |
+| resolution_note、resolved_at | OPEN 時皆 NULL；另兩狀態需非空白說明與不早於 created_at 的時間 |
+| 唯一限制 | 同 run/file/record/rule/field/role 不重複；不同欄位、角色、規則可並存 |
+
+quality_issue_impacts 以 (issue_id, metric_code) 為主鍵，保存同一問題影響的多種用途，
+例如 WIN_LOSS、H2H、ELO。metric_code 必填非空白，代碼字典與規則內容一同版本化；
+本輪不宣稱這些指標的計算語意已定稿。外鍵不連帶刪除，避免誤刪證據。
+問題表索引 source_file_id；唯一鍵的 run_id 前綴支援依批次查詢，影響表主鍵支援依問題查詢。
+
+資料庫不保證每個問題至少有一筆 impacts、不驗證角色與欄位語意、JSON 每個值的型別，
+也不實作狀態轉移歷史。這些由後續匯入與審核流程確認。
+RESOLVED/DISMISSED 不是直接發布資格；修改判定後必須重新執行規則與相關統計驗證。
+沒有問題列不代表通過；成功批次與完整檢查證據仍是發布前提。
+
+## V10：賽事範圍判斷
+
+tournament_decisions 主鍵為 (run_id, tour, tourney_id)，同一次執行只保存一個最終範圍判斷。
+不同執行可重新分類；規則版本透過 run.scope_rules_sha256 追溯。
+source_file_id、record_number 指向該賽事的一筆原始比賽作為查核起點；
+共用 snapshot_id/tour，data_kind 固定 MATCHES，複合外鍵阻擋混用來源。
+不參照 matches，因此尚未建立正式比賽的 REVIEW/EXCLUDE 賽事也能留存判斷。
+
+scope_status 必填 INCLUDE/EXCLUDE/REVIEW，沒有預設值，要求程式明確寫入判斷；
+找不到規則時仍須依 05 文件明確寫入 REVIEW。
+analysis_category 可 NULL（未知分類），非 NULL 不得空白；不強迫歷史賽事改成現代級別。
+rule_code、reason、evidence 必填且非空白。evidence 保存查證文件／規則位置與摘要，
+不得放憑證；未知分類可記錄待查依據，不虛構官方確認。
+另設 (tour, tourney_id)、source_file_id 索引供反查。
+
+同 ID 多個日期或名稱是否一致、指定來源列是否確屬該賽事、規則優先順序、
+紀錄上限、來源級別及 104 個例外的實際套用，由匯入器檢查。
+原始級別保留於 CSV 與 matches.tourney_level，不在判斷表重複改寫。
+納入判斷不代替品質檢查，也不代表每個統計指標有效。
+本輪只建立保存結構，沒有載入例外清單或實作任何分類／隔離執行流程。
+
+## 本輪 migration 驗收與交接（2026-10-25）
+
+依使用者最新授權，agent 已完成 V7 排名來源、V8 比賽來源、V9 品質問題與影響用途、
+V10 賽事判斷；只在獨立 Testcontainers 驗證，未套用開發資料庫或匯入真實資料。
+完整 clean verify：158 tests、0 failures、0 errors、0 skipped，JAR 建置及 repackage 成功。
+包含新建資料庫套用 V1～V10，以及有人工球員／比賽資料的 V6→V10 升級、
+Flyway validate 和再次 migrate 無變更驗證。這不是正式資料量的效能或備份還原測試。
+
+目前資料保存結構已完成本輪 migration 範圍；下一步為匯入程式，恢復使用者操作的教學模式。
+先定稿候選資料庫、發布／回復邊界及版本化規則，再以來源檔案驗證／登錄的一個完整變更開始。
+CSV 解析、雜湊驗證、隔離／分類規則執行、統計資格、重試及發布仍未實作。
+帳號與 Elo 等功能表留待相關功能需求定稿，並非本輪來源保存 migration 的未完成項。
