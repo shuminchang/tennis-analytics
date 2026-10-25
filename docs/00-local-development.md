@@ -242,3 +242,19 @@ env -u DB_URL -u DB_USERNAME -u DB_PASSWORD ./mvnw -Dtest=RankingsSchemaTest tes
 ```
 
 預期 10 個案例通過。測試資料隨交易回滾，未匯入來源排名資料。
+
+
+## V3 比賽表驗收（2026-10-25）
+
+V1～V3 已在 Testcontainers 中依序套用成功。目前測試共 48 個案例：
+球員 12、排名 10、比賽 24、連線 1、健康檢查 1。
+使用者執行移除 DB_* 的 ./mvnw clean verify 全數通過，完成 JAR 打包及 repackage。
+較早的 24 個案例紀錄為 V2 階段；目前數量以本節為準。
+單獨驗證比賽表，在 backend 執行：
+
+```bash
+env -u DB_URL -u DB_USERNAME -u DB_PASSWORD ./mvnw -Dtest=MatchesSchemaTest test
+```
+
+預期 24 個案例通過。這些為測試容器中的人工測試資料，並非原始資料匯入。
+尚未驗證開發資料庫套用 V3 或執行本次新 JAR；品質排除與匯入流程尚未實作。
