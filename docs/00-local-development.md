@@ -352,3 +352,16 @@ agent 核對檔案，未重跑驗收。工具檢查 UTF-8 CSV 標頭、欄位數
 仍以不可變快照為前提，未驗證並行修改偵測分支、整份快照身分或實際資料匯入。
 下一步定義來源檔案規格（巡迴、種類、允許檔名與標頭）；繼續逐步教學。
 完整指令與限制見 [教學手冊](完整教學步驟與指令.md)。
+
+## 來源檔案規格與 Docker 恢復（2026-10-25）
+
+SourceFileType 的 24 個測試通過；最終完整 clean verify 為 229 個案例全通過，
+JAR 建置與 repackage 成功，由使用者執行。尚未接入 SourceFileInspector 或匯入資料。
+
+本次驗收曾停在 Testcontainers 連線。WSL 執行 `timeout 15s docker version`
+回傳 124；Windows PowerShell 的 `docker version` 回報 Internal Server Error。
+儲存工作並停止測試後，從系統匣退出 Docker Desktop，在 Windows PowerShell 執行
+`wsl --shutdown`，再重新啟動 Docker Desktop；Windows 與 WSL 均恢復完整 Client/Server，
+WSL 檢查結束代碼為 0，再重跑驗收成功。未確定原始根因，也未修改 API 版本。
+注意 shutdown 會停止所有 WSL 程序與中斷 VS Code 連線；未清除任何 volume。
+完整步驟、指令與證據界線見 [教學手冊](完整教學步驟與指令.md) 文末。
