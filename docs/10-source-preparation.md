@@ -85,3 +85,38 @@ backend/source-snapshot plan /home/shumin/tennis-sackmann-archive-full https://g
 ```
 
 140 個來源測試通過，package 成功。真實 plan 成功：資料檔 133（ATP/WTA 年度比賽各 59、球員各 1、排名 7/6），輔助文件 5、資料排除清單 340。尚未封存或匯入。先前 297 個全套測試為此修正前的驗收，不冒充修正後全套結果。CLI 通用錯誤訊息仍未提供具體失敗原因，後續可改善診斷。
+
+## 真實來源封存驗收（2026-10-26）
+
+使用者在 `/home/shumin/tennis-analytics` 依序執行以下命令，兩次結束代碼均為 0：
+
+```bash
+backend/source-snapshot prepare \
+  /home/shumin/tennis-sackmann-archive-full \
+  https://github.com/Aneeshers/tennis-sackmann-archive \
+  83733587353df8a41f2fd4f516147d5aa83f5a8d \
+  .local/source-snapshots/83733587353df8a41f2fd4f516147d5aa83f5a8d \
+  > /tmp/tennis-source-prepared.json
+
+backend/source-snapshot verify \
+  /home/shumin/tennis-sackmann-archive-full \
+  https://github.com/Aneeshers/tennis-sackmann-archive \
+  83733587353df8a41f2fd4f516147d5aa83f5a8d \
+  .local/source-snapshots/83733587353df8a41f2fd4f516147d5aa83f5a8d \
+  > /tmp/tennis-source-verified.json
+```
+
+真實封存已建立，且通過與指定 Git 快照的檔案清單、內容雜湊、大小及紀錄數驗證。agent 根據使用者輸出記錄，未重跑大量檔案檢查。這是來源準備成果，不是資料庫登錄、業務資料匯入或完整資料品質驗收；外部備份還原仍未完成。
+
+待補選檔修正 fe95a30 後的整套 clean verify：先前全套 297 個測試在修正前通過，修正後目前僅來源專屬 140 個測試及打包通過。完成後進入來源登錄教學。
+
+## 來源階段完整驗收完成（2026-10-26）
+
+使用者在 `/home/shumin/tennis-analytics/backend` 執行
+`env -u DB_URL -u DB_USERNAME -u DB_PASSWORD ./mvnw clean verify`，
+貼回 298 個測試全部通過（Failures/Errors/Skipped 均為 0）、BUILD SUCCESS，
+JAR 打包與 repackage 成功。這是 fe95a30 選檔修正後的完整驗收，解除前節待補測試事項；agent 未重跑測試。
+
+真實來源 prepare/verify 已成功，來源處理階段驗收完成。
+下一階段恢復教學，先處理 source_snapshots/source_files 的來源登錄與交易測試；
+尚未登錄真實來源、轉換或匯入業務資料，亦未完成外部備份還原演練。
