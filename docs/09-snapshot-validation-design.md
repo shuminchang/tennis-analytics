@@ -60,3 +60,25 @@ JAR 建置與 repackage 成功。agent 核對程式及測試，未重跑驗收�
 尚未核對 Git 快照身分、選檔完整性或真實資料匯入，也不保證批次期間來源不可變。
 下一步定義來源快照身分，再逐步串接指定 commit 的清單與內容核對。
 操作及驗收見 [完整教學手冊](完整教學步驟與指令.md)。
+
+## 第三個程式單位：SourceSnapshotIdentity（格式已驗收）
+
+record 保存 URI repositoryUrl 與 String commitSha；不包含本機根目錄，
+同一來源快照移動保存位置不應改變來源身分。
+第一版來源網址限定 HTTPS、有 host 及非空且非單獨 / 的路徑，
+拒絕 user-info、query、fragment；這是本專案來源識別政策，不宣稱是全部 Git URL 格式。
+網址以明確設定的標準寫法傳入；不自動合併大小寫、.git 或結尾斜線等別名，
+本專案使用 https://github.com/Aneeshers/tennis-sackmann-archive。
+URI 的字串形式日後寫入 repository_url；本輪沒有資料庫寫入。
+commitSha 限 40 位小寫十六進位，與 V4 一致；不接受分支、標籤、短 SHA，
+不自動 trim 或改大小寫。未來使用其他 Git 雜湊格式需同步調整模型與 migration。
+格式通過不代表遠端存在、commit 屬於該儲存庫或本機檔案吻合，後續另行查核。
+實作與格式測試已完成，驗收見下節；真實 Git 查核尚未實作。
+
+## 快照身分格式驗收（2026-10-26）
+
+使用者完成 SourceSnapshotIdentity 與 20 個單元測試；完整 clean verify
+共 275 個案例全通過，JAR 建置及 repackage 成功。agent 核對檔案，未重跑驗收。
+已驗證網址政策與完整 SHA 格式，尚未查核儲存庫、commit 或來源內容的真實對應，
+未建立封存或匯入資料。下一步為本機 Git 查核與指定 commit 檔案清單，維持逐步教學。
+詳細指令及驗收界線見 [完整教學手冊](完整教學步驟與指令.md)。
