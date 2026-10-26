@@ -108,3 +108,15 @@ cat-file blob 串流至新檔，保留原始位元組，不使用 archive 的 ex
 ```
 
 18 個案例通過（Git 6、封存 12）。包含缺檔、多檔、連結、內容／清單變更、既有目標保護及人工封存搬移驗證。WSL 測試發現唯讀 staging 根目錄無法搬移，改為搬移後設定根目錄權限。未重跑真實 CSV 品質掃描，未寫入資料庫。
+
+## 自主 data source 階段三：獨立命令列入口（2026-10-26）
+
+新增 SourceSnapshotCli 與 backend/source-snapshot，提供 plan、prepare、verify，不啟動 Spring 或連資料庫。完整指令、限制與交接見 [來源快照工具](10-source-preparation.md)。
+
+工作目錄 `/home/shumin/tennis-analytics/backend`：
+
+```bash
+./mvnw '-Dtest=com.shuminapp.tennis.ingestion.*Test' package
+```
+
+來源處理專屬測試與打包通過；整套 clean verify 因 Docker 連線停滯而中止，不能記為全套通過。真實庫為 partial clone，plan/prepare 被拒絕，未產生真實封存、未匯入資料。原始 CSV 與 .vscode 保持不變。下一階段恢復教學，先解決完整來源庫及 Docker 驗收前置條件。

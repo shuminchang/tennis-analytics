@@ -24,3 +24,5 @@ build/
 *.iml
 .DS_Store
 Thumbs.db
+# Local derived source archives
+.local/source-snapshots/
