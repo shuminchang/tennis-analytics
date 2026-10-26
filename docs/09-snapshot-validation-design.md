@@ -82,3 +82,17 @@ commitSha 限 40 位小寫十六進位，與 V4 一致；不接受分支、標�
 已驗證網址政策與完整 SHA 格式，尚未查核儲存庫、commit 或來源內容的真實對應，
 未建立封存或匯入資料。下一步為本機 Git 查核與指定 commit 檔案清單，維持逐步教學。
 詳細指令及驗收界線見 [完整教學手冊](完整教學步驟與指令.md)。
+
+## Git 查核實作（2026-10-26）
+
+依最新授權，agent 自主實作 GitSourceRepository。以參數陣列呼叫本機 Git，
+不經 shell；排除繼承的 GIT_*、全域／系統設定，禁用 replace objects，設定命令逾時。
+origin 必須等於指定 URL 或其加上 .git 的形式；這是本機設定一致性，不能證明遠端真實性。
+來源 repository 與 commit 是操作者信任的輸入，不自動 fetch 或驗證上游簽章。
+拒絕 partial clone，要求本機已有物件。cat-file -t 確認 SHA 本身是 commit，
+ls-tree -r -z 取得該提交的樹，不讀工作目錄內容。選中檔案只接受一般 blob，拒絕連結及 submodule。
+已知 qual_chall/futures/doubles 與 ATP amateur 不選入；新的 players/rankings/matches CSV 命名停止待查。
+保留排除路徑清單，另列 LICENSE、README 及已有的上游說明／字典供封存。
+cat-file blob 串流至新檔，保留原始位元組，不使用 archive 的 export-ignore 或 checkout 換行轉換。
+輸出既存時拒絕覆寫。metadata 限 16 MiB、Git 命令限兩分鐘，錯誤不回顯可能含憑證的 stderr。
+6 個人工 Git 測試通過；尚未做本輪全套驗收或正式資料封存。
