@@ -1737,3 +1737,27 @@ V7～V10 及約束／升級測試使用人工資料，在獨立 PostgreSQL Testc
 來源處理專屬測試與打包通過；整套 clean verify 因 Docker 連線停滯而中止，不能記為全套通過。真實庫為 partial clone，plan/prepare 被拒絕，未產生真實封存、未匯入資料。原始 CSV 與 .vscode 保持不變。下一階段恢復教學，先解決完整來源庫及 Docker 驗收前置條件。
 
 本輪最終結果：來源處理 139 個測試通過（Failures/Errors/Skipped 均為 0），package 成功；另以暫存人工 Git 庫實際執行已打包 CLI 的 plan、prepare、verify，三步皆成功。此結果不替代待補的全套資料庫測試。
+
+## Docker 恢復後的完整驗收（2026-10-26）
+
+使用者確認 Docker Client/Server 皆正常回應，timeout 查詢結束碼為 0。
+在 `/home/shumin/tennis-analytics/backend` 執行：
+
+```bash
+env -u DB_URL -u DB_USERNAME -u DB_PASSWORD ./mvnw clean verify
+```
+
+使用者貼回結果：297 個測試，Failures/Errors/Skipped 均為 0，BUILD SUCCESS；JAR 打包與 repackage 成功。agent 未重跑測試。此前 Docker 阻擋完整驗收的待辦已解除；真實來源封存、來源登錄與業務匯入仍未完成。下一步查核 partial clone 設定，再決定完整來源庫的取得方式。
+
+## 完整來源庫與 plan 修正（2026-10-26）
+
+使用者另建 `/home/shumin/tennis-sackmann-archive-full`，確認非 shallow、無 partial clone 設定且指定 commit 存在。初次 plan 仍失敗，agent 唯讀診斷確認漏列 `wta/wta_matches_qual_itf_YYYY.csv`。已補上精確排除規則，回歸測試同時拒絕未知 current 變體；未改來源 CSV。
+
+agent 在專案根目錄執行：
+
+```bash
+./backend/mvnw -f backend/pom.xml '-Dtest=com.shuminapp.tennis.ingestion.*Test' package
+backend/source-snapshot plan /home/shumin/tennis-sackmann-archive-full https://github.com/Aneeshers/tennis-sackmann-archive 83733587353df8a41f2fd4f516147d5aa83f5a8d > /tmp/tennis-fixed-plan.json
+```
+
+140 個來源測試通過，package 成功。真實 plan 成功：資料檔 133（ATP/WTA 年度比賽各 59、球員各 1、排名 7/6），輔助文件 5、資料排除清單 340。尚未封存或匯入。先前 297 個全套測試為此修正前的驗收，不冒充修正後全套結果。CLI 通用錯誤訊息仍未提供具體失敗原因，後續可改善診斷。

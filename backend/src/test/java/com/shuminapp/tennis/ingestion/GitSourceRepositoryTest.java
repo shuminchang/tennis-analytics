@@ -70,6 +70,18 @@ class GitSourceRepositoryTest {
         assertThrows(IOException.class, () -> new GitSourceRepository(fixture.root).readSnapshot(updated));
     }
 
+    @Test void excludesWtaQualItfButRejectsUnknownVariant() throws Exception {
+        var fixture = new GitFixture(temp.resolve("repo"));
+        fixture.write("wta/wta_players.csv", GitFixture.PLAYERS);
+        fixture.write("wta/wta_matches_qual_itf_1968.csv", "excluded");
+        var snapshot = new GitSourceRepository(fixture.root).readSnapshot(fixture.commit());
+        assertThat(snapshot.entries()).hasSize(1);
+        assertThat(snapshot.excludedPaths()).contains("wta/wta_matches_qual_itf_1968.csv");
+        fixture.write("wta/wta_matches_qual_itf_current.csv", "unknown");
+        var updated = fixture.commit();
+        assertThrows(IOException.class, () -> new GitSourceRepository(fixture.root).readSnapshot(updated));
+    }
+
     @Test void acceptsDotGitOriginAndPreservesOlderCommit() throws Exception {
         var fixture = new GitFixture(temp.resolve("repo"));
         fixture.git("remote", "set-url", "origin", GitFixture.URL + ".git");

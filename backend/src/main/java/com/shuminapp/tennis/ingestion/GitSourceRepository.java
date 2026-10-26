@@ -98,6 +98,7 @@ public final class GitSourceRepository {
         }
         String name = path.substring(path.indexOf('/') + 1);
         if (name.matches("(atp|wta)_matches_(qual_chall|futures|doubles)_[0-9]{4}\\.csv")
+                || path.matches("wta/wta_matches_qual_itf_[0-9]{4}\\.csv")
                 || name.equals("atp_matches_amateur.csv")) return false;
         return name.contains("players") || name.contains("rankings") || name.contains("matches");
     }
