@@ -1711,3 +1711,15 @@ V7～V10 及約束／升級測試使用人工資料，在獨立 PostgreSQL Testc
 只讀目前指定 commit 的樹名盤點：473 個樹項目，作為選檔規則設計依據，不是匯入成果。
 人工 Git 測試涵蓋指定舊 commit、髒工作目錄、origin 不符、非 commit、連結與未知候選檔名。
 完整程式與驗證指令見教學手冊及 09 設計。
+
+## 自主 data source 階段二：來源封存（2026-10-26）
+
+新增 SourceSnapshotStore 與 SourceSnapshotManifest：從指定 Git blob 匯出選中的 CSV 與來源說明文件，保存 SHA-256、Git blob ID、位元組數、資料紀錄數、選檔規則版本及排除清單。目的地須不存在且位於來源庫之外。先在同層暫存目錄完成檢查，再搬移並設為唯讀；唯讀權限防止誤改，不是不可竄改儲存。驗證仍需可信任的本機 Git commit。
+
+工作目錄 `/home/shumin/tennis-analytics/backend`：
+
+```bash
+./mvnw -Dtest=GitSourceRepositoryTest,SourceSnapshotStoreTest test
+```
+
+18 個案例通過（Git 6、封存 12）。包含缺檔、多檔、連結、內容／清單變更、既有目標保護及人工封存搬移驗證。WSL 測試發現唯讀 staging 根目錄無法搬移，改為搬移後設定根目錄權限。未重跑真實 CSV 品質掃描，未寫入資料庫。
