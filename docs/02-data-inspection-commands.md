@@ -1800,3 +1800,7 @@ JAR 打包與 repackage 成功。這是 fe95a30 選檔修正後的完整驗收�
 ## 2026-10-27 整批來源登錄
 
 新增整批登錄服務，6 個人工 PostgreSQL 整合案例通過。未重跑真實來源品質掃描或執行真實登錄；指令及交易邊界見 [功能交付紀錄](11-player-import-and-search.md)。
+
+## 三個功能階段：第二步驗收（2026-10-27）
+
+球員轉換與匯入、版本化規則、來源／品質追溯與獨立 CLI 已完成。工作目錄 backend，執行 `env -u DB_URL -u DB_USERNAME -u DB_PASSWORD ./mvnw -Dtest=PlayerConverterTest,PlayerImportServiceTest test`：7 案通過；再執行 `env -u DB_URL -u DB_USERNAME -u DB_PASSWORD ./mvnw clean verify`：325 案全部通過，JAR 打包成功。測試只使用人工資料與測試容器，未重跑真實 CSV 探索或寫入開發資料庫。詳細流程、操作與限制見 [功能交付紀錄](11-player-import-and-search.md)。前兩步完成後依使用者授權快轉合併 main，再建立 feat/player-search。

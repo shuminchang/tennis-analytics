@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+backend_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+exec java -Dloader.main=com.shuminapp.tennis.ingestion.PlayerImportCli \
+ -cp "$backend_dir/target/tennis-0.0.1-SNAPSHOT.jar" org.springframework.boot.loader.launch.PropertiesLauncher "$@"

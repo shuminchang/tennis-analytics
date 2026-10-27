@@ -1,0 +1,12 @@
+players-v1: candidate database, initial full ATP+WTA players import only.
+IDs: positive int32; invalid IDs quarantined with raw row evidence.
+Empty optional fields become NULL; preserve spelling and all raw CSV in archive.
+hand: R,L,U,A; IOC: [A-Z]{3}; Wikidata: Q[1-9][0-9]*; invalid becomes NULL with issue.
+dob: strict 8 digit Gregorian date, year 1..9999; invalid becomes NULL with issue.
+height: positive int16; outside 100..250 retained and flagged HEIGHT_ANALYSIS.
+Explicit placeholder names U Unknown / Unknown / X X flagged PLAYER_SEARCH and PERSONAL_STATS.
+Other names containing unknown flagged PERSONAL_STATS for review, remain searchable.
+Duplicate IDs within tour: fail entire run, never pick first or last.
+No overwriting existing player data or automatic cross-snapshot replacement.
+Only successful atomic import rows are published; retries return existing successful run.
+Scope: players only, no match, ranking, H2H, Elo or career-completeness claims.
