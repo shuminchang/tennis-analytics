@@ -123,3 +123,57 @@ it("offers recovery for an out-of-range page", async () => {
   expect(await screen.findByText("頁碼超出結果範圍。")).toBeInTheDocument();
   expect(screen.getByRole("link", { name: "回到第一頁" })).toHaveAttribute("href", "/players?page=0");
 });
+
+it("opens details and returns to the original search filters", async () => {
+  const fetch = vi.fn().mockImplementation((url: string) => Promise.resolve(
+    url.includes("/ATP/1") ? { ok: true, json: async () => roger } : response(),
+  ));
+  vi.stubGlobal("fetch", fetch);
+  const user = userEvent.setup();
+  mount("/players?q=Roger&tour=ATP&size=20");
+  await user.click(await screen.findByRole("link", { name: "Roger Federer" }));
+  expect(await screen.findByRole("heading", { name: "Roger Federer" })).toBeInTheDocument();
+  expect(screen.getByText("SUI")).toBeInTheDocument();
+  const back = screen.getByRole("link", { name: /返回搜尋結果/ });
+  expect(back).toHaveAttribute("href", "/players?q=Roger&tour=ATP&size=20");
+  await user.click(back);
+  expect(await screen.findByLabelText("球員姓名")).toHaveValue("Roger");
+});
+it("loads a direct WTA detail URL and preserves missing fields", async () => {
+  const fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ ...serena, hand: "U", ioc: null }) });
+  vi.stubGlobal("fetch", fetch);
+  const user = userEvent.setup();
+  mount("/players/WTA/1");
+  expect(await screen.findByRole("heading", { name: "Serena Williams" })).toBeInTheDocument();
+  expect(fetch.mock.calls[0][0]).toBe("/tennis/api/v1/players/WTA/1");
+  expect(screen.getAllByText("未提供")).toHaveLength(2);
+  expect(screen.getByText("未知")).toBeInTheDocument();
+  await user.click(screen.getByRole("button", { name: "切換語言" }));
+  expect(await screen.findByText("At a glance")).toBeInTheDocument();
+});
+it("shows a distinct detail not-found state", async () => {
+  vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 404 }));
+  mount("/players/ATP/999");
+  expect(await screen.findByRole("heading", { name: "找不到這位球員" })).toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: "重新載入" })).not.toBeInTheDocument();
+});
+it.each(["ITF/1", "ATP/0", "ATP/-1", "ATP/no", "ATP/2147483648"])("rejects invalid detail identity %s without fetching", (identity) => {
+  const fetch = vi.fn();
+  vi.stubGlobal("fetch", fetch);
+  mount(`/players/${identity}`);
+  expect(screen.getByRole("alert")).toHaveTextContent("球員網址無效");
+  expect(fetch).not.toHaveBeenCalled();
+});
+it("shows detail loading and permits retry after failure", async () => {
+  let resolve!: (value: unknown) => void;
+  const fetch = vi.fn().mockImplementationOnce(() => new Promise((r) => { resolve = r; }))
+    .mockResolvedValue({ ok: true, json: async () => roger });
+  vi.stubGlobal("fetch", fetch);
+  const user = userEvent.setup();
+  mount("/players/ATP/1");
+  expect(screen.getByRole("status")).toHaveTextContent("正在查詢");
+  resolve({ ok: false, status: 503 });
+  expect(await screen.findByRole("alert")).toHaveTextContent("暫時無法取得資料");
+  await user.click(screen.getByRole("button", { name: "重新載入" }));
+  expect(await screen.findByRole("heading", { name: "Roger Federer" })).toBeInTheDocument();
+});

@@ -62,3 +62,15 @@ export async function fetchPlayers(
     throw new Error("Invalid response");
   return body;
 }
+
+export async function fetchPlayer(tour: string, playerId: number, signal: AbortSignal): Promise<Player | null> {
+  const response = await fetch(`/tennis/api/v1/players/${encodeURIComponent(tour)}/${playerId}`, {
+    signal: AbortSignal.any([signal, AbortSignal.timeout(15000)]),
+    headers: { Accept: "application/json" },
+  });
+  if (response.status === 404) return null;
+  if (!response.ok) throw new Error("Player details failed");
+  const body = (await response.json()) as Player;
+  if (body.tour !== tour || body.playerId !== playerId) throw new Error("Invalid player response");
+  return body;
+}

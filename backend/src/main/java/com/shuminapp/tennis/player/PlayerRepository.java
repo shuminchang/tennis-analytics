@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -12,9 +13,7 @@ public class PlayerRepository {
     private final JdbcTemplate jdbc;
     public PlayerRepository(JdbcTemplate jdbc) { this.jdbc = jdbc; }
 
-    public SearchPage search(String query, String tour, int page, int size) {
-        List<Object> args = new ArrayList<>();
-        String where = """
+    private static final String VISIBLE_PLAYERS = """
                 FROM players p
                 WHERE EXISTS (
                     SELECT 1 FROM player_sources ps JOIN import_runs r ON r.id=ps.run_id
@@ -29,6 +28,10 @@ public class PlayerRepository {
                         AND qi.status='OPEN' AND impact.metric_code='PLAYER_SEARCH'
                 )
                 """;
+
+    public SearchPage search(String query, String tour, int page, int size) {
+        List<Object> args = new ArrayList<>();
+        String where = VISIBLE_PLAYERS;
         if (tour != null) { where += " AND p.tour=?"; args.add(tour); }
         if (!query.isEmpty()) {
             where += " AND concat_ws(' ',p.name_first,p.name_last) ILIKE ? ESCAPE '!'";
@@ -46,6 +49,18 @@ public class PlayerRepository {
                             dob == null ? null : dob.toLocalDate(), rs.getString("ioc"));
                 }, args.toArray());
         return new SearchPage(items,total,page,size);
+    }
+    public Optional<PlayerSummary> findById(String tour,int playerId) {
+        var players = jdbc.query("""
+                SELECT p.tour,p.player_id,p.name_first,p.name_last,p.hand,p.dob,p.ioc
+                """ + VISIBLE_PLAYERS + " AND p.tour=? AND p.player_id=?",
+                (rs, row) -> {
+                    Date dob = rs.getDate("dob");
+                    return new PlayerSummary(rs.getString("tour"), rs.getInt("player_id"),
+                            rs.getString("name_first"), rs.getString("name_last"), rs.getString("hand"),
+                            dob == null ? null : dob.toLocalDate(), rs.getString("ioc"));
+                }, tour,playerId);
+        return players.stream().findFirst();
     }
     public record PlayerSummary(String tour,int playerId,String nameFirst,String nameLast,String hand,LocalDate dob,String ioc) { }
     public record SearchPage(List<PlayerSummary> items,long total,int page,int size) {

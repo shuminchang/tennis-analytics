@@ -74,3 +74,25 @@ test("API failure offers retry and a delayed response shows loading", async ({
   await expect(page.getByRole("status")).toBeVisible();
   await expect(page.getByRole("table")).toBeVisible();
 });
+
+test("player details support refresh, returning to filters and mobile layout", async ({ page }) => {
+  test.skip(process.env.E2E_MOCK_API === "1", "Detail acceptance uses the real API");
+  await page.goto("/tennis/players?q=Roger&tour=ATP&size=20");
+  await page.getByRole("link", { name: "Roger Federer" }).click();
+  await expect(page).toHaveURL(/\/players\/ATP\/1\?/);
+  await expect(page.getByRole("heading", { name: "Roger Federer" })).toBeVisible();
+  await page.reload();
+  await expect(page.getByText("SUI", { exact: true })).toBeVisible();
+  await page.screenshot({ path: "test-results/player-detail-desktop.png", fullPage: true, animations: "disabled" });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.getByRole("heading", { name: "Roger Federer" })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBeTruthy();
+  await page.screenshot({ path: "test-results/player-detail-mobile.png", fullPage: true, animations: "disabled" });
+  await page.getByRole("link", { name: /返回搜尋結果/ }).click();
+  await expect(page.getByLabel("球員姓名")).toHaveValue("Roger");
+  await expect(page.getByRole("combobox", { name: "巡迴", exact: true })).toHaveValue("ATP");
+  await page.goto("/tennis/players/WTA/1");
+  await expect(page.getByRole("heading", { name: "Serena Williams" })).toBeVisible();
+  await page.goto("/tennis/players/ATP/2");
+  await expect(page.getByRole("heading", { name: "找不到這位球員" })).toBeVisible();
+});

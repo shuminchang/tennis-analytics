@@ -34,4 +34,16 @@ class PlayerControllerTest {
             .andExpect(jsonPath("$.trace").doesNotExist())
             .andExpect(jsonPath("$.message").value("Player search is temporarily unavailable."));
     }
+    @Test void rejectsNonNumericDetailIdBeforeService() throws Exception {
+        mvc.perform(get("/v1/players/ATP/bad"))
+            .andExpect(status().isBadRequest()).andExpect(jsonPath("$.code").value("INVALID_PLAYER_IDENTITY"));
+        verifyNoInteractions(service);
+    }
+    @Test void hidesDatabaseDetailsWhenDetailLookupFails() throws Exception {
+        when(service.findById("ATP",1)).thenThrow(new DataAccessResourceFailureException("private database detail"));
+        mvc.perform(get("/v1/players/ATP/1")).andExpect(status().isServiceUnavailable())
+            .andExpect(jsonPath("$.code").value("PLAYER_UNAVAILABLE"))
+            .andExpect(jsonPath("$.trace").doesNotExist())
+            .andExpect(jsonPath("$.message").value("Player details are temporarily unavailable."));
+    }
 }

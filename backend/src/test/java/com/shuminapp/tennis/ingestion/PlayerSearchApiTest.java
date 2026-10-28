@@ -74,4 +74,40 @@ class PlayerSearchApiTest {
         assertThat(response.getBody().get("code").asText()).isEqualTo("INVALID_SEARCH");
         assertThat(response.getBody().has("trace")).isFalse();
     }
+    @Test void detailsUseTourAndIdAndReturnBasicFields() {
+        var atp=http.getForEntity("/v1/players/atp/1",JsonNode.class);
+        var wta=http.getForEntity("/v1/players/WTA/1",JsonNode.class);
+        assertThat(atp.getStatusCode().value()).isEqualTo(200);
+        assertThat(wta.getStatusCode().value()).isEqualTo(200);
+        assertThat(atp.getBody().get("tour").asText()).isEqualTo("ATP");
+        assertThat(atp.getBody().get("playerId").asInt()).isEqualTo(1);
+        assertThat(atp.getBody().get("nameLast").asText()).isEqualTo("Federer");
+        assertThat(atp.getBody().get("dob").asText()).isEqualTo("1981-08-08");
+        assertThat(atp.getBody().get("hand").asText()).isEqualTo("R");
+        assertThat(atp.getBody().get("ioc").asText()).isEqualTo("SUI");
+        assertThat(wta.getBody().get("nameLast").asText()).isEqualTo("Williams");
+    }
+    @Test void detailsPreserveMissingFieldsAsNull() {
+        var response=http.getForEntity("/v1/players/ATP/4",JsonNode.class);
+        assertThat(response.getStatusCode().value()).isEqualTo(200);
+        for(String field:new String[]{"dob","hand","ioc"}) {
+            assertThat(response.getBody().get(field).isNull()).isTrue();
+        }
+    }
+    @ParameterizedTest
+    @ValueSource(strings={"ATP/2","ATP/999","ATP/123456"})
+    void detailsHidePlaceholderUnpublishedAndMissingPlayers(String identity) {
+        var response=http.getForEntity("/v1/players/"+identity,JsonNode.class);
+        assertThat(response.getStatusCode().value()).isEqualTo(404);
+        assertThat(response.getBody().get("code").asText()).isEqualTo("PLAYER_NOT_FOUND");
+        assertThat(response.getBody().has("trace")).isFalse();
+    }
+    @ParameterizedTest
+    @ValueSource(strings={"ITF/1","ATP/0","ATP/-1","ATP/oops","ATP/2147483648"})
+    void invalidDetailIdentityReturns400(String identity) {
+        var response=http.getForEntity("/v1/players/"+identity,JsonNode.class);
+        assertThat(response.getStatusCode().value()).isEqualTo(400);
+        assertThat(response.getBody().get("code").asText()).isEqualTo("INVALID_PLAYER_IDENTITY");
+        assertThat(response.getBody().has("trace")).isFalse();
+    }
 }

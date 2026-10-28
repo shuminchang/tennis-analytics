@@ -21,7 +21,7 @@ npm run dev
 - 切換條件送出時回第一頁；頁碼超出範圍可回到第一頁。
 - 繁體中文／英文切換，偏好存 localStorage；無儲存權限時仍可使用。
 - 缺少資料顯示「未提供」；未知慣用手 U 與缺值分開。
-- IOC 原始代碼不自動翻成國家名稱；不提供尚未完成的排名、勝率或球員詳情連結。
+- IOC 原始代碼不自動翻成國家名稱；不提供尚未完成的排名或勝率；姓名連結可開啟球員詳情。
 - 版面為網球記錄冊風格；字型載入失敗時使用本機字型。使用專案 frontend-design skill，頁尾保留該 skill 要求的署名。
 
 ## 驗證
@@ -52,3 +52,9 @@ E2E_MOCK_API=1 E2E_BASE_URL=http://127.0.0.1:5178 npm run test:e2e
 npm 10 安裝新增測試依賴曾發生 Arborist `edgesOut` 錯誤，改用一次性的 `npx --yes npm@11 install ...` 完成。鎖定檔已更新；隨後原 npm 10 的 `npm ci` 可成功重現，無需升級全域 npm。
 
 參考：[TanStack Query](https://tanstack.com/query/latest/docs/framework/react/overview)、[react-i18next](https://react.i18next.com/latest/usetranslation-hook)。
+
+## 球員詳情
+
+`/tennis/players/:tour/:playerId` 顯示姓名、巡迴、IOC、生日及慣用手。姓名連結攜帶搜尋 query string，返回可保留篩選與頁碼；直接開啟、重新整理及中英文切換皆可用。404 與無效網址分開顯示，暫時失敗可重試。頁面不顯示尚未驗證的身高、排名或比賽統計。
+
+2026-10-28：前端 23 案、lint／build 通過；獨立資料庫及實際 API 的瀏覽器 3 案通過，含詳情重新整理、返回條件、ATP/WTA 同 ID 與手機版面。測試人工資料不寫入 tennis_candidate。

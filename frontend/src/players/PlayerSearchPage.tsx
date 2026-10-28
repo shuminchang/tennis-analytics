@@ -32,11 +32,11 @@ export default function PlayerSearchPage() {
         header: t("player"),
         cell: ({ row }) => (
           <div className="player-name">
-            <strong>
+            <Link to={`/players/${row.original.tour}/${row.original.playerId}?${params}`} className="player-link">
               {[row.original.nameFirst, row.original.nameLast]
                 .filter(Boolean)
                 .join(" ") || t("unnamed")}
-            </strong>
+            </Link>
             <span>#{row.original.playerId}</span>
           </div>
         ),
@@ -83,7 +83,7 @@ export default function PlayerSearchPage() {
         },
       },
     ],
-    [t, i18n.language],
+    [t, i18n.language, params],
   );
   // TanStack Table supplies an imperative table instance; this component is not React-Compiler memoized.
   // eslint-disable-next-line react-hooks/incompatible-library

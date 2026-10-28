@@ -161,3 +161,23 @@ API 初次測試出現 404：Spring Boot 注入的 TestRestTemplate 已帶 conte
 
 以上 importer SHA 對應本次已驗收的建置；未來重建其他版本時須核對實際程式版本，不直接沿用此 SHA。
 資料庫已建立且匯入成功，無需為確認頁面再次建立或匯入。
+
+## 球員詳情頁完整驗收（2026-10-28）
+
+依使用者授權完成前端姓名連結與詳情頁，沿用 frontend-design 技能及現有排版，未全檔格式化。
+路由 `/tennis/players/:tour/:playerId` 呼叫詳情 API；搜尋條件透過 query string 保留，返回不依賴瀏覽器歷史，因此重新整理及新分頁仍可使用。支援雙語、缺值、載入、無效網址、404 與錯誤重試。
+僅顯示基本欄位，不增加未匯入的排名／比賽或有品質疑慮的身高。保留來源授權與既有頁尾署名。
+
+驗收指令（專案根目錄）：
+
+```bash
+npm --prefix frontend run lint
+npm --prefix frontend test
+npm --prefix frontend run build
+env -u DB_URL -u DB_USERNAME -u DB_PASSWORD ./backend/mvnw -f backend/pom.xml clean verify
+LD_LIBRARY_PATH=/tmp/tennis-browser-libs/extracted/usr/lib/x86_64-linux-gnu python3 scripts/test/player_search_e2e.py
+```
+
+結果：前端 23 案、後端 365 案全通過；lint、正式建置及 JAR 打包成功。瀏覽器 3 案通過，人工 Git → 封存 → 獨立 PostgreSQL → API → 前端完整串接；詳情重新整理、返回篩選、跨巡迴同 ID、占位 404 與手機版面已驗證。桌面及手機截圖已目視檢查，存在 frontend/test-results/，不納入 Git。
+未改動 tennis_candidate，尚未對使用者正在執行的開發後端進行人工詳情驗收；需重啟 dev: backend 以載入新 Controller。可在原搜尋頁點 Federer，或開啟 http://127.0.0.1:5173/tennis/players/ATP/103819。
+目前 feat/player-detail 的前後端變更尚未提交，待使用者要求時一起提交。保留 .vscode/settings.json 與 PROJECT_SUMMARY.md，不納入本功能修改。

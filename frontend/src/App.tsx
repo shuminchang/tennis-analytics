@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Routes, Route, Navigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import PlayerSearchPage from "./players/PlayerSearchPage";
+import PlayerDetailPage from "./players/PlayerDetailPage";
 import "./App.css";
 
 export default function App() {
@@ -49,6 +50,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/players" replace />} />
           <Route path="/players" element={<PlayerSearchPage />} />
+          <Route path="/players/:tour/:playerId" element={<PlayerDetailPage />} />
           <Route
             path="*"
             element={

@@ -4,6 +4,13 @@ import { initReactI18next } from "react-i18next";
 const resources = {
   "zh-TW": {
     translation: {
+      detailEdition: "球員檔案 / PLAYER RECORD",
+      detailTitle: "基本資料",
+      detailBack: "返回搜尋結果",
+      detailMissing: "找不到這位球員",
+      detailMissingNote: "球員可能不存在，或目前尚未開放顯示。",
+      detailInvalid: "球員網址無效",
+      detailNote: "目前提供來源中的基本資料；排名、比賽紀錄與生涯統計尚未提供。",
       brand: "網球資料室",
       nav: "球員索引",
       language: "切換語言",
@@ -59,6 +66,13 @@ const resources = {
   },
   en: {
     translation: {
+      detailEdition: "THE PLAYER RECORD",
+      detailTitle: "At a glance",
+      detailBack: "Back to search results",
+      detailMissing: "Player not found",
+      detailMissingNote: "This player may not exist or may not be available for display.",
+      detailInvalid: "Invalid player address",
+      detailNote: "Basic source information only. Rankings, match records and career statistics are not yet available.",
       brand: "Tennis Ledger",
       nav: "Player index",
       language: "Change language",
