@@ -4,6 +4,7 @@ Prerequisites: backend JAR built, npm ci, npx playwright install chromium.
 Never reads .env or uses the development PostgreSQL volume.
 """
 import json
+from datetime import date, timedelta
 import os
 from pathlib import Path
 import shutil
@@ -70,6 +71,9 @@ def main():
         atp += ''.join(f'{n},Alex,Player{n:02},R,19900101,USA,180,\n' for n in range(10,30))
         (repo / 'atp/atp_players.csv').write_text(header + atp)
         (repo / 'wta/wta_players.csv').write_text(header + '1,Serena,Williams,R,19810926,USA,175,Q2\n')
+        ranking_rows = ''.join(f'{(date(2024, 1, 1) + timedelta(days=n)).strftime("%Y%m%d")},{n+1},1,{0 if n == 24 else ""}\n' for n in range(25))
+        (repo / 'atp/atp_rankings_20s.csv').write_text('ranking_date,rank,player,points\n' + ranking_rows)
+        (repo / 'wta/wta_rankings_20s.csv').write_text('ranking_date,rank,player,points,tours\n20240101,2,1,100,0\n')
         run('git', 'add', '.', cwd=repo); run('git', 'commit', '-qm', 'synthetic player fixture', cwd=repo)
         sha = run('git', 'rev-parse', 'HEAD', cwd=repo).stdout.strip()
         archive = temp / 'archive'
@@ -82,6 +86,8 @@ def main():
                'SERVER_PORT': str(api_port), 'LOGGING_LEVEL_ROOT': 'WARN'}
         with (temp / 'import.log').open('w') as log:
             run(str(ROOT / 'backend/import-players'), str(repo), 'https://example.com/tennis', sha, str(archive), 'a' * 40, env=env, output=log)
+        with (temp / 'rankings.log').open('w') as log:
+            run(str(ROOT / 'backend/import-rankings'), str(repo), 'https://example.com/tennis', sha, str(archive), 'a' * 40, env=env, output=log)
         backend_log = (temp / 'backend.log').open('w'); logs.append(backend_log)
         backend = subprocess.Popen(['java', '-jar', str(JAR)], env=env, stdout=backend_log, stderr=subprocess.STDOUT)
         processes.append(backend)

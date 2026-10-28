@@ -3,10 +3,13 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { fetchPlayer } from "./api";
+import RankingHistory from "./RankingHistory";
 
 export default function PlayerDetailPage() {
   const { tour = "", playerId = "" } = useParams();
   const { search } = useLocation();
+  const returnParams = new URLSearchParams(search);
+  returnParams.delete("rankingPage");
   const { t, i18n } = useTranslation();
   const heading = useRef<HTMLHeadingElement>(null);
   const selectedTour = tour.toUpperCase();
@@ -30,7 +33,7 @@ export default function PlayerDetailPage() {
     : t("missing");
   return (
     <section className="player-detail" aria-labelledby="detail-title">
-      <Link to={`/players${search}`} className="text-link detail-back">← {t("detailBack")}</Link>
+      <Link to={`/players${returnParams.size ? `?${returnParams}` : ""}`} className="text-link detail-back">← {t("detailBack")}</Link>
       {!valid ? (
         <div className="state" role="alert"><h1 id="detail-title" ref={heading} tabIndex={-1}>{t("detailInvalid")}</h1></div>
       ) : query.isPending ? (
@@ -65,6 +68,7 @@ export default function PlayerDetailPage() {
               <div><dt>{t("hand")}</dt><dd>{hand}</dd></div>
             </dl>
           </section>
+          <RankingHistory tour={player.tour} playerId={player.playerId} />
           <aside className="about">
             <h2>{t("scopeTitle")}</h2>
             <div><p>{t("detailNote")}</p><p className="source-note">{t("source")} <a href="https://github.com/Aneeshers/tennis-sackmann-archive" target="_blank" rel="noreferrer">GitHub ↗</a> · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">{t("license")}</a></p></div>

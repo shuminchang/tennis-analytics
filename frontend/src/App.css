@@ -563,3 +563,12 @@ footer a {
   .detail-facts dl { grid-template-columns: repeat(2, 1fr); }
   .detail-facts dd { font-size: 17px; }
 }
+
+.ranking-history { margin-top: 32px; border: 1px solid #d4dccc; border-radius: 8px; overflow: hidden; }
+.ranking-note { padding: 0 30px 20px; font-size: 13px; line-height: 1.8; }
+.ranking-history .eyebrow { margin: 0; }
+.ranking-history table { min-width: 360px; }
+@media (max-width: 600px) {
+  .ranking-note { padding: 0 20px 16px; }
+  .ranking-history th:first-child, .ranking-history td:first-child { min-width: 125px; }
+}

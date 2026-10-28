@@ -1,0 +1,24 @@
+package com.shuminapp.tennis.ingestion;
+
+import com.shuminapp.tennis.TennisApplication;
+import java.net.URI;
+import java.nio.file.Path;
+import org.springframework.boot.WebApplicationType;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+
+/** Explicit operator entry point. Never runs during normal web startup. */
+public final class RankingImportCli {
+    private RankingImportCli() { }
+    public static void main(String[] args) throws Exception {
+        if (args.length!=5 || !"candidate".equals(System.getenv("IMPORT_TARGET"))) {
+            System.err.println("Set IMPORT_TARGET=candidate and DB_* to an isolated database. Arguments: <repo> <https-origin> <source-sha> <archive> <importer-sha>");
+            System.exit(2); return;
+        }
+        var identity=new SourceSnapshotIdentity(URI.create(args[1]),args[2]);
+        try(var context=new SpringApplicationBuilder(TennisApplication.class).web(WebApplicationType.NONE)
+                .properties("spring.datasource.hikari.data-source-properties.reWriteBatchedInserts=true").run()) {
+            var result=context.getBean(RankingImportService.class).importRankings(Path.of(args[0]),identity,Path.of(args[3]),args[4]);
+            System.out.printf("run=%d imported=%d sourceRecords=%d quarantined=%d reused=%s%n",result.runId(),result.imported(),result.sourceRecords(),result.quarantined(),result.reused());
+        }
+    }
+}

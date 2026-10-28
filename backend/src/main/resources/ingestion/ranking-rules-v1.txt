@@ -1,0 +1,11 @@
+ranking-rules-v1
+Scope: every verified ATP/WTA ranking file in the selected snapshot; both tours required.
+Require successfully imported players from the same snapshot. No cross-snapshot replacement.
+Strict YYYYMMDD positive-year date; positive integer player/rank; nullable nonnegative integer points/tours.
+Do not replace missing points with zero. ATP tours must be absent.
+Key = tour,ranking_date,player_id. Identical typed duplicates merge; preserve every source position.
+Any differing rank,points,tours quarantines the entire key, including null/value differences.
+If a parse-invalid row has a valid key, quarantine all rows of that key. Invalid identities quarantine their row.
+Missing published same-snapshot player quarantines all rows of the key.
+Immutable archived CSV remains the raw source. Invalid rows retain raw JSON; conflicts retain typed evidence and all source positions.
+No filling missing dates; ranking history is observed source history, not guaranteed complete career history.

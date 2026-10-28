@@ -285,3 +285,7 @@ Flyway validate 和再次 migrate 無變更驗證。這不是正式資料量的�
 先定稿候選資料庫、發布／回復邊界及版本化規則，再以來源檔案驗證／登錄的一個完整變更開始。
 CSV 解析、雜湊驗證、隔離／分類規則執行、統計資格、重試及發布仍未實作。
 帳號與 Elo 等功能表留待相關功能需求定稿，並非本輪來源保存 migration 的未完成項。
+
+## 排名匯入實作補充
+
+V11 為 import_runs 增加 data_kind，既有批次為 PLAYERS；排名使用 RANKINGS。排名匯入以 PostgreSQL 暫存表分批接收、同一交易發布；一致重複保留多筆 ranking_sources，衝突及解析異常以 quality_issues 隔離。已在獨立測試容器驗證，尚未套用本機候選資料庫。細節與限制見 docs/12-player-ranking-history.md。

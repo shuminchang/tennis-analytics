@@ -37,10 +37,17 @@ class ProvenanceMigrationUpgradeTest {
                         (tour, tourney_id, tourney_date, round, match_num, winner_id, loser_id)
                     VALUES ('ATP', 'test', DATE '2026-01-05', 'F', 1, 100001, 100001)
                     """);
+            jdbcTemplate.update("INSERT INTO upgrade_v6_test.source_snapshots(repository_url,commit_sha,archive_location) VALUES(?,?,?)",
+                    "https://example.com/tennis","a".repeat(40),"/fixture");
+            jdbcTemplate.update("""
+                    INSERT INTO upgrade_v6_test.import_runs(snapshot_id,importer_commit_sha,transform_rules_sha256,quality_rules_sha256,scope_rules_sha256)
+                    SELECT id,?,?,?,? FROM upgrade_v6_test.source_snapshots
+                    ""","b".repeat(40),"c".repeat(64),"c".repeat(64),"c".repeat(64));
             Flyway flyway = Flyway.configure().dataSource(dataSource)
                     .schemas(schema).defaultSchema(schema).load();
-            assertThat(flyway.migrate().migrationsExecuted).isEqualTo(4);
+            assertThat(flyway.migrate().migrationsExecuted).isEqualTo(5);
             flyway.validate();
+            assertThat(jdbcTemplate.queryForObject("SELECT data_kind FROM upgrade_v6_test.import_runs",String.class)).isEqualTo("PLAYERS");
             assertThat(flyway.migrate().migrationsExecuted).isZero();
             assertThat(jdbcTemplate.queryForObject(
                     "SELECT name_first FROM upgrade_v6_test.players", String.class)).isEqualTo("Preserved");

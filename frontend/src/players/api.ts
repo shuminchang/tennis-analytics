@@ -74,3 +74,17 @@ export async function fetchPlayer(tour: string, playerId: number, signal: AbortS
   if (body.tour !== tour || body.playerId !== playerId) throw new Error("Invalid player response");
   return body;
 }
+
+export interface RankingEntry { date: string; rank: number; points: number | null }
+export interface RankingHistory { items: RankingEntry[]; total: number; page: number; size: number; available: boolean }
+export async function fetchRankings(tour: string, playerId: number, page: number, signal: AbortSignal): Promise<RankingHistory> {
+  const response = await fetch(`/tennis/api/v1/players/${encodeURIComponent(tour)}/${playerId}/rankings?page=${page}&size=20`, {
+    signal: AbortSignal.any([signal, AbortSignal.timeout(15000)]),
+    headers: { Accept: "application/json" },
+  });
+  if (!response.ok) throw new Error("Ranking history failed");
+  const body = (await response.json()) as RankingHistory;
+  if (!Array.isArray(body.items) || !Number.isSafeInteger(body.total) || body.total < 0 || typeof body.available !== "boolean")
+    throw new Error("Invalid ranking response");
+  return body;
+}

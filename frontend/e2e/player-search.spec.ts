@@ -96,3 +96,24 @@ test("player details support refresh, returning to filters and mobile layout", a
   await page.goto("/tennis/players/ATP/2");
   await expect(page.getByRole("heading", { name: "找不到這位球員" })).toBeVisible();
 });
+
+test("ranking history uses real imported data and preserves paging on refresh", async ({ page }) => {
+  test.skip(process.env.E2E_MOCK_API === "1", "Ranking acceptance uses the real API");
+  await page.goto("/tennis/players/ATP/1?q=Roger&tour=ATP");
+  const history = page.getByRole("region", { name: "排名歷史", exact: true }).filter({ has: page.getByRole("heading", { name: "排名歷史" }) });
+  await expect(history.getByRole("table")).toBeVisible();
+  await expect(history.getByRole("row")).toHaveCount(21);
+  await expect(history.getByRole("cell", { name: "0", exact: true })).toBeVisible();
+  await history.getByRole("button", { name: "下一頁" }).click();
+  await expect(page).toHaveURL(/rankingPage=1/);
+  await page.reload();
+  await expect(history.getByRole("row")).toHaveCount(6);
+  await page.getByRole("button", { name: "切換語言" }).click();
+  await expect(page.getByRole("heading", { name: "Ranking history" })).toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBeTruthy();
+  await page.screenshot({ path: "test-results/player-ranking-mobile.png", fullPage: true, animations: "disabled" });
+  await page.getByRole("link", { name: /Back to search results/ }).click();
+  await expect(page.getByLabel("Player name")).toHaveValue("Roger");
+  await expect(page).not.toHaveURL(/rankingPage/);
+});
