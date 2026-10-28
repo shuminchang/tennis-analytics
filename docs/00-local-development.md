@@ -398,3 +398,27 @@ JAR 建置與 repackage 成功。agent 核對程式及測試，未重跑驗收�
 已驗證網址政策與完整 SHA 格式，尚未查核儲存庫、commit 或來源內容的真實對應，
 未建立封存或匯入資料。下一步為本機 Git 查核與指定 commit 檔案清單，維持逐步教學。
 詳細指令及驗收界線見 [完整教學手冊](完整教學步驟與指令.md)。
+
+## VS Code 開發任務
+
+在 WSL 開啟專案根目錄，按 `Ctrl+Shift+P` → `Tasks: Run Task` → `dev: start all`。
+任務定義位於 `.vscode/tasks.json`，採用 [VS Code compound tasks](https://code.visualstudio.com/docs/debugtest/tasks)。
+
+- `dev: database`：啟動 Compose PostgreSQL，等待健康檢查通過。
+- `dev: backend`：先完成資料庫任務，讀取根目錄 `.env` 的 POSTGRES_*，對應 DB_*，執行 Maven Wrapper 的 spring-boot:run，固定 8081。
+- `dev: frontend`：啟動 Vite，固定 5173；API 代理到 127.0.0.1:8081。連接埠被占用會直接報錯。
+- `dev: stop database`：停止 db 容器，保留資料 volume。
+
+前置條件：Docker Desktop／WSL 整合可用、Java 21、Node 已設定，frontend 已執行 npm ci，根目錄已有 .env。
+本任務用 Bash source 載入 .env，因此值必須符合 Bash 語法；包含空白、$ 或 # 的密碼應以單引號包住。任務不顯示秘密值，也不使用終端機殘留的 DB_* 連線設定。
+
+開啟 http://localhost:5173/tennis/players；後端健康檢查為 http://127.0.0.1:8081/tennis/api/v1/health。
+啟動後端會自動套用現有 Flyway migration，但不匯入球員；資料庫未匯入時搜尋結果為空。
+前端存檔會熱更新；後端目前未使用 DevTools，修改 Java 後需停止並重新執行後端任務。
+
+停止前後端：`Tasks: Terminate Task` 選擇相關任務（或各任務終端 Ctrl+C）；需要停止資料庫時另外執行 dev: stop database。
+本次驗證 JSON、Bash 語法及人工環境變數對應，未實際啟動本機資料庫或套用 migration。既有 settings.json 保持原樣。
+
+### 本機目前使用的資料庫
+
+2026-10-28：dev: backend 的 DB_URL 已改連 tennis_candidate，.env 的 POSTGRES_DB 保留 tennis。候選資料庫已匯入球員，頁面搜尋 Federer 通過。切換連線後須重啟後端任務；詳細匯入與驗收見 docs/11-player-import-and-search.md。

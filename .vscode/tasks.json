@@ -1,0 +1,147 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "dev: start all",
+      "detail": "啟動本機 PostgreSQL、Spring Boot 與 Vite。",
+      "dependsOrder": "parallel",
+      "dependsOn": [
+        "dev: backend",
+        "dev: frontend"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "dev: database",
+      "type": "process",
+      "command": "docker",
+      "args": [
+        "compose",
+        "up",
+        "-d",
+        "--wait",
+        "db"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "development"
+      },
+      "runOptions": {
+        "instanceLimit": 1
+      }
+    },
+    {
+      "label": "dev: backend",
+      "type": "process",
+      "command": "bash",
+      "args": [
+        "-c",
+        "set -euo pipefail\nif [[ ! -f ../.env ]]; then echo 'Missing .env: create it from .env.example first.' >&2; exit 1; fi\nset -a\nsource ../.env\nset +a\nexport DB_URL=\"jdbc:postgresql://127.0.0.1:${POSTGRES_PORT:-5433}/tennis_candidate\"\nexport DB_USERNAME=\"${POSTGRES_USER:?Set POSTGRES_USER in .env}\"\nexport DB_PASSWORD=\"${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}\"\nexport SERVER_PORT=8081\nexec ./mvnw spring-boot:run"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/backend"
+      },
+      "problemMatcher": [
+        {
+          "owner": "dev-server",
+          "pattern": {
+            "regexp": "^(?!)()()()$",
+            "file": 1,
+            "location": 2,
+            "message": 3
+          },
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": ".*",
+            "endsPattern": ".*Started TennisApplication.*"
+          }
+        }
+      ],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "development"
+      },
+      "runOptions": {
+        "instanceLimit": 1
+      },
+      "dependsOn": [
+        "dev: database"
+      ],
+      "isBackground": true
+    },
+    {
+      "label": "dev: frontend",
+      "type": "process",
+      "command": "npm",
+      "args": [
+        "run",
+        "dev",
+        "--",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "5173",
+        "--strictPort"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/frontend",
+        "env": {
+          "API_PROXY_TARGET": "http://127.0.0.1:8081"
+        }
+      },
+      "problemMatcher": [
+        {
+          "owner": "dev-server",
+          "pattern": {
+            "regexp": "^(?!)()()()$",
+            "file": 1,
+            "location": 2,
+            "message": 3
+          },
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": ".*",
+            "endsPattern": ".*Local:.*5173.*"
+          }
+        }
+      ],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "development"
+      },
+      "runOptions": {
+        "instanceLimit": 1
+      },
+      "isBackground": true
+    },
+    {
+      "label": "dev: stop database",
+      "type": "process",
+      "command": "docker",
+      "args": [
+        "compose",
+        "stop",
+        "db"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "development"
+      },
+      "runOptions": {
+        "instanceLimit": 1
+      }
+    }
+  ]
+}
