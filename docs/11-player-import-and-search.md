@@ -61,3 +61,62 @@ IMPORT_TARGET=candidate backend/import-players \
 ```
 
 先從對應 commit 執行 `./mvnw package`；本段為操作說明，不表示已對真實資料執行。CLI 不開 HTTP 服務，成功顯示 run/imported/quarantined/reused。候選限制是程式防呆，不替代操作者確認 DB_URL。
+
+## 3. 球員搜尋（feat/player-search，已驗收）
+
+前兩個功能 commit 為 4cb892b、59ade66，已在 feat/data-model 提交並快轉合併 main；球員搜尋分支從 main 的 59ade66 建立。
+
+- `GET /tennis/api/v1/players?q=&tour=&page=&size=`；空 q 可瀏覽，tour 可空／ATP／WTA，page 0～10000、size 1～100、q 最多 100 字元。
+- Controller → PlayerService → PlayerRepository；沿用 JdbcTemplate，不額外引入 JPA。Service 正規化及驗證參數，以唯讀 REPEATABLE_READ 交易保持總數與結果一致，交易逾時 10 秒。
+- Repository 使用參數綁定，%／_／! 作字面搜尋；依姓名、巡迴與 ID 穩定排序。只讀成功匯入且沒有 OPEN PLAYER_SEARCH 品質排除的球員，未發布或占位資料不顯示。
+- 回應 `{items,total,page,size}`；錯誤 `{code,message}`，不公開 SQL 或堆疊。
+- 前端 `/tennis/players` 支援篩選、分頁、雙語、URL 條件保存、載入／空結果／錯誤重試、手機橫向表格及頁碼越界復原。
+- 不提供尚未實作的球員詳情、排名或生涯統計；保留來源與授權說明。
+
+### Docker 中斷時的交接紀錄（已由最終驗收解除）
+
+目前前端與不依賴 Docker 的後端測試可執行。API 整合測試曾因 Docker 再次逾時而中止，不能記為通過。依使用者要求先完成其他部分，再等待 Docker 重啟。
+
+恢復後依序執行（專案根目錄）：
+
+```bash
+env -u DB_URL -u DB_USERNAME -u DB_PASSWORD ./backend/mvnw -f backend/pom.xml -Dtest=PlayerSearchApiTest test
+env -u DB_URL -u DB_USERNAME -u DB_PASSWORD ./backend/mvnw -f backend/pom.xml clean verify
+python3 scripts/test/player_search_e2e.py
+```
+
+最後一項需 Chromium 系統相依套件；本機暫存函式庫仍存在時，可在命令前加 `LD_LIBRARY_PATH=/tmp/tennis-browser-libs/extracted/usr/lib/x86_64-linux-gnu`。真實端到端測試不得設定 E2E_MOCK_API。通過後更新驗收結果，再將第三步所有前後端檔案、測試與文件一起 commit；不合併第三步到 main、不推送或部署。
+
+## 球員搜尋：Docker 重啟前交接（2026-10-28）
+
+前兩步已提交 4cb892b、59ade66，快轉合併 main；目前分支 feat/player-search，第三步尚未提交。
+前端頁面、Controller、Service、Repository、測試與操作文件均已存檔；不包含使用者的 .vscode/ 修改。
+
+本次不依賴 Docker 的驗收：
+
+- frontend：`npm run lint`、`npm test`（14 案）、`npm run build` 通過。
+- backend：`env -u DB_URL -u DB_USERNAME -u DB_PASSWORD ./mvnw -Dtest=PlayerServiceTest,PlayerControllerTest test`，8 案通過。
+- frontend：啟動 `npm run dev -- --host 127.0.0.1 --port 5178 --strictPort` 後，以 `E2E_MOCK_API=1 E2E_BASE_URL=http://127.0.0.1:5178 npm run test:e2e` 驗證瀏覽器；2 案通過。此為模擬回應，不代表資料庫或實際 API 通過。
+- 本機 Chromium 缺 libgbm，暫以下載並解壓至 /tmp 的 libgbm1、libwayland-server0 配合 `LD_LIBRARY_PATH=/tmp/tennis-browser-libs/extracted/usr/lib/x86_64-linux-gnu` 執行；未安裝系統套件。重啟後暫存路徑可能消失。
+
+桌面／手機版面已檢查；搜尋、分頁、語言保存、空結果、錯誤重試與載入狀態已有前端驗證。截圖在 frontend/test-results/，不納入 Git。
+完整端到端腳本會清除繼承的 E2E_MOCK_API，避免將模擬回應誤當實際 API 驗收。
+
+使用者要求先完成其他工作再重啟 Docker；本次不重試 Docker、不提交尚未完成整合驗收的第三步。
+恢復後先執行 PlayerSearchApiTest，再 clean verify 與 scripts/test/player_search_e2e.py；具體指令見 [功能交付紀錄](11-player-import-and-search.md)。
+第三步全部通過後更新文件並在 feat/player-search 一次提交；不推送、部署或合併第三步到 main。
+
+## 第三步最終驗收（2026-10-28）
+
+Docker 恢復後已完成下列驗收，解除前述待驗收事項：
+
+1. 專案根目錄：`env -u DB_URL -u DB_USERNAME -u DB_PASSWORD ./backend/mvnw -f backend/pom.xml -Dtest=PlayerSearchApiTest test`，9 案通過。
+2. 專案根目錄：`env -u DB_URL -u DB_USERNAME -u DB_PASSWORD ./backend/mvnw -f backend/pom.xml clean verify`，342 案全部通過，無失敗、錯誤或跳過，JAR 打包成功。
+3. 專案根目錄：`LD_LIBRARY_PATH=/tmp/tennis-browser-libs/extracted/usr/lib/x86_64-linux-gnu python3 scripts/test/player_search_e2e.py`，2 個瀏覽器案例通過；人工 Git/CSV → 封存 → PostgreSQL 匯入 → HTTP API → 頁面已串接驗證。錯誤與延遲情境刻意攔截回應，其餘搜尋使用實際 API。
+
+API 初次測試出現 404：Spring Boot 注入的 TestRestTemplate 已帶 context path，測試又加上 /tennis/api。已改成相對 `/v1/players`，與既有 HealthControllerTest 一致；公開網址仍為 `/tennis/api/v1/players`。
+前次前端 lint、14 個測試、正式建置及模擬瀏覽器 2 案結果仍有效；此次未修改前端產品程式。
+端到端測試容器與程序已由腳本清理。未匯入真實資料、未推送或部署；.vscode/ 未修改或納入提交。
+
+第三個功能 commit 集中包含頁面、Controller、Service、Repository、測試與文件，保留在 feat/player-search，未合併 main。前兩步已合併 main。
+下一階段恢復教學節奏：先檢視球員搜尋頁面與端到端資料流程，再決定後續功能；正式候選資料匯入及部署需另行安排。

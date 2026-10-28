@@ -1,75 +1,54 @@
-# React + TypeScript + Vite
+# 球員搜尋前端
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + TypeScript + Vite，頁面位於 `/tennis/players`。使用 React Router、TanStack Query/Table 與 react-i18next。
 
-Currently, two official plugins are available:
+## 本機啟動
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+工作目錄 `frontend`：
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm ci
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+後端先以已匯入的候選資料庫啟動。Vite 將 `/tennis/api` 代理到 `http://127.0.0.1:8081`；可用 `API_PROXY_TARGET` 覆寫開發代理目標。不需開放跨網域 CORS。
+前端沒有內建假資料；尚未匯入時顯示空結果，API 無法連線時提供重試。
+正式環境仍需 Apache 對 `/tennis/api/` 反向代理，並將 `/tennis/players` 等前端路由導回 index.html；Vite 開發代理不會包含在 dist 內。
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 行為
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- 姓名不分大小寫搜尋；ATP/WTA 篩選、分頁，條件保留於 URL，可重新整理及使用上一頁／下一頁。
+- 切換條件送出時回第一頁；頁碼超出範圍可回到第一頁。
+- 繁體中文／英文切換，偏好存 localStorage；無儲存權限時仍可使用。
+- 缺少資料顯示「未提供」；未知慣用手 U 與缺值分開。
+- IOC 原始代碼不自動翻成國家名稱；不提供尚未完成的排名、勝率或球員詳情連結。
+- 版面為網球記錄冊風格；字型載入失敗時使用本機字型。使用專案 frontend-design skill，頁尾保留該 skill 要求的署名。
 
+## 驗證
+
+```bash
+npm run lint
+npm test
+npm run build
+npx playwright install chromium
 ```
+
+完整端到端測試（需 Docker、Java、Python 3、Git，且 backend 已打包），工作目錄專案根目錄：
+
+```bash
+python3 scripts/test/player_search_e2e.py
+```
+
+腳本自建可刪除的 PostgreSQL 容器、人工 Git/CSV 封存，經匯入 CLI 寫入測試資料，再啟動實際 API、Vite 及瀏覽器。不讀 `.env`，不使用開發資料庫 volume。結束時清除測試程序與容器，日誌留於 /tmp。
+
+Docker 不可用時可只檢查前端：先以 `npm run dev -- --port 5178 --strictPort` 啟動，再執行：
+
+```bash
+E2E_MOCK_API=1 E2E_BASE_URL=http://127.0.0.1:5178 npm run test:e2e
+```
+
+此模式攔截 API 回應，不代表後端或資料庫已驗收。Linux 需 Playwright 的系統相依套件；若缺少 libgbm 等，可由管理員執行 `npx playwright install-deps chromium`。本輪測試暫以 /tmp 解壓的 libgbm1、libwayland-server0 及 LD_LIBRARY_PATH 執行，未變更系統套件。
+
+npm 10 安裝新增測試依賴曾發生 Arborist `edgesOut` 錯誤，改用一次性的 `npx --yes npm@11 install ...` 完成。鎖定檔已更新；隨後原 npm 10 的 `npm ci` 可成功重現，無需升級全域 npm。
+
+參考：[TanStack Query](https://tanstack.com/query/latest/docs/framework/react/overview)、[react-i18next](https://react.i18next.com/latest/usetranslation-hook)。

@@ -1804,3 +1804,11 @@ JAR 打包與 repackage 成功。這是 fe95a30 選檔修正後的完整驗收�
 ## 三個功能階段：第二步驗收（2026-10-27）
 
 球員轉換與匯入、版本化規則、來源／品質追溯與獨立 CLI 已完成。工作目錄 backend，執行 `env -u DB_URL -u DB_USERNAME -u DB_PASSWORD ./mvnw -Dtest=PlayerConverterTest,PlayerImportServiceTest test`：7 案通過；再執行 `env -u DB_URL -u DB_USERNAME -u DB_PASSWORD ./mvnw clean verify`：325 案全部通過，JAR 打包成功。測試只使用人工資料與測試容器，未重跑真實 CSV 探索或寫入開發資料庫。詳細流程、操作與限制見 [功能交付紀錄](11-player-import-and-search.md)。前兩步完成後依使用者授權快轉合併 main，再建立 feat/player-search。
+
+## 球員搜尋驗收交接（2026-10-28）
+
+本階段未重新掃描真實 CSV、登錄真實快照或匯入業務資料。新增搜尋僅對成功匯入及通過搜尋品質規則的球員開放查詢。前端 14 案、後端非 Docker 8 案與模擬 API 瀏覽器 2 案通過；實際 API／資料庫端到端驗收待 Docker 恢復，不能以模擬結果代替。操作及交接見 [功能交付紀錄](11-player-import-and-search.md)。
+
+## 球員搜尋最終驗收（2026-10-28）
+
+Docker 恢復後 API 專屬 9 案、後端全套 342 案、人工來源經真實 PostgreSQL／API 的瀏覽器 2 案均通過，解除前節待驗收事項。沒有重跑真實 CSV 檢查或寫入業務資料庫；詳細指令、404 排錯與結果見 [功能交付紀錄](11-player-import-and-search.md) 最終驗收段落。

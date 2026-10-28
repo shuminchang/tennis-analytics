@@ -26,3 +26,6 @@ build/
 Thumbs.db
 # Local derived source archives
 .local/source-snapshots/
+
+# Python test runner cache
+__pycache__/
