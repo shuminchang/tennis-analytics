@@ -422,3 +422,7 @@ JAR 建置與 repackage 成功。agent 核對程式及測試，未重跑驗收�
 ### 本機目前使用的資料庫
 
 2026-10-28：dev: backend 的 DB_URL 已改連 tennis_candidate，.env 的 POSTGRES_DB 保留 tennis。候選資料庫已匯入球員，頁面搜尋 Federer 通過。切換連線後須重啟後端任務；詳細匯入與驗收見 docs/11-player-import-and-search.md。
+
+### 排名資料已就緒（2026-10-29）
+
+本機 tennis_candidate 已完成 V11 與排名匯入，成功批次為 3。啟動 dev: start all 後可從 Federer 詳情頁查看排名歷史；資料仍沿用指定來源快照，頁面最新一列不是目前世界排名。若保留「尚未匯入」快取，重新整理頁面。勿重新建立候選資料庫或重新匯入球員。
