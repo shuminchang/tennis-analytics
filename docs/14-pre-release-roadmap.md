@@ -9,7 +9,7 @@
 | 2 | 賽事列表與歷屆決賽勝方 | 已驗收 |
 | 3 | 分場地／年份及發球指標 | 已驗收 |
 | 4 | 排名圖表／指定日期榜單／首頁 | 已驗收 |
-| 5 | 登入、角色、CSRF、帳號管理 | 待實作 |
+| 5 | 登入、角色、CSRF、帳號管理 | 已驗收 |
 | 6 | 球員比較與個人收藏 | 待實作 |
 | 7 | H2H 與 Wilson 信賴區間 | 待實作 |
 | 8 | 版本化 Elo 預計算與圖表 | 待實作 |
@@ -35,3 +35,9 @@ V13 v_event_final_winners 僅對單一合格 F 決賽且非 D 事件提供來源
 ## 階段 4：排名與首頁
 
 新增公開排名觀測 view、指定日期榜單、最多 5,000 筆的球員圖表與首頁匯入時間摘要。未指定日期使用來源最新日期，指定缺少日期不借用前一期；積分缺值斷線、名次軸反轉。RankingBrowseTest 精確日期／缺值通過，前端 39 案、lint／build 通過。
+
+## 階段 5：Session 與角色
+
+新增 V15 app_users／audit_log、BCrypt(12)、Session、CSRF、MEMBER／ADVANCED／ADMIN 與匿名訪客。5 次錯誤鎖定 15 分鐘，登入成功重設；停用及角色變更逐請求生效。密碼不放 URL／日誌／localStorage，不提供預設帳號或自由註冊。登入／登出後重新載入清除私人查詢快取。
+GET /auth/csrf 取得遮罩 token，每次寫入前重取；POST /auth/login 為表單、POST /auth/logout；GET /auth/me；管理員可建立／停用帳號。CLI backend/account-admin 只接受互動式終端輸入密碼，需另設 DB_*，不會自動建立真實帳號。Cookie HttpOnly、SameSite=Lax，正式環境須 COOKIE_SECURE=true。
+驗證：AccountTest 的 CSRF／權限／鎖定／停用流程與既有 Controller／Health 共 8 案通過；前端 41 案、lint／build 通過。既有 MVC slice 測試專測 Controller 而停用 filters；安全整合測試保留完整 filter chain。採用 [Spring Security CSRF 官方流程](https://docs.spring.io/spring-security/reference/6.5/servlet/exploits/csrf.html)。限流與正式設定留在階段 9。

@@ -13,6 +13,8 @@ public class FeatureAdvice {
     ResponseEntity<?> invalid(Exception e) { return ResponseEntity.badRequest().body(Map.of("code","INVALID_REQUEST","message","Check request parameters.")); }
     @ExceptionHandler(NoSuchElementException.class)
     ResponseEntity<?> missing(Exception e) { return ResponseEntity.status(404).body(Map.of("code","NOT_FOUND","message","Record not found.")); }
+    @ExceptionHandler(org.springframework.dao.DuplicateKeyException.class)
+    ResponseEntity<?> conflict(Exception e) { return ResponseEntity.status(409).body(Map.of("code","CONFLICT","message","Record already exists.")); }
     @ExceptionHandler(DataAccessException.class)
     ResponseEntity<?> unavailable(Exception e) { return ResponseEntity.status(503).body(Map.of("code","UNAVAILABLE","message","Temporarily unavailable.")); }
 }

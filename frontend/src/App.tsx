@@ -6,6 +6,7 @@ import PlayerDetailPage from "./players/PlayerDetailPage";
 import Tournaments, { TournamentDetail } from "./features/Tournaments";
 import Rankings from "./features/Rankings";
 import Home from "./features/Home";
+import Account from "./features/Account";
 import "./App.css";
 
 export default function App() {
@@ -41,6 +42,7 @@ export default function App() {
           </Link>
           <Link to="/">{i18n.language === "en" ? "Home" : "首頁"}</Link>
           <Link to="/rankings">{i18n.language === "en" ? "Rankings" : "排名"}</Link>
+          <Link to="/account">{i18n.language === "en" ? "Account" : "帳號"}</Link>
           <Link to="/tournaments">{i18n.language === "en" ? "Events" : "賽事"}</Link>
           <button
             className="language"
@@ -55,6 +57,7 @@ export default function App() {
       <main id="main">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/account" element={<Account />} />
           <Route path="/rankings" element={<Rankings />} />
           <Route path="/tournaments" element={<Tournaments />} />
           <Route path="/tournaments/:tour/:id" element={<TournamentDetail />} />

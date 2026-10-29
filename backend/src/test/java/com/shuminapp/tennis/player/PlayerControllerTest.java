@@ -12,6 +12,7 @@ import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+@org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc(addFilters=false)
 @WebMvcTest(PlayerController.class)
 class PlayerControllerTest {
     @Autowired MockMvc mvc;
