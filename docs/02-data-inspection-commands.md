@@ -1832,3 +1832,20 @@ Docker 恢復後 API 專屬 9 案、後端全套 342 案、人工來源經真實
 ## 真實比賽匯入核對（2026-10-29）
 
 run=4 已在 tennis_candidate 成功保存 ATP 199,389、WTA 162,182 場，共 361,571 場；來源對照同數。範圍分類與先前探索一致，套用身分品質規則後預設顯示 ATP 199,059、WTA 89,881 場，共 288,940 場。隔離列 0、品質問題 633 筆，兩者意義不同。未重跑 CSV 探索。Federer 2021 年 14 筆已通過真實 API／頁面驗收，比分明示來源勝方在前。命令、版本及完整結果見 [比賽紀錄交付](13-player-match-history.md)。
+
+## 2026-10-30：發布前真實資料驗收（不是重跑 CSV 探索）
+
+來源快照仍為 83733587353df8a41f2fd4f516147d5aa83f5a8d；未修改原檔、未重新匯入。候選庫 players=137483、rankings=5573027、matches=361571，展示讀模型 288940。
+elo-v1 批次 1 使用 stats-v1 的 286774 場，成功保存 1140032 筆前後評分與 34631 筆目前分類評分。這些是本機執行結果，不是匯入預估或官方排名。
+
+工作目錄 `/home/shumin/tennis-analytics`，先由本機環境設定 DB_*，勿貼出密碼：
+
+```bash
+IMPORT_TARGET=candidate backend/rebuild-elo
+python3 scripts/ops/backup_restore.py --database tennis_candidate --restore-check
+python3 scripts/ops/benchmark.py --authenticated
+```
+
+Elo 是規則化衍生資料，與來源比分／排名分開；同一規則與輸入重用成功批次，勿因日期近似將圖表稱為逐場實際時間線。
+備份已實際還原並核對 22 項表／讀模型計數及約束；工具只刪除自己建立的空還原庫。外部目的地依使用者決定待定。命令會建立本機衍生模型／備份或短暫 QA 帳號，不能當成純唯讀探索指令。
+完整實測、可重現命令與限制見 [發布前工程驗收](15-local-release-readiness.md) 及 [摘要報告](reports/2026-10-30-local-verification.json)。

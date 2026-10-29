@@ -22,9 +22,13 @@ parser.add_argument('--base', default='http://127.0.0.1:8082/tennis/api')
 parser.add_argument('--output', default='.local/verification/performance.json')
 parser.add_argument('--authenticated', action='store_true')
 parser.add_argument('--database', default='tennis_candidate')
+parser.add_argument('--container')
+parser.add_argument('--db-user')
 args = parser.parse_args()
 if not re.fullmatch(r'[a-z][a-z0-9_]{0,62}', args.database):
     raise ValueError('Invalid database identifier')
+if args.container and not re.fullmatch(r'tennis_budget_db_[0-9a-f]{8,12}', args.container):
+    raise ValueError('Standalone target must be an owned budget test container')
 if not args.base.startswith(('http://127.0.0.1:', 'http://localhost:')):
     raise ValueError('Benchmark is limited to local HTTP services')
 opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()))
@@ -33,7 +37,7 @@ username = None
 qa_path = Path(args.output).with_suffix('.qa.json')
 
 def sql(query):
-    return subprocess.run(['docker', 'compose', 'exec', '-T', 'db', 'psql', '-X', '-qAt', '-v', 'ON_ERROR_STOP=1', '-U', user, '-d', args.database], cwd=ROOT, input=query, text=True, stdout=subprocess.PIPE, check=True, timeout=30).stdout.strip()
+    return subprocess.run((['docker', 'exec', '-i', args.container] if args.container else ['docker', 'compose', 'exec', '-T', 'db']) + ['psql', '-X', '-qAt', '-v', 'ON_ERROR_STOP=1', '-U', user, '-d', args.database], cwd=ROOT, input=query, text=True, stdout=subprocess.PIPE, check=True, timeout=30).stdout.strip()
 
 def write(path, fields=None):
     with opener.open(args.base + '/auth/csrf', timeout=15) as response:
@@ -44,8 +48,13 @@ def write(path, fields=None):
 
 try:
     if args.authenticated:
-        config = json.loads(subprocess.run(['docker', 'compose', 'config', '--format', 'json'], cwd=ROOT, check=True, text=True, stdout=subprocess.PIPE).stdout)
-        user = config['services']['db']['environment']['POSTGRES_USER']
+        if args.container:
+            user = args.db_user
+            if not user or not re.fullmatch(r'[a-z][a-z0-9_]{0,62}', user):
+                raise ValueError('A valid budget DB user is required')
+        else:
+            config = json.loads(subprocess.run(['docker', 'compose', 'config', '--format', 'json'], cwd=ROOT, check=True, text=True, stdout=subprocess.PIPE, timeout=15).stdout)
+            user = config['services']['db']['environment']['POSTGRES_USER']
         username = 'qa_bench_' + uuid.uuid4().hex[:12]
         password = secrets.token_urlsafe(24)
         crypto = sorted((Path.home() / '.m2/repository/org/springframework/security/spring-security-crypto').glob('*/spring-security-crypto-*.jar'))[-1]

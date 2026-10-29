@@ -15,6 +15,7 @@ public class AnalyticsRefreshService {
         jdbc.execute("SELECT pg_advisory_xact_lock(714031)");jdbc.execute("SET LOCAL statement_timeout=0");
         if(jdbc.queryForObject("SELECT count(*) FROM import_runs WHERE status='RUNNING'",Long.class)>0 || jdbc.queryForObject("SELECT count(*) FROM elo_runs WHERE status='RUNNING'",Long.class)>0) throw new IllegalStateException("Inspect running batch before refresh");
         jdbc.execute("REFRESH MATERIALIZED VIEW analytics_matches");jdbc.execute("REFRESH MATERIALIZED VIEW analytics_events");
+        jdbc.execute("ANALYZE analytics_matches");jdbc.execute("ANALYZE analytics_events");
         jdbc.update("INSERT INTO analytics_state VALUES(true,clock_timestamp(),(SELECT max(id) FROM import_runs WHERE data_kind='MATCHES' AND status='SUCCEEDED')) ON CONFLICT(singleton) DO UPDATE SET refreshed_at=excluded.refreshed_at,source_run_id=excluded.source_run_id");
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() { @Override public void afterCommit() { clear(); } });
     }

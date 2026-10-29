@@ -8,6 +8,8 @@ import json
 import os
 from pathlib import Path
 import re
+import select
+import time
 import subprocess
 from datetime import datetime, timezone
 import uuid
@@ -16,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[2]
 TABLES = ['flyway_schema_history', 'import_runs', 'source_snapshots', 'source_files', 'quality_issue_impacts', 'analytics_state', 'players', 'rankings', 'matches', 'player_sources', 'ranking_sources', 'match_sources', 'quality_issues', 'tournament_decisions', 'app_users', 'favorites', 'audit_log', 'elo_runs', 'elo_history', 'elo_current', 'analytics_matches', 'analytics_events']
 
 def command(args, **kwargs):
-    return subprocess.run(args, cwd=ROOT, check=True, timeout=1800, **kwargs)
+    return subprocess.run(args, cwd=ROOT, check=True, timeout=kwargs.pop('timeout', 1800), **kwargs)
 
 def pg(user, database):
     return ['docker', 'compose', 'exec', '-T', 'db', 'psql', '-X', '-qAt', '-v', 'ON_ERROR_STOP=1', '-U', user, '-d', database]
@@ -24,6 +26,20 @@ def pg(user, database):
 def summary_sql():
     fields = ','.join(f"'{name}',(SELECT count(*) FROM {name})" for name in TABLES)
     return f'SELECT json_build_object({fields});'
+
+def snapshot_line(stream, buffered, seconds=60):
+    deadline = time.monotonic() + seconds
+    while b'\n' not in buffered:
+        remaining = deadline - time.monotonic()
+        if remaining <= 0 or not select.select([stream], [], [], remaining)[0]:
+            raise TimeoutError('Snapshot response timed out')
+        chunk = os.read(stream.fileno(), 65536)
+        if not chunk:
+            raise RuntimeError('Snapshot keeper closed before response')
+        buffered.extend(chunk)
+    line, _, rest = buffered.partition(b'\n')
+    buffered[:] = rest
+    return line.decode('utf-8')
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
@@ -55,10 +71,11 @@ def main():
         keeper = subprocess.Popen(pg(user, args.database), cwd=ROOT, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=(output / 'snapshot.log').open('w'), text=True)
         keeper.stdin.write('BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY;\nSELECT pg_export_snapshot();\n' + summary_sql() + '\n')
         keeper.stdin.flush()
-        snapshot = keeper.stdout.readline().strip()
+        buffered = bytearray()
+        snapshot = snapshot_line(keeper.stdout, buffered).strip()
         if not re.fullmatch(r'[0-9A-Fa-f-]+', snapshot):
             raise RuntimeError('Cannot export snapshot; inspect snapshot.log')
-        counts = json.loads(keeper.stdout.readline())
+        counts = json.loads(snapshot_line(keeper.stdout, buffered))
         print('Backing up consistent snapshot...', flush=True)
         with partial.open('wb') as stream:
             os.chmod(partial, 0o600)
@@ -92,16 +109,23 @@ def main():
         manifest['status'] = 'SUCCEEDED'
         checkpoint('COMPLETE')
         print('PASS: backup checksum' + (' and real restore verified' if args.restore_check else '') + '. Manifest: ' + str(output / 'manifest.json'), flush=True)
-    except Exception as error:
+    except BaseException as error:
         manifest.update(status='FAILED', failure=type(error).__name__)
         raise
     finally:
         if keeper and keeper.poll() is None:
-            keeper.terminate();keeper.wait(timeout=30)
+            keeper.terminate()
+            try:
+                keeper.wait(timeout=15)
+            except subprocess.TimeoutExpired:
+                keeper.kill();keeper.wait(timeout=15)
         if restore_created:
-            cleanup = subprocess.run(['docker', 'compose', 'exec', '-T', 'db', 'dropdb', '-U', user, '--if-exists', restore], cwd=ROOT, timeout=60, stdout=subprocess.DEVNULL)
-            manifest['cleanup_pending'] = cleanup.returncode != 0
-        (output / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
+            try:
+                cleanup = subprocess.run(['docker', 'compose', 'exec', '-T', 'db', 'dropdb', '-U', user, '--if-exists', restore], cwd=ROOT, timeout=15, stdout=subprocess.DEVNULL)
+                manifest['cleanup_pending'] = cleanup.returncode != 0
+            except (OSError, subprocess.TimeoutExpired):
+                manifest['cleanup_pending'] = True
+        checkpoint(manifest['stage'])
         for path in output.iterdir():
             if path.is_file():
                 os.chmod(path, 0o600)

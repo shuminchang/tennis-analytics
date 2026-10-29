@@ -21,6 +21,7 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
           cache-dependency-path: frontend/package-lock.json
+      - run: python3 scripts/test/ops_checks.py
       - run: ./backend/mvnw -B -f backend/pom.xml verify
       - run: npm --prefix frontend ci
       - run: npm --prefix frontend run lint

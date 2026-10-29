@@ -1,0 +1,156 @@
+{
+  "verified_on": "2026-10-30",
+  "source_commit": "83733587353df8a41f2fd4f516147d5aa83f5a8d",
+  "backup": {
+    "database": "tennis_candidate",
+    "created_at": "2026-10-29T17:04:02.505559+00:00",
+    "status": "SUCCEEDED",
+    "external_backup": false,
+    "stage": "COMPLETE",
+    "sha256": "84f887815df57bc162b70082144bc3cea63e1b29dba6fbdd03c0d8129e835523",
+    "bytes": 107707958,
+    "counts": {
+      "flyway_schema_history": 18,
+      "import_runs": 4,
+      "source_snapshots": 1,
+      "source_files": 133,
+      "quality_issue_impacts": 2808,
+      "analytics_state": 1,
+      "players": 137483,
+      "rankings": 5573027,
+      "matches": 361571,
+      "player_sources": 137483,
+      "ranking_sources": 5573263,
+      "match_sources": 361571,
+      "quality_issues": 2453,
+      "tournament_decisions": 19039,
+      "app_users": 0,
+      "favorites": 0,
+      "audit_log": 0,
+      "elo_runs": 1,
+      "elo_history": 1140032,
+      "elo_current": 34631,
+      "analytics_matches": 288940,
+      "analytics_events": 15852
+    },
+    "code_commit": "4b81322e595f25d316cbb505697bcdbb4b1eacaf",
+    "restore_database": "tennis_restore_4cf04b83d66d",
+    "restore_verified": true,
+    "restored_counts": {
+      "flyway_schema_history": 18,
+      "import_runs": 4,
+      "source_snapshots": 1,
+      "source_files": 133,
+      "quality_issue_impacts": 2808,
+      "analytics_state": 1,
+      "players": 137483,
+      "rankings": 5573027,
+      "matches": 361571,
+      "player_sources": 137483,
+      "ranking_sources": 5573263,
+      "match_sources": 361571,
+      "quality_issues": 2453,
+      "tournament_decisions": 19039,
+      "app_users": 0,
+      "favorites": 0,
+      "audit_log": 0,
+      "elo_runs": 1,
+      "elo_history": 1140032,
+      "elo_current": 34631,
+      "analytics_matches": 288940,
+      "analytics_events": 15852
+    },
+    "cleanup_pending": false
+  },
+  "tests": {
+    "backend": 413,
+    "frontend": 41,
+    "browser": 9,
+    "follow_up_backend": 4,
+    "ops_failure_paths": 4
+  },
+  "remote_ci_executed": false,
+  "deployed": false,
+  "resource_limited_stack": {
+    "limits_mib": {
+      "postgres": 320,
+      "java": 448,
+      "apache": 64
+    },
+    "cpu_quotas": {
+      "postgres": 0.5,
+      "java": 0.4,
+      "apache": 0.1
+    },
+    "performance": {
+      "/v1/health": {
+        "cold_ms": 67.26,
+        "warm_p95_ms": 83.56,
+        "warm_mean_ms": 19.89,
+        "samples": 20
+      },
+      "/v1/players?q=Federer": {
+        "cold_ms": 384.58,
+        "warm_p95_ms": 378.97,
+        "warm_mean_ms": 278.28,
+        "samples": 20
+      },
+      "/v1/players/ATP/103819/summary": {
+        "cold_ms": 58.21,
+        "warm_p95_ms": 86.24,
+        "warm_mean_ms": 25.77,
+        "samples": 20
+      },
+      "/v1/players/ATP/103819/analysis": {
+        "cold_ms": 177.83,
+        "warm_p95_ms": 75.96,
+        "warm_mean_ms": 15.27,
+        "samples": 20
+      },
+      "/v1/tournaments?tour=ATP": {
+        "cold_ms": 98.65,
+        "warm_p95_ms": 87.9,
+        "warm_mean_ms": 29.67,
+        "samples": 20
+      },
+      "/v1/rankings?tour=ATP": {
+        "cold_ms": 409.66,
+        "warm_p95_ms": 82.79,
+        "warm_mean_ms": 20.52,
+        "samples": 20
+      },
+      "/v1/h2h?tour=ATP&first=103819&second=104745": {
+        "cold_ms": 119.38,
+        "warm_p95_ms": 82.61,
+        "warm_mean_ms": 18.79,
+        "samples": 20
+      },
+      "/v1/players/ATP/103819/elo": {
+        "cold_ms": 1593.25,
+        "warm_p95_ms": 200.19,
+        "warm_mean_ms": 80.07,
+        "samples": 20
+      }
+    },
+    "status": "SUCCEEDED",
+    "cleanup_verified": true,
+    "memory_snapshot_mib": {
+      "postgres": 177.7,
+      "java": 198.1,
+      "apache": 3.047
+    },
+    "limits_exclude": "Host OS, Docker daemon and other host workloads",
+    "test_type": "Sequential local HTTP through Apache; one first call and 20 warm calls per endpoint; warm p95 threshold <500ms except H2H <1000ms",
+    "jar_sha256": "ac738c88350002bc0cff9a1ca0cbef3f0e65e3fa4224e1ca860e13585f392179"
+  },
+  "real_federer_ui": {
+    "player_id": 103819,
+    "tour": "ATP",
+    "displayed": 1545,
+    "played": 1523,
+    "wins": 1248,
+    "losses": 275,
+    "browser_errors": 0
+  },
+  "real_bounded_snapshot_reader_verified": true
+}

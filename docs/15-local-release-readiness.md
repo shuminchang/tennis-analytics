@@ -78,3 +78,63 @@ scripts/ops/update-candidate.sh tennis_candidate_new_snapshot \
 
 正式 Apache／HTTPS、轉送標頭與 CSP、systemd／日誌輪替、獨立 app／import DB 權限與備份排程，及整台 Nanode 1 GB 記憶體／磁碟實測。
 本輪不安裝正式系統設定、不推送或部署；下方只補本機已執行結果。
+
+
+## 2026-10-30 本機實際結果
+
+本輪以既有來源快照 83733587353df8a41f2fd4f516147d5aa83f5a8d 與本機 tennis_candidate 驗收，不重新匯入或改寫原始 CSV。
+
+- V12～V18 已套用；球員 137,483、排名 5,573,027、比賽 361,571、展示讀模型 288,940 筆。
+- 真實 elo-v1 批次 1 成功：合格比賽 286,774、歷史評分 1,140,032、各球員／分類目前評分 34,631 筆。計算使用 256 MiB Java heap，約 33 秒；不是完整生涯或實際逐場日期的宣稱。
+- 全套後端 413 案、前端 41 案、lint／build、人工來源完整端到端 9 案通過。後續關閉 Web SQL JIT 與刷新後 ANALYZE 的修正，再驗 AnalysisTest／AccountTest／RateLimitTest，共 4 案通過並重新打包。
+- 真實備份大小 107,707,958 bytes，SHA-256：84f887815df57bc162b70082144bc3cea63e1b29dba6fbdd03c0d8129e835523。
+- 已實際還原隨機空資料庫，保存表／讀模型的筆數與已驗證約束核對通過；連同 Flyway 歷史共 22 項（詳見報告計數），還原庫已清除，來源庫保留。備份仍在 .local/backups/20261029T170402Z-6f9e68/，未提交資料檔。
+- 備份中的 app_users／favorites 為 0；效能工具之後建立的隨機 QA 帳號已刪除，登入稽核保留。因此後續 audit_log 計數可以與備份當下不同。
+
+可提交的摘要見 [驗證報告](reports/2026-10-30-local-verification.json)；原始日誌、備份及畫面保存在 Git 忽略的 .local/verification/ 與 .local/backups/。遠端 CI 只完成配置，未推送執行。
+
+### 冷查詢修正及測量界線
+
+原本在單核心 JVM、未限制 PostgreSQL 的本機測量，分析冷查詢約 944 ms、暖 p95 約 6 ms；EXPLAIN 顯示短查詢承擔 JIT 編譯成本，因此 Web 連線關閉 jit，分析讀模型刷新後立即 ANALYZE。
+該次暖 p95：搜尋 141 ms、摘要 9 ms、分析 7 ms、賽事 11 ms、排名 12 ms、H2H 9 ms、Elo 47 ms（取整上捨入）；此測量並行還原且不是正式主機容量證明。
+
+為避免將 Java heap 上限誤當整台主機驗收，另提供獨立測試：
+
+```bash
+# 工作目錄：/home/shumin/tennis-analytics
+python3 scripts/ops/budget_stack.py \
+  .local/backups/20261029T170402Z-6f9e68/manifest.json
+```
+
+驗證備份雜湊後，還原至工具新建的 PostgreSQL 容器，連同 Java 與 Apache 分別限制 320／448／64 MiB、0.5／0.4／0.1 CPU，總服務上限 832 MiB／1 CPU，透過 Apache 執行真實資料的匿名及進階 API 測量。PostgreSQL 使用 shared_buffers=32MB、work_mem=2MB、maintenance_work_mem=16MB；不改原 Compose 設定。報告保留冷查詢與 20 次暖查詢 p95，最後僅清理自己的容器與網路。
+主機 OS、Docker daemon 與 Linode 其他網站的資源不在容器上限內；仍須第 10 階段在目標主機驗收。這是本機 HTTP 測試，不代表 HTTPS／Secure cookie／正式 Apache 設定已部署。
+
+打包前停止正在使用 target JAR 的暫時服務，或先複製 JAR 至固定驗證路徑，避免 Maven 重寫運行中的檔案造成延遲載入類別失敗。
+
+
+### 受限服務堆疊結果
+
+2026-10-30 執行成功，真實備份在限制內還原，經 Apache 測量（毫秒）：
+
+| 端點 | 首次 | 暖 p95（20 次） |
+| --- | ---: | ---: |
+| 健康 | 67.26 | 83.56 |
+| 球員搜尋 | 384.58 | 378.97 |
+| 摘要 | 58.21 | 86.24 |
+| 場地分析 | 177.83 | 75.96 |
+| 賽事列表 | 98.65 | 87.90 |
+| 排名榜 | 409.66 | 82.79 |
+| H2H | 119.38 | 82.61 |
+| Elo 圖表 | 1593.25 | 200.19 |
+
+一般暖 p95 <500ms、H2H <1000ms 均通過；Elo 首次載入約 1.59 秒，不能宣稱所有冷查詢小於 500ms。這是順序請求，不是多使用者併發容量測試；正式主機負載與 TLS 仍待第 10 階段。
+測量後記憶體快照為 PostgreSQL 約 177.7 MiB、Java 198.1 MiB、Apache 3.047 MiB；不是全程峰值，實際硬上限以容器設定為準。測試容器／網路與 QA 帳號已清理，原候選庫未改動。
+
+真實瀏覽器另驗 Roger Federer 頁面：1,523 場有效樣本／1,248 勝／275 負、排名圖及來源比賽紀錄可顯示，無 pageerror。畫面 .local/verification/real-federer.png。
+本輪第 1～9 階段在上述本機範圍完成；外部備份保留待定。部署、推送與合併不在此次自動執行範圍。
+
+
+### Docker 中斷時的備份狀態
+
+快照回應以 60 秒上限讀取；Docker 清理逾時仍保存 manifest 的結果與 cleanup_pending，不會因 dropdb 失聯遺失已驗證結果。cleanup_pending=true 只表示還有工具建立的還原庫／容器需查核，不能直接刪除其他庫。
+`python3 scripts/test/ops_checks.py` 的 4 案通過：雙行快照緩衝、回應逾時、dump 失敗不產生已驗證檔、還原成功但清理失聯仍保留結果。這些是無 Docker 的失敗模擬；另已對真實 PostgreSQL 驗證有界快照讀取（players=137483）。CI 已加入這 4 案。
