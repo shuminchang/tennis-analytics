@@ -1,0 +1,6 @@
+Scope policy v1, derived from docs/05-tournament-scope.md.
+Explicit exceptions in tournament-exceptions-v1.csv take priority; source level must match reviewed value.
+ATP A,G,M,D INCLUDE; WTA G,I,P,PM,T1,T2,T3,T4,T5,D INCLUDE.
+ATP/WTA E,J EXCLUDE; WTA 35+H,50+H EXCLUDE.
+All other levels REVIEW, retaining original level. D means team singles, not individual title.
+Exception reasons and verification sources are documented in docs/05-tournament-scope.md.

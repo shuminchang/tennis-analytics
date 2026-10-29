@@ -383,3 +383,7 @@ https://www.wtatennis.com/tournaments/1081/zhuhai/2023
 WTA INCLUDE 89882、EXCLUDE 587、REVIEW 71713。
 這是套用範圍規則的原始列數，尚未套用品質規則，並非已匯入或有效統計筆數。
 重現方式及身分疑點見 [檢查交接](06-data-inspection-handoff.md)。
+
+## 匯入篩選實作更新（2026-10-29）
+
+本文件已確認的通用規則與 104 個例外已由比賽匯入器實作，例外內容版本化於 backend/src/main/resources/ingestion/tournament-exceptions-v1.csv。日期／名稱／級別衝突與例外級別變更會停止匯入。INCLUDE／EXCLUDE／REVIEW 均保存判斷，預設列表另套用品質規則。前文「尚未實作匯入篩選」為歷史設計狀態；實作與實際結果以 docs/13-player-match-history.md 為準。

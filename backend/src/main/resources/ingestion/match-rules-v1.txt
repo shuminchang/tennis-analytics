@@ -1,0 +1,14 @@
+match-rules-v1
+Scope: verified ATP/WTA annual singles files only; both tours required. Source CSV remains immutable.
+Key: tour,tourney_id,round,integer match_num. Date is tournament date, not actual match date.
+Require published same-snapshot players. Invalid required key/date/reference quarantines the row.
+Identical raw duplicate keys merge with all source locations; conflicting raw rows quarantine the whole key.
+Same tournament ID with differing date,name,level aborts import pending review.
+Optional invalid numeric fields become NULL with raw evidence. Keep valid zero separate from missing.
+Preserve signed serve statistics; flag negatives and inconsistent relations. Preserve text seeds, raw score and source heights.
+Age numeric(4,1) must be exactly representable; nonpositive age is excluded from age analysis, not entire match.
+Known suspect minute values: 0,1146,987,2475,1507,1094; no invented global upper threshold.
+Same winner/loser ID, explicit placeholder source/master name, or master birth after tournament date excludes MATCH_HISTORY and PERSONAL_STATS.
+Partial names containing unknown do not automatically exclude a match.
+Default history requires INCLUDE tournament scope and no open MATCH_HISTORY impact.
+W/O,RET,DEF,UNK/missing score are shown with source result status; no win-rate/H2H/Elo or championship calculation.

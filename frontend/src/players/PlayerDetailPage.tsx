@@ -4,12 +4,15 @@ import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { fetchPlayer } from "./api";
 import RankingHistory from "./RankingHistory";
+import MatchHistory from "./MatchHistory";
 
 export default function PlayerDetailPage() {
   const { tour = "", playerId = "" } = useParams();
   const { search } = useLocation();
   const returnParams = new URLSearchParams(search);
   returnParams.delete("rankingPage");
+  returnParams.delete("matchPage");
+  returnParams.delete("matchYear");
   const { t, i18n } = useTranslation();
   const heading = useRef<HTMLHeadingElement>(null);
   const selectedTour = tour.toUpperCase();
@@ -69,6 +72,7 @@ export default function PlayerDetailPage() {
             </dl>
           </section>
           <RankingHistory tour={player.tour} playerId={player.playerId} />
+          <MatchHistory tour={player.tour} playerId={player.playerId} />
           <aside className="about">
             <h2>{t("scopeTitle")}</h2>
             <div><p>{t("detailNote")}</p><p className="source-note">{t("source")} <a href="https://github.com/Aneeshers/tennis-sackmann-archive" target="_blank" rel="noreferrer">GitHub ↗</a> · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">{t("license")}</a></p></div>

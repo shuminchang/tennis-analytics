@@ -117,3 +117,26 @@ test("ranking history uses real imported data and preserves paging on refresh", 
   await expect(page.getByLabel("Player name")).toHaveValue("Roger");
   await expect(page).not.toHaveURL(/rankingPage/);
 });
+
+test("match history filters years, refreshes pages and opens an opponent", async ({ page }) => {
+  test.skip(process.env.E2E_MOCK_API === "1", "Match acceptance uses the real API");
+  await page.goto("/tennis/players/ATP/1?q=Roger&tour=ATP");
+  const history = page.getByRole("region", { name: "比賽紀錄", exact: true });
+  await expect(history.getByRole("table")).toBeVisible();
+  await history.getByRole("spinbutton", { name: "賽事年份" }).fill("2024");
+  await history.getByRole("button", { name: "篩選比賽" }).click();
+  await expect(history.getByRole("row")).toHaveCount(21);
+  await expect(history.getByRole("cell", { name: /不戰晉級/ })).toBeVisible();
+  await page.screenshot({ path: "test-results/player-matches-desktop.png", fullPage: true, animations: "disabled" });
+  await history.getByRole("button", { name: "下一頁" }).click();
+  await page.reload();
+  await expect(history.getByRole("row")).toHaveCount(6);
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBeTruthy();
+  await page.screenshot({ path: "test-results/player-matches-mobile.png", fullPage: true, animations: "disabled" });
+  await history.getByRole("link", { name: "Rafael Nadal" }).first().click();
+  await expect(page.getByRole("heading", { name: "Rafael Nadal" })).toBeVisible();
+  await page.getByRole("link", { name: /返回搜尋結果/ }).click();
+  await expect(page.getByLabel("球員姓名")).toHaveValue("Roger");
+  await expect(page).not.toHaveURL(/matchPage|matchYear/);
+});

@@ -572,3 +572,12 @@ footer a {
   .ranking-note { padding: 0 20px 16px; }
   .ranking-history th:first-child, .ranking-history td:first-child { min-width: 125px; }
 }
+
+.match-filter { display: flex; align-items: flex-end; gap: 16px; padding: 0 30px 24px; }
+.match-filter label { display: grid; gap: 8px; font-size: 13px; }
+.match-filter input { width: 150px; border: 1px solid #b8c9b2; border-radius: 4px; padding: 12px; background: #fffef8; color: inherit; font: inherit; }
+.match-meta { display: block; font-size: 12px; margin-top: 6px; line-height: 1.5; }
+.match-history table { min-width: 860px; }
+@media (max-width: 600px) { .match-filter { padding: 0 20px 20px; gap: 12px; } }
+.match-scroll-note { display: none; }
+@media (max-width: 900px) { .match-scroll-note { display: block; padding: 0 20px; font-size: 12px; } }

@@ -4,6 +4,7 @@ Prerequisites: backend JAR built, npm ci, npx playwright install chromium.
 Never reads .env or uses the development PostgreSQL volume.
 """
 import json
+import csv
 from datetime import date, timedelta
 import os
 from pathlib import Path
@@ -67,13 +68,21 @@ def main():
             run('git', *args, cwd=repo)
         header = 'player_id,name_first,name_last,hand,dob,ioc,height,wikidata_id\n'
         (repo / 'atp').mkdir(); (repo / 'wta').mkdir()
-        atp = '1,Roger,Federer,R,19810808,SUI,185,Q1\n2,U,Unknown,U,,,,\n'
+        atp = '1,Roger,Federer,R,19810808,SUI,185,Q1\n2,U,Unknown,U,,,,\n3,Rafael,Nadal,L,19860603,ESP,185,Q3\n'
         atp += ''.join(f'{n},Alex,Player{n:02},R,19900101,USA,180,\n' for n in range(10,30))
         (repo / 'atp/atp_players.csv').write_text(header + atp)
         (repo / 'wta/wta_players.csv').write_text(header + '1,Serena,Williams,R,19810926,USA,175,Q2\n')
         ranking_rows = ''.join(f'{(date(2024, 1, 1) + timedelta(days=n)).strftime("%Y%m%d")},{n+1},1,{0 if n == 24 else ""}\n' for n in range(25))
         (repo / 'atp/atp_rankings_20s.csv').write_text('ranking_date,rank,player,points\n' + ranking_rows)
         (repo / 'wta/wta_rankings_20s.csv').write_text('ranking_date,rank,player,points,tours\n20240101,2,1,100,0\n')
+        match_header = ['tourney_id','tourney_name','surface','draw_size','tourney_level','tourney_date','match_num','winner_id','winner_seed','winner_entry','winner_name','winner_hand','winner_ht','winner_ioc','winner_age','loser_id','loser_seed','loser_entry','loser_name','loser_hand','loser_ht','loser_ioc','loser_age','score','best_of','round','minutes','w_ace','w_df','w_svpt','w_1stIn','w_1stWon','w_2ndWon','w_SvGms','w_bpSaved','w_bpFaced','l_ace','l_df','l_svpt','l_1stIn','l_1stWon','l_2ndWon','l_SvGms','l_bpSaved','l_bpFaced','winner_rank','winner_rank_points','loser_rank','loser_rank_points']
+        for tour in ('atp', 'wta'):
+            with (repo / f'{tour}/{tour}_matches_2024.csv').open('w') as stream:
+                writer = csv.DictWriter(stream, fieldnames=match_header); writer.writeheader()
+                if tour == 'atp':
+                    for n in range(25):
+                        writer.writerow({'tourney_id':'fixture-open','tourney_name':'Fixture Open','tourney_level':'A','tourney_date':'20240101','round':'RR','match_num':n+1,'winner_id':1,'loser_id':3,'score':'W/O' if n == 0 else '6-3 6-4','surface':'Hard'})
+                    writer.writerow({'tourney_id':'fixture-2023','tourney_name':'Fixture 2023','tourney_level':'A','tourney_date':'20230101','round':'F','match_num':1,'winner_id':3,'loser_id':1,'score':'6-3 6-4'})
         run('git', 'add', '.', cwd=repo); run('git', 'commit', '-qm', 'synthetic player fixture', cwd=repo)
         sha = run('git', 'rev-parse', 'HEAD', cwd=repo).stdout.strip()
         archive = temp / 'archive'
@@ -88,6 +97,8 @@ def main():
             run(str(ROOT / 'backend/import-players'), str(repo), 'https://example.com/tennis', sha, str(archive), 'a' * 40, env=env, output=log)
         with (temp / 'rankings.log').open('w') as log:
             run(str(ROOT / 'backend/import-rankings'), str(repo), 'https://example.com/tennis', sha, str(archive), 'a' * 40, env=env, output=log)
+        with (temp / 'matches.log').open('w') as log:
+            run(str(ROOT / 'backend/import-matches'), str(repo), 'https://example.com/tennis', sha, str(archive), 'a' * 40, env=env, output=log)
         backend_log = (temp / 'backend.log').open('w'); logs.append(backend_log)
         backend = subprocess.Popen(['java', '-jar', str(JAR)], env=env, stdout=backend_log, stderr=subprocess.STDOUT)
         processes.append(backend)
