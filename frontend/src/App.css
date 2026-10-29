@@ -581,3 +581,8 @@ footer a {
 @media (max-width: 600px) { .match-filter { padding: 0 20px 20px; gap: 12px; } }
 .match-scroll-note { display: none; }
 @media (max-width: 900px) { .match-scroll-note { display: block; padding: 0 20px; font-size: 12px; } }
+.feature-page { padding: 40px 0; }
+.feature-page h1 { font-size: clamp(28px, 4vw, 48px); }
+.feature-page .match-filter { flex-wrap: wrap; padding-left: 0; }
+.feature-page input, .feature-page select, .feature-page button { font: inherit; padding: 10px; }
+.site-header nav { flex-wrap: wrap; }

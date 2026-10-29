@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import PlayerSearchPage from "./players/PlayerSearchPage";
 import PlayerDetailPage from "./players/PlayerDetailPage";
+import Tournaments, { TournamentDetail } from "./features/Tournaments";
 import "./App.css";
 
 export default function App() {
@@ -36,6 +37,7 @@ export default function App() {
           <Link to="/players" className="nav-active">
             {t("nav")}
           </Link>
+          <Link to="/tournaments">{i18n.language === "en" ? "Events" : "賽事"}</Link>
           <button
             className="language"
             aria-label={t("language")}
@@ -49,6 +51,8 @@ export default function App() {
       <main id="main">
         <Routes>
           <Route path="/" element={<Navigate to="/players" replace />} />
+          <Route path="/tournaments" element={<Tournaments />} />
+          <Route path="/tournaments/:tour/:id" element={<TournamentDetail />} />
           <Route path="/players" element={<PlayerSearchPage />} />
           <Route path="/players/:tour/:playerId" element={<PlayerDetailPage />} />
           <Route

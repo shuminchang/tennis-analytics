@@ -1,0 +1,21 @@
+import { Link, useParams, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import Resource from "./Resource";
+interface Event { tour: string; tournamentId: string; name: string; date: string; surface: string | null; finalWinner: { playerId: number; nameFirst: string; nameLast: string } | null }
+export default function Tournaments() {
+  const { i18n } = useTranslation();const en = i18n.language === "en";const [params, setParams] = useSearchParams();
+  const tour = params.get("tour") ?? "ATP", q = params.get("q") ?? "", year = params.get("year") ?? "", page = Number(params.get("page") ?? 0);
+  const path = `/v1/tournaments?${new URLSearchParams({ tour, q, ...(year ? { year } : {}), page: String(page) })}`;
+  return <section className="feature-page"><h1>{en ? "Tournaments" : "賽事與歷屆賽果"}</h1><p>{en ? "Reviewed source events. A final winner is shown only for a single eligible final; team titles and uncertain finals are not inferred." : "僅列已確認範圍；只有單一合格決賽才顯示來源決賽勝方，不推算團體或不明賽制冠軍。"}</p>
+    <form className="match-filter" onSubmit={e => { e.preventDefault();const f = new FormData(e.currentTarget);setParams({ tour: String(f.get("tour")), q: String(f.get("q")), year: String(f.get("year")) }); }}>
+      <label>{en ? "Tour" : "巡迴"}<select name="tour" defaultValue={tour}><option>ATP</option><option>WTA</option></select></label>
+      <label>{en ? "Name" : "賽事名稱"}<input name="q" maxLength={100} defaultValue={q}/></label>
+      <label>{en ? "Year" : "年份"}<input name="year" type="number" min={1} max={9998} defaultValue={year}/></label><button className="secondary">{en ? "Search" : "搜尋"}</button>
+    </form>
+    <Resource<{ items: Event[]; total: number }> path={path}>{data => <><div className="table-scroll"><table><thead><tr><th>{en ? "Date" : "賽事日期"}</th><th>{en ? "Event" : "賽事"}</th><th>{en ? "Source final winner" : "來源決賽勝方"}</th></tr></thead><tbody>{data.items.map(e => <tr key={e.tournamentId}><td>{e.date}</td><td><Link to={`/tournaments/${e.tour}/${encodeURIComponent(e.tournamentId)}`}>{e.name}</Link></td><td>{e.finalWinner ? <Link to={`/players/${e.tour}/${e.finalWinner.playerId}`}>{e.finalWinner.nameFirst} {e.finalWinner.nameLast}</Link> : "—"}</td></tr>)}</tbody></table></div>{!data.items.length && <p>{en ? "No events found." : "沒有符合條件的賽事。"}</p>}<nav className="pagination"><button disabled={page <= 0} onClick={() => { const p = new URLSearchParams(params);p.set("page", String(page - 1));setParams(p); }}>{en ? "Previous" : "上一頁"}</button><span>{page + 1} / {Math.max(1, Math.ceil(data.total / 20))}</span><button disabled={(page + 1) * 20 >= data.total} onClick={() => { const p = new URLSearchParams(params);p.set("page", String(page + 1));setParams(p); }}>{en ? "Next" : "下一頁"}</button></nav></>}</Resource>
+  </section>;
+}
+export function TournamentDetail() {
+  const { tour, id } = useParams();const [params, setParams] = useSearchParams();const page = Number(params.get("page") ?? 0);const { i18n } = useTranslation();const en = i18n.language === "en";
+  return <section className="feature-page"><Link to="/tournaments">← {en ? "Tournaments" : "賽事索引"}</Link><h1>{id}</h1><p>{en ? "Source score: winner first. Tournament date is not the actual match date." : "來源比分勝方在前，賽事日期不等於實際比賽日。"}</p><Resource<{ items: { id: number; round: string; winner_id: number; loser_id: number; score: string | null }[]; total: number }> path={`/v1/tournaments/${tour}/${encodeURIComponent(id ?? "")}?page=${page}`}>{data => <><div className="table-scroll"><table><thead><tr><th>{en ? "Round" : "輪次"}</th><th>{en ? "Winner" : "來源勝方"}</th><th>{en ? "Loser" : "來源敗方"}</th><th>{en ? "Score" : "比分"}</th></tr></thead><tbody>{data.items.map(m => <tr key={m.id}><td>{m.round}</td><td><Link to={`/players/${tour}/${m.winner_id}`}>#{m.winner_id}</Link></td><td><Link to={`/players/${tour}/${m.loser_id}`}>#{m.loser_id}</Link></td><td>{m.score ?? "—"}</td></tr>)}</tbody></table></div><nav className="pagination"><button disabled={page <= 0} onClick={() => setParams({ page: String(page - 1) })}>{en ? "Previous" : "上一頁"}</button><span>{page + 1}</span><button disabled={(page + 1) * 20 >= data.total} onClick={() => setParams({ page: String(page + 1) })}>{en ? "Next" : "下一頁"}</button></nav></>}</Resource></section>;
+}

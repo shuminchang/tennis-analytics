@@ -6,7 +6,7 @@
 | 階段 | 功能 | 狀態 |
 | --- | --- | --- |
 | 1 | 統計資格與球員摘要 | 已驗收 |
-| 2 | 賽事列表與歷屆決賽勝方 | 待實作 |
+| 2 | 賽事列表與歷屆決賽勝方 | 已驗收 |
 | 3 | 分場地／年份及發球指標 | 待實作 |
 | 4 | 排名圖表／指定日期榜單／首頁 | 待實作 |
 | 5 | 登入、角色、CSRF、帳號管理 | 待實作 |
@@ -22,3 +22,8 @@ Docker 中斷時先保存檔案與日誌，不將逾時當成通過。恢復後�
 
 新增 V12 的 v_display_matches／v_stat_matches，將展示與統計樣本資格分開。排除 W/O、DEF、UNK、空白／不符合第一版分數語法的比分與 OPEN 個人／比分品質問題；帶有實際得分的 RET 納入。沒有樣本回傳 null 勝率，不冒稱完整生涯。新增摘要 Repository／Service／Controller 與詳情卡片。
 命令：`env -u DB_URL -u DB_USERNAME -u DB_PASSWORD ./backend/mvnw -f backend/pom.xml -Dtest=StatsTest test`；人工 PostgreSQL 案例通過。前端 lint／build 及 37 案通過。尚未對真實庫套用 V12，留待最終本機驗收。
+
+## 階段 2：賽事與來源決賽勝方
+
+V13 v_event_final_winners 僅對單一合格 F 決賽且非 D 事件提供來源勝方；不猜測缺少或多個決賽、不混用團體冠軍。新增賽事列表／年份名稱篩選、賽果 API 與雙語頁面。TournamentTest 在獨立 PostgreSQL 驗證一般決賽與 D 排除，通過；前端 lint／build 通過。
+使用者已確認第 9 階段先做本機備份及實際還原，外部目的地待定。
