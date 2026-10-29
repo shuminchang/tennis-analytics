@@ -9,7 +9,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 @RestControllerAdvice(basePackages="com.shuminapp.tennis.features")
 public class FeatureAdvice {
-    @ExceptionHandler({IllegalArgumentException.class,MethodArgumentTypeMismatchException.class})
+    @ExceptionHandler({IllegalArgumentException.class,java.time.DateTimeException.class,MethodArgumentTypeMismatchException.class})
     ResponseEntity<?> invalid(Exception e) { return ResponseEntity.badRequest().body(Map.of("code","INVALID_REQUEST","message","Check request parameters.")); }
     @ExceptionHandler(NoSuchElementException.class)
     ResponseEntity<?> missing(Exception e) { return ResponseEntity.status(404).body(Map.of("code","NOT_FOUND","message","Record not found.")); }

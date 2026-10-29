@@ -586,3 +586,6 @@ footer a {
 .feature-page .match-filter { flex-wrap: wrap; padding-left: 0; }
 .feature-page input, .feature-page select, .feature-page button { font: inherit; padding: 10px; }
 .site-header nav { flex-wrap: wrap; }
+.line-chart { width: 100%; height: auto; min-height: 160px; color: #234f3c; }
+.line-chart text { font-size: 12px; fill: currentColor; }
+.feature-page form { max-width: 100%; }
