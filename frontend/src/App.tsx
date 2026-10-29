@@ -9,6 +9,7 @@ import Home from "./features/Home";
 import Account from "./features/Account";
 import Compare from "./features/Compare";
 import H2H from "./features/H2H";
+import About from "./features/About";
 import Favorites from "./features/Favorites";
 import "./App.css";
 
@@ -63,6 +64,7 @@ export default function App() {
       <main id="main">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
           <Route path="/h2h" element={<H2H />} />
           <Route path="/compare" element={<Compare />} />
           <Route path="/favorites" element={<Favorites />} />
@@ -84,7 +86,7 @@ export default function App() {
         </Routes>
       </main>
       <footer>
-        <span>{t("footer")}</span>
+        <span>{t("footer")} · <Link to="/about">{i18n.language === "en" ? "Data & methods" : "資料與方法"}</Link></span>
         <a href="https://deerflow.tech" target="_blank" rel="noreferrer">
           Created By Deerflow
         </a>

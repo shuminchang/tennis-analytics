@@ -25,6 +25,10 @@ public final class FeatureData {
                 jdbc.update("INSERT INTO match_sources(run_id,snapshot_id,source_file_id,record_number,tour,match_id) VALUES(?,?,?,?,?,?)",run,snapshot,mf,n+1,tour,match);
             }
         }
+        refresh(jdbc);
+    }
+    public static void refresh(JdbcTemplate jdbc) {
+        jdbc.execute("REFRESH MATERIALIZED VIEW analytics_matches");jdbc.execute("REFRESH MATERIALIZED VIEW analytics_events");
     }
     private static long file(JdbcTemplate jdbc,long snapshot,String tour,String kind) {
         return jdbc.queryForObject("INSERT INTO source_files(snapshot_id,relative_path,tour,data_kind,sha256,byte_size,record_count) VALUES(?,?,?,?,?,0,0) RETURNING id",Long.class,snapshot,tour.toLowerCase()+"/"+kind+".csv",tour,kind,"d".repeat(64));

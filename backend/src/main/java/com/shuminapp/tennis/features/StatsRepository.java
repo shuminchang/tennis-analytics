@@ -17,9 +17,9 @@ public class StatsRepository {
         List<Object> args=new ArrayList<>(List.of(tour,id,id));
         if(year!=null) { where+=" AND tourney_date>=? AND tourney_date<?";args.add(LocalDate.of(year,1,1));args.add(LocalDate.of(year+1,1,1)); }
         if(surface!=null) { where+=" AND surface=?";args.add(surface); }
-        long displayed=jdbc.queryForObject("SELECT count(*) FROM v_display_matches"+where,Long.class,args.toArray());
+        long displayed=jdbc.queryForObject("SELECT count(*) FROM analytics_matches"+where,Long.class,args.toArray());
         args.addFirst(id);
-        return jdbc.queryForObject("SELECT count(*) AS played,count(*) FILTER(WHERE winner_id=?) AS wins,min(tourney_date) AS first,max(tourney_date) AS last FROM v_stat_matches"+where,(rs,n)->{
+        return jdbc.queryForObject("SELECT count(*) AS played,count(*) FILTER(WHERE winner_id=?) AS wins,min(tourney_date) AS first,max(tourney_date) AS last FROM analytics_matches"+where.replace(" WHERE "," WHERE eligible AND "),(rs,n)->{
             long played=rs.getLong("played"),wins=rs.getLong("wins");
             return new Summary("stats-v1",displayed,played,wins,played-wins,played==0?null:(double)wins/played,
                     rs.getDate("first")==null?null:rs.getDate("first").toLocalDate(),rs.getDate("last")==null?null:rs.getDate("last").toLocalDate());

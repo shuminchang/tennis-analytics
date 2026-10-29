@@ -7,6 +7,8 @@ import org.testcontainers.containers.PostgreSQLContainer;
 
 @TestConfiguration(proxyBeanMethods = false)
 public class TestDatabaseConfiguration {
+    @org.springframework.context.annotation.Primary
+    @Bean org.springframework.cache.CacheManager testCacheManager() { return new org.springframework.cache.support.NoOpCacheManager(); }
 
     @Bean
     @ServiceConnection

@@ -592,3 +592,6 @@ footer a {
 .account-form { display: grid; gap: 16px; max-width: 420px; margin: 24px 0; }
 .account-form label { display: grid; gap: 8px; }
 .account-form input, .account-form select { width: 100%; box-sizing: border-box; }
+.ops-status { white-space: pre-wrap; overflow-wrap: anywhere; max-width: 100%; font-size: 12px; }
+.feature-page > p { line-height: 1.8; }
+@media(max-width: 700px) { .site-header { flex-wrap: wrap; } .site-header nav { width: 100%; justify-content: flex-start; } }

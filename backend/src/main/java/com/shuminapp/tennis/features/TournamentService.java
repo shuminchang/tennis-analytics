@@ -8,6 +8,7 @@ public class TournamentService {
     private final TournamentRepository repository;
     public TournamentService(TournamentRepository repository) { this.repository=repository; }
     @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ,timeout=10)
+    @org.springframework.cache.annotation.Cacheable("events")
     public TournamentRepository.EventPage list(String tour,String q,Integer year,int page,int size) {
         FeatureSupport.year(year);FeatureSupport.page(page,size);if(q.length()>100) throw new IllegalArgumentException();
         return repository.events(FeatureSupport.tour(tour),q.strip(),year,page,size);

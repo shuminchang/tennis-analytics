@@ -19,6 +19,6 @@ class AnalysisTest {
         var row=service.breakdown("ATP",1,"surface").getFirst();assertThat(row.matches()).isEqualTo(2);
         assertThat(row.serveRate()).isCloseTo(72d/110,within(.000001));assertThat(row.serveSamples()).isEqualTo(2);
         assertThat(row.aceSamples()).isEqualTo(1);assertThat(service.breakdown("ATP",3,"year")).isEmpty();
-        jdbc.update("UPDATE matches SET w_svpt=0,l_svpt=0");assertThat(service.breakdown("ATP",1,"surface").getFirst().serveRate()).isNull();
+        jdbc.update("UPDATE matches SET w_svpt=0,l_svpt=0");FeatureData.refresh(jdbc);assertThat(service.breakdown("ATP",1,"surface").getFirst().serveRate()).isNull();
     }
 }

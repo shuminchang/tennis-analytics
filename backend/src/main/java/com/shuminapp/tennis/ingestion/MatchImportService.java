@@ -14,6 +14,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 @Service
 public class MatchImportService {
+    private final com.shuminapp.tennis.features.AnalyticsRefreshService analytics;
     private final SourceRegistrationService registration;
     private final JdbcTemplate jdbc;
     private final TransactionTemplate tx;
@@ -21,8 +22,8 @@ public class MatchImportService {
     private final TournamentScope scope=new TournamentScope();
     private final ObjectMapper json=new ObjectMapper();
     private final String transformHash,scopeHash;
-    public MatchImportService(SourceRegistrationService registration,JdbcTemplate jdbc,PlatformTransactionManager manager) {
-        this.registration=registration;this.jdbc=jdbc;this.tx=new TransactionTemplate(manager);
+    public MatchImportService(SourceRegistrationService registration,JdbcTemplate jdbc,PlatformTransactionManager manager,com.shuminapp.tennis.features.AnalyticsRefreshService analytics) {
+        this.analytics=analytics;this.registration=registration;this.jdbc=jdbc;this.tx=new TransactionTemplate(manager);
         transformHash=hash("match-rules-v1.txt");scopeHash=hash("tournament-policy-v1.txt","tournament-exceptions-v1.csv");
     }
     private String hash(String... names) {
@@ -75,6 +76,7 @@ public class MatchImportService {
                 for(var file:files) stage(registered,archive,file);
                 publish(registered.snapshotId(),begun.runId());
                 jdbc.update("UPDATE import_runs SET status='SUCCEEDED',finished_at=clock_timestamp() WHERE id=? AND status='RUNNING'",begun.runId());
+                analytics.refresh();
                 return result(begun.runId(),false);
             });
         } catch(RuntimeException failure) {

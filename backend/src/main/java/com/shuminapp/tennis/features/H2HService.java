@@ -9,6 +9,7 @@ public class H2HService {
     private final FeatureSupport support;private final H2HRepository repository;
     public H2HService(FeatureSupport support,H2HRepository repository) { this.support=support;this.repository=repository; }
     @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ,timeout=10)
+    @org.springframework.cache.annotation.Cacheable("h2h")
     public H2HRepository.Result between(String tour,int first,int second,String from,String to,String surface) {
         if(first==second) throw new IllegalArgumentException();var one=support.player(tour,first);support.player(one.tour(),second);
         LocalDate start=from==null || from.isBlank()?null:LocalDate.parse(from),end=to==null || to.isBlank()?null:LocalDate.parse(to);

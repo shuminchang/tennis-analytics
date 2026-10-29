@@ -9,6 +9,7 @@ public class AnalysisService {
     private final FeatureSupport support;private final AnalysisRepository repository;
     public AnalysisService(FeatureSupport support,AnalysisRepository repository) { this.support=support;this.repository=repository; }
     @Transactional(readOnly=true,timeout=10)
+    @org.springframework.cache.annotation.Cacheable("analysis")
     public List<AnalysisRepository.Breakdown> breakdown(String tour,int id,String by) {
         if(!Set.of("surface","year").contains(by)) throw new IllegalArgumentException();var p=support.player(tour,id);return repository.breakdown(p.tour(),p.playerId(),by);
     }

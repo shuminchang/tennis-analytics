@@ -45,7 +45,9 @@ def wait_url(url, process):
 def main():
     if not JAR.exists():
         raise RuntimeError('Build backend JAR before running this script')
-    temp = Path(tempfile.mkdtemp(prefix='tennis-search-e2e-'))
+    log_root = ROOT / '.local/verification'
+    log_root.mkdir(parents=True, exist_ok=True)
+    temp = Path(tempfile.mkdtemp(prefix='tennis-search-e2e-', dir=log_root))
     container = None
     processes = []
     logs = []
@@ -99,6 +101,18 @@ def main():
             run(str(ROOT / 'backend/import-rankings'), str(repo), 'https://example.com/tennis', sha, str(archive), 'a' * 40, env=env, output=log)
         with (temp / 'matches.log').open('w') as log:
             run(str(ROOT / 'backend/import-matches'), str(repo), 'https://example.com/tennis', sha, str(archive), 'a' * 40, env=env, output=log)
+        with (temp / 'elo.log').open('w') as log:
+            run(str(ROOT / 'backend/rebuild-elo'), env=env, output=log)
+        # Synthetic accounts exist only in this disposable container.
+        crypto = sorted((Path.home() / '.m2/repository/org/springframework/security/spring-security-crypto').glob('*/spring-security-crypto-*.jar'))[-1]
+        logging = sorted((Path.home() / '.m2/repository/org/springframework/spring-jcl').glob('*/spring-jcl-*.jar'))[-1]
+        password_source = temp / 'FixturePassword.java'
+        password_source.write_text('import org.springframework.security.crypto.bcrypt.BCrypt; class FixturePassword { public static void main(String[] a) { System.out.print(BCrypt.hashpw("fixture-password-123", BCrypt.gensalt(12))); } }')
+        password_hash = run('java', '-cp', str(crypto) + ':' + str(logging), str(password_source)).stdout.strip()
+        for username, role in [('fixtureadmin', 'ADMIN'), ('fixtureadvanced', 'ADVANCED'), ('fixturemember', 'MEMBER')]:
+            run('docker', 'exec', container, 'psql', '-U', 'tennis_test', '-d', 'tennis_e2e', '-v', 'ON_ERROR_STOP=1', '-c',
+                f"INSERT INTO app_users(username,password_hash,role) VALUES('{username}','{password_hash}','{role}')")
+        env['APP_RATE_REQUESTS'] = '10000'  # Separate rate-limit tests exercise the production limits.
         backend_log = (temp / 'backend.log').open('w'); logs.append(backend_log)
         backend = subprocess.Popen(['java', '-jar', str(JAR)], env=env, stdout=backend_log, stderr=subprocess.STDOUT)
         processes.append(backend)

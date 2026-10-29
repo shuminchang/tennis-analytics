@@ -140,3 +140,75 @@ test("match history filters years, refreshes pages and opens an opponent", async
   await expect(page.getByLabel("球員姓名")).toHaveValue("Roger");
   await expect(page).not.toHaveURL(/matchPage|matchYear/);
 });
+
+test("public analytics browse tournaments, rankings and player summaries", async ({ page }) => {
+  test.skip(process.env.E2E_MOCK_API === "1", "Requires real feature API");
+  await page.goto("/tennis/");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("沿著紀錄");
+  await page.goto("/tennis/tournaments?tour=ATP&year=2023");
+  await page.getByRole("link", { name: "Fixture 2023", exact: true }).click();
+  await expect(page.getByRole("table")).toBeVisible();
+  await page.goto("/tennis/rankings?tour=ATP&date=2024-01-25");
+  await expect(page.getByRole("link", { name: "Roger Federer" })).toBeVisible();
+  await page.getByRole("link", { name: "Roger Federer" }).click();
+  await expect(page.getByRole("heading", { name: "來源結果摘要" })).toBeVisible();
+  await expect(page.getByRole("img", { name: "名次" })).toBeVisible();
+});
+
+test("member login, CSRF-backed favorites and comparison work across reloads", async ({ page }) => {
+  test.skip(process.env.E2E_MOCK_API === "1", "Requires session authentication");
+  await page.goto("/tennis/account");
+  await page.getByLabel("帳號", { exact: true }).fill("fixturemember");
+  await page.getByLabel("密碼", { exact: true }).fill("fixture-password-123");
+  await page.getByRole("button", { name: "登入", exact: true }).click();
+  await expect(page.getByText("fixturemember · MEMBER", { exact: true })).toBeVisible();
+  await page.goto("/tennis/players/ATP/1");
+  await page.getByRole("button", { name: "收藏球員" }).click();
+  await expect(page.getByText("已收藏。", { exact: true })).toBeVisible();
+  await page.goto("/tennis/favorites");
+  await expect(page.getByRole("link", { name: /Roger Federer/ })).toBeVisible();
+  await page.goto("/tennis/compare?tour=ATP&ids=1,3");
+  await expect(page.getByRole("table")).toBeVisible();
+  await page.goto("/tennis/h2h?tour=ATP&first=1&second=3");
+  await expect(page.getByRole("link", { name: "需進階或管理員權限" })).toBeVisible();
+  await page.goto("/tennis/account");
+  await page.getByRole("button", { name: "登出", exact: true }).click();
+  await expect(page.getByRole("button", { name: "登入", exact: true })).toBeVisible();
+});
+
+test("advanced users can inspect H2H and precomputed Elo", async ({ page }) => {
+  test.skip(process.env.E2E_MOCK_API === "1", "Requires session authentication");
+  await page.goto("/tennis/account");
+  await page.getByLabel("帳號", { exact: true }).fill("fixtureadvanced");
+  await page.getByLabel("密碼", { exact: true }).fill("fixture-password-123");
+  await page.getByRole("button", { name: "登入", exact: true }).click();
+  await expect(page.getByText("fixtureadvanced · ADVANCED", { exact: true })).toBeVisible();
+  await page.goto("/tennis/h2h?tour=ATP&first=1&second=3");
+  await expect(page.getByText(/95% Wilson:/)).toBeVisible();
+  await page.goto("/tennis/players/ATP/1");
+  await expect(page.getByRole("img", { name: "Elo · OVERALL" })).toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBeTruthy();
+  await page.screenshot({ path: "test-results/pre-release-mobile.png", fullPage: true, animations: "disabled" });
+});
+
+test("administrator can provision accounts and operate bounded analytics jobs", async ({ page }) => {
+  test.skip(process.env.E2E_MOCK_API === "1", "Requires session authentication");
+  await page.goto("/tennis/account");
+  await page.getByLabel("帳號", { exact: true }).fill("fixtureadmin");
+  await page.getByLabel("密碼", { exact: true }).fill("fixture-password-123");
+  await page.getByRole("button", { name: "登入", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "帳號管理" })).toBeVisible();
+  await page.getByLabel("新帳號", { exact: true }).fill("createdmember");
+  await page.getByLabel("新密碼（至少 12 字元）", { exact: true }).fill("fixture-created-password-123");
+  await page.getByRole("button", { name: "建立", exact: true }).click();
+  await expect(page.getByText("已建立。", { exact: true })).toBeVisible();
+  const account = page.getByRole("listitem").filter({ hasText: "createdmember" });
+  await expect(account).toContainText("MEMBER");
+  await account.getByRole("button", { name: "切換啟用" }).click();
+  await expect(account).toContainText("停用");
+  for (const name of ["清除快取", "刷新分析", "重建 Elo"]) {
+    await page.getByRole("button", { name, exact: true }).click();
+    await expect(page.getByText("已完成。", { exact: true })).toBeVisible();
+  }
+});

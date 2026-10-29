@@ -1,6 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap");
+@import "@fontsource-variable/dm-sans";
+@import "@fontsource-variable/noto-sans-tc";
 :root {
-  font-family: "DM Sans", "Noto Sans TC", sans-serif;
+  font-family: "DM Sans Variable", "Noto Sans TC Variable", sans-serif;
   color: #1e3529;
   background: #f6f4ec;
   font-synthesis: none;

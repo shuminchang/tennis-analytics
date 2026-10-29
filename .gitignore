@@ -29,3 +29,7 @@ Thumbs.db
 
 # Python test runner cache
 __pycache__/
+
+# Local verification logs and database backups
+.local/verification/
+.local/backups/

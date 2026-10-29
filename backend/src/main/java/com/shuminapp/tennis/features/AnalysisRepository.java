@@ -20,7 +20,7 @@ public class AnalysisRepository {
                         NOT EXISTS(SELECT 1 FROM match_sources s JOIN quality_issues q ON q.run_id=s.run_id AND q.source_file_id=s.source_file_id AND q.record_number=s.record_number
                             JOIN quality_issue_impacts i ON i.issue_id=q.id WHERE s.match_id=m.id AND q.status='OPEN' AND i.metric_code='SERVE_STATS'
                                 AND q.role IN ('RECORD',CASE WHEN m.winner_id=? THEN 'WINNER' ELSE 'LOSER' END)) AS valid
-                    FROM v_stat_matches m WHERE m.tour=? AND (m.winner_id=? OR m.loser_id=?)
+                    FROM analytics_matches m WHERE m.eligible AND m.tour=? AND (m.winner_id=? OR m.loser_id=?)
                 )
                 SELECT bucket,count(*) AS matches,count(*) FILTER(WHERE won) AS wins,
                     count(*) FILTER(WHERE valid AND svpt>0 AND points_won>=0) AS serve_samples,

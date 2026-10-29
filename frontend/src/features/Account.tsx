@@ -14,7 +14,7 @@ export default function Account() {
       finally { setBusy(false); }
     }}><label>{en ? "Username" : "帳號"}<input name="username" autoComplete="username" required maxLength={64}/></label><label>{en ? "Password" : "密碼"}<input name="password" type="password" autoComplete="current-password" required maxLength={72}/></label><button disabled={busy}>{en ? "Sign in" : "登入"}</button></form>}
     {message && <p role="alert">{message}</p>}
-    {me.data?.roles?.includes("ADMIN") && <AdminAccounts />}
+    {me.data?.roles?.includes("ADMIN") && <><AdminAccounts /><AdminOperations /></>}
   </section>;
 }
 function AdminAccounts() {
@@ -25,4 +25,9 @@ function AdminAccounts() {
   }}><label>{en ? "New username" : "新帳號"}<input name="username" pattern="[a-z0-9_.-]{3,64}" required/></label><label>{en ? "New password (12+ characters)" : "新密碼（至少 12 字元）"}<input type="password" name="password" autoComplete="new-password" minLength={12} maxLength={72} required/></label><label>{en ? "Role" : "角色"}<select name="role"><option>MEMBER</option><option>ADVANCED</option><option>ADMIN</option></select></label><button>{en ? "Create" : "建立"}</button></form><p role="status">{message}</p>
     <Resource<{ id: number; username: string; role: string; enabled: boolean }[]> path="/v1/admin/users">{rows => <ul>{rows.map(u => <li key={u.id}>{u.username} · {u.role} · {u.enabled ? (en ? "Enabled" : "啟用") : (en ? "Disabled" : "停用")} <button onClick={async () => { try { await mutate(`/v1/admin/users/${u.id}`, "PATCH", { role: u.role, enabled: !u.enabled });await client.invalidateQueries({ queryKey: ["resource", "/v1/admin/users"] }); } catch { setMessage(en ? "Update rejected." : "更新被拒絕。"); } }}>{en ? "Toggle access" : "切換啟用"}</button></li>)}</ul>}</Resource>
   </section>;
+}
+
+function AdminOperations() {
+  const { i18n } = useTranslation();const en = i18n.language === "en";const client = useQueryClient();const [busy, setBusy] = useState(false);const [message, setMessage] = useState("");
+  return <section><h2>{en ? "Operations" : "批次與快取管理"}</h2><p>{en ? "Refresh analytics after data changes, then rebuild Elo. Model building is a batch operation." : "資料更新後先刷新分析讀模型，再重建 Elo；模型重建是批次工作。"}</p>{[["/v1/admin/cache/clear", en ? "Clear cache" : "清除快取"], ["/v1/admin/analytics/refresh", en ? "Refresh analytics" : "刷新分析"], ["/v1/admin/elo/rebuild", en ? "Rebuild Elo" : "重建 Elo"]].map(([path, label]) => <button key={path} disabled={busy} onClick={async () => { setBusy(true);setMessage("");try { await mutate(path, "POST");await client.invalidateQueries();setMessage(en ? "Completed." : "已完成。"); } catch { setMessage(en ? "Failed. Inspect batch status before retrying." : "失敗，請先檢查批次狀態再重試。"); } finally { setBusy(false); } }}>{label}</button>)}<p role="status">{busy ? (en ? "Working…" : "處理中…") : message}</p><Resource<Record<string, unknown>> path="/v1/admin/status">{status => <pre className="ops-status">{JSON.stringify(status, null, 2)}</pre>}</Resource></section>;
 }

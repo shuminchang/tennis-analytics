@@ -11,7 +11,7 @@ public class H2HRepository {
     public H2HRepository(JdbcTemplate jdbc) { this.jdbc=jdbc; }
     public Result between(String tour,int first,int second,LocalDate from,LocalDate to,String surface) {
         List<Object> args=new ArrayList<>(List.of(tour,first,second,second,first));
-        String where=" FROM v_stat_matches WHERE tour=? AND ((winner_id=? AND loser_id=?) OR (winner_id=? AND loser_id=?))";
+        String where=" FROM analytics_matches WHERE eligible AND tour=? AND ((winner_id=? AND loser_id=?) OR (winner_id=? AND loser_id=?))";
         if(from!=null) { where+=" AND tourney_date>=?";args.add(from); }if(to!=null) { where+=" AND tourney_date<=?";args.add(to); }
         if(surface!=null) { where+=" AND surface=?";args.add(surface); }
         List<Object> queryArgs=new ArrayList<>(args);queryArgs.addFirst(first);

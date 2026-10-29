@@ -28,7 +28,7 @@ public class EloBuildService {
             return jdbc.queryForObject("INSERT INTO elo_runs(status,rules_sha256) VALUES('RUNNING',?) RETURNING id",Long.class,rulesHash); });
         try {
             return tx.execute(status->{
-                jdbc.execute("SELECT pg_advisory_xact_lock(714031)");
+                jdbc.execute("SELECT pg_advisory_xact_lock(714031)");jdbc.execute("SET LOCAL statement_timeout=0");
                 MessageDigest digest;try { digest=MessageDigest.getInstance("SHA-256"); } catch(Exception e) { throw new IllegalStateException(e); }
                 jdbc.query(INPUT,ps->ps.setFetchSize(1000),(RowCallbackHandler)rs->{ for(int i=1;i<=9;i++) { String value=rs.getString(i);byte[] bytes=(value==null?"<null>":value).getBytes(StandardCharsets.UTF_8);digest.update(java.nio.ByteBuffer.allocate(4).putInt(bytes.length).array());digest.update(bytes); } });
                 String fingerprint=HexFormat.of().formatHex(digest.digest());

@@ -18,7 +18,7 @@ class TournamentTest {
         var page=service.list("ATP","Fixture",2024,0,20);assertThat(page.total()).isEqualTo(1);
         assertThat(page.items().getFirst().finalWinner().playerId()).isEqualTo(1);
         assertThat(service.detail("ATP","event",0,2).items()).hasSize(2);
-        jdbc.update("UPDATE matches SET tourney_level='D' WHERE tour='ATP'");
+        jdbc.update("UPDATE matches SET tourney_level='D' WHERE tour='ATP'");FeatureData.refresh(jdbc);
         assertThat(service.list("ATP","",null,0,20).items().getFirst().finalWinner()).isNull();
     }
 }
