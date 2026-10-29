@@ -8,6 +8,7 @@ import Rankings from "./features/Rankings";
 import Home from "./features/Home";
 import Account from "./features/Account";
 import Compare from "./features/Compare";
+import H2H from "./features/H2H";
 import Favorites from "./features/Favorites";
 import "./App.css";
 
@@ -44,6 +45,7 @@ export default function App() {
           </Link>
           <Link to="/">{i18n.language === "en" ? "Home" : "首頁"}</Link>
           <Link to="/rankings">{i18n.language === "en" ? "Rankings" : "排名"}</Link>
+          <Link to="/h2h">H2H</Link>
           <Link to="/compare">{i18n.language === "en" ? "Compare" : "比較"}</Link>
           <Link to="/favorites">{i18n.language === "en" ? "Saved" : "收藏"}</Link>
           <Link to="/account">{i18n.language === "en" ? "Account" : "帳號"}</Link>
@@ -61,6 +63,7 @@ export default function App() {
       <main id="main">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/h2h" element={<H2H />} />
           <Route path="/compare" element={<Compare />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/account" element={<Account />} />
