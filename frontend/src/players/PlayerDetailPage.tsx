@@ -6,6 +6,7 @@ import { fetchPlayer } from "./api";
 import RankingHistory from "./RankingHistory";
 import MatchHistory from "./MatchHistory";
 import PlayerSummary from "../features/PlayerSummary";
+import PlayerAnalysis from "../features/PlayerAnalysis";
 
 export default function PlayerDetailPage() {
   const { tour = "", playerId = "" } = useParams();
@@ -73,6 +74,7 @@ export default function PlayerDetailPage() {
             </dl>
           </section>
           <PlayerSummary tour={player.tour} id={player.playerId} />
+          <PlayerAnalysis tour={player.tour} id={player.playerId} />
           <RankingHistory tour={player.tour} playerId={player.playerId} />
           <MatchHistory tour={player.tour} playerId={player.playerId} />
           <aside className="about">
