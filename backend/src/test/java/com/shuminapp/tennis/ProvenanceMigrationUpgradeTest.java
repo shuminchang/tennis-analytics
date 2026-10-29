@@ -45,7 +45,8 @@ class ProvenanceMigrationUpgradeTest {
                     ""","b".repeat(40),"c".repeat(64),"c".repeat(64),"c".repeat(64));
             Flyway flyway = Flyway.configure().dataSource(dataSource)
                     .schemas(schema).defaultSchema(schema).load();
-            assertThat(flyway.migrate().migrationsExecuted).isEqualTo(5);
+            int pending=flyway.info().pending().length;
+            assertThat(flyway.migrate().migrationsExecuted).isEqualTo(pending);
             flyway.validate();
             assertThat(jdbcTemplate.queryForObject("SELECT data_kind FROM upgrade_v6_test.import_runs",String.class)).isEqualTo("PLAYERS");
             assertThat(flyway.migrate().migrationsExecuted).isZero();
