@@ -8,6 +8,7 @@ import MatchHistory from "./MatchHistory";
 import PlayerSummary from "../features/PlayerSummary";
 import PlayerAnalysis from "../features/PlayerAnalysis";
 import RankingChart from "../features/RankingChart";
+import FavoriteButton from "../features/FavoriteButton";
 
 export default function PlayerDetailPage() {
   const { tour = "", playerId = "" } = useParams();
@@ -74,6 +75,7 @@ export default function PlayerDetailPage() {
               <div><dt>{t("hand")}</dt><dd>{hand}</dd></div>
             </dl>
           </section>
+          <FavoriteButton tour={player.tour} id={player.playerId} />
           <PlayerSummary tour={player.tour} id={player.playerId} />
           <PlayerAnalysis tour={player.tour} id={player.playerId} />
           <RankingChart tour={player.tour} id={player.playerId} />
