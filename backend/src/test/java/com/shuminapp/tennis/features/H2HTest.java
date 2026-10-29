@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest @AutoConfigureMockMvc @Import(TestDatabaseConfiguration.class)
 class H2HTest {
+    @AfterEach void cleanup() { FeatureData.clear(jdbc); }
     @Autowired JdbcTemplate jdbc;@Autowired H2HService service;@Autowired AccountService accounts;@Autowired MockMvc mvc;
     @BeforeEach void seed() { FeatureData.seed(jdbc);jdbc.execute("TRUNCATE app_users,audit_log CASCADE");accounts.create("TEST","advanced","fixture-password-123","ADVANCED");accounts.create("TEST","member","fixture-password-123","MEMBER"); }
     @Test void matchesHandCalculationAndZeroSampleInterval() {

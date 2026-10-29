@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 @SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.NONE)
 @Import(TestDatabaseConfiguration.class)
 class AnalysisTest {
+    @AfterEach void cleanup() { FeatureData.clear(jdbc); }
     @Autowired JdbcTemplate jdbc;@Autowired AnalysisService service;
     @BeforeEach void seed() { FeatureData.seed(jdbc); }
     @Test void weightsServePointsAndKeepsMetricSpecificSamples() {

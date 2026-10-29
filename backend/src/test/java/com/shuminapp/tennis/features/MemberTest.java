@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest @AutoConfigureMockMvc @Import(TestDatabaseConfiguration.class)
 class MemberTest {
+    @AfterEach void cleanup() { FeatureData.clear(jdbc); }
     @Autowired JdbcTemplate jdbc;@Autowired MockMvc mvc;@Autowired AccountService accounts;@Autowired MemberService service;
     @BeforeEach void seed() { FeatureData.seed(jdbc);jdbc.execute("TRUNCATE app_users,audit_log CASCADE");accounts.create("TEST","one","fixture-password-123","MEMBER");accounts.create("TEST","two","fixture-password-123","MEMBER"); }
     @Test void favoritesBelongOnlyToTheCurrentMemberAndAreIdempotent() throws Exception {

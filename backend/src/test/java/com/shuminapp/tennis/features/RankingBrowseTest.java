@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 @SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.NONE)
 @Import(TestDatabaseConfiguration.class)
 class RankingBrowseTest {
+    @AfterEach void cleanup() { FeatureData.clear(jdbc); }
     @Autowired JdbcTemplate jdbc;@Autowired RankingBrowseService service;
     @Test void keepsTheExactDateAndMissingPoints() {
         FeatureData.seed(jdbc);long snapshot=jdbc.queryForObject("SELECT id FROM source_snapshots",Long.class);

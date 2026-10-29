@@ -9,6 +9,7 @@ import PlayerSummary from "../features/PlayerSummary";
 import PlayerAnalysis from "../features/PlayerAnalysis";
 import RankingChart from "../features/RankingChart";
 import FavoriteButton from "../features/FavoriteButton";
+import Elo from "../features/Elo";
 
 export default function PlayerDetailPage() {
   const { tour = "", playerId = "" } = useParams();
@@ -78,6 +79,7 @@ export default function PlayerDetailPage() {
           <FavoriteButton tour={player.tour} id={player.playerId} />
           <PlayerSummary tour={player.tour} id={player.playerId} />
           <PlayerAnalysis tour={player.tour} id={player.playerId} />
+          <Elo tour={player.tour} id={player.playerId} />
           <RankingChart tour={player.tour} id={player.playerId} />
           <RankingHistory tour={player.tour} playerId={player.playerId} />
           <MatchHistory tour={player.tour} playerId={player.playerId} />

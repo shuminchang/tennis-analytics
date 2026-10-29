@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 @SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.NONE)
 @Import(TestDatabaseConfiguration.class)
 class TournamentTest {
+    @AfterEach void cleanup() { FeatureData.clear(jdbc); }
     @Autowired JdbcTemplate jdbc;@Autowired TournamentService service;
     @BeforeEach void seed() { FeatureData.seed(jdbc); }
     @Test void findsReviewedEventAndItsSingleEligibleFinal() {

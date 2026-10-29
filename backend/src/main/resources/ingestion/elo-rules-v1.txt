@@ -1,0 +1,9 @@
+elo-v1, model assumptions, not official rankings.
+Input: v_stat_matches stats-v1; W/O,DEF,unknown/unparseable scores and identity issues excluded; played RET included.
+Initial rating 1500; expected=1/(1+10^((opponent-rating)/400)); each player's K=250/(own dimension matches+5)^0.4.
+Update both players from pre-match ratings, using each player's K. Unequal experience means updates need not sum to zero.
+OVERALL and each known Hard/Clay/Grass/Carpet dimension independently initialized and counted. Unknown surface affects OVERALL only.
+Deterministic order: tour,tourney_date,tourney_id,round order (RR,ER,R128,R64,R32,R16,QF,SF,BR,F),match_num,id.
+Tournament dates and round codes are ordering approximations; no actual match timestamps are invented.
+Input digest includes ordered IDs,players,date,surface,round,match number; rules digest identifies scoring and ordering assumptions.
+Model publication atomic; same rules/input reuse prior successful run. No weighted surface blend or greatest-player claim.

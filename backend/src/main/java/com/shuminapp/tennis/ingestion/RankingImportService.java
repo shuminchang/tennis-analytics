@@ -38,6 +38,7 @@ public class RankingImportService {
         if(files.stream().map(f->f.type().tour()).distinct().count()!=2) throw new IllegalArgumentException("Both tours' ranking files required");
         Result begun=tx.execute(status -> {
             lock();
+            if(jdbc.queryForObject("SELECT count(*) FROM elo_runs WHERE status='RUNNING'",Long.class)>0) throw new IllegalStateException("Inspect running Elo model before import");
             if(jdbc.queryForObject("SELECT count(*) FROM import_runs WHERE status='RUNNING'",Long.class)>0)
                 throw new IllegalStateException("Inspect interrupted/running import before retry");
             if(jdbc.queryForObject("SELECT count(*) FROM import_runs WHERE data_kind='PLAYERS' AND status='SUCCEEDED' AND snapshot_id=?",Long.class,registered.snapshotId())!=1)

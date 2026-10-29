@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @AutoConfigureMockMvc
 @Import(TestDatabaseConfiguration.class)
 class AccountTest {
+    @AfterEach void cleanup() { jdbc.execute("TRUNCATE app_users,audit_log CASCADE"); }
     @Autowired MockMvc mvc;@Autowired AccountService accounts;@Autowired JdbcTemplate jdbc;
     @BeforeEach void seed() { jdbc.execute("TRUNCATE app_users,audit_log CASCADE");accounts.create("TEST","member","fixture-password-123","MEMBER");accounts.create("TEST","admin","fixture-password-123","ADMIN"); }
     MockHttpSession login(String name) throws Exception {

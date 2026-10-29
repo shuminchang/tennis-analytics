@@ -3,7 +3,11 @@ package com.shuminapp.tennis.features;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 public final class FeatureData {
+    public static void clear(JdbcTemplate jdbc) {
+        jdbc.execute("TRUNCATE elo_history,elo_current,elo_runs,app_users,audit_log,quality_issue_impacts,quality_issues,match_sources,matches,tournament_decisions,ranking_sources,rankings,player_sources,players,source_files,source_snapshots,import_runs CASCADE");
+    }
     public static void seed(JdbcTemplate jdbc) {
+        clear(jdbc);
         jdbc.execute("TRUNCATE quality_issue_impacts,quality_issues,match_sources,matches,tournament_decisions,player_sources,players,source_files,source_snapshots,import_runs CASCADE");
         long snapshot=jdbc.queryForObject("INSERT INTO source_snapshots(repository_url,commit_sha,archive_location) VALUES('https://example.com/fixture',?,'/fixture') RETURNING id",Long.class,"a".repeat(40));
         long run=jdbc.queryForObject("INSERT INTO import_runs(snapshot_id,importer_commit_sha,transform_rules_sha256,quality_rules_sha256,scope_rules_sha256,status,finished_at,data_kind) VALUES(?,?,?,?,?,'SUCCEEDED',clock_timestamp(),'MATCHES') RETURNING id",Long.class,snapshot,"b".repeat(40),"c".repeat(64),"c".repeat(64),"c".repeat(64));

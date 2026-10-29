@@ -44,6 +44,7 @@ public class PlayerImportService {
         }
         Result begun=tx.execute(status -> {
             lock();
+            if(jdbc.queryForObject("SELECT count(*) FROM elo_runs WHERE status='RUNNING'",Long.class)>0) throw new IllegalStateException("Inspect running Elo model before import");
             var successful=jdbc.queryForList("SELECT id,snapshot_id,transform_rules_sha256,importer_commit_sha FROM import_runs WHERE status='SUCCEEDED' AND data_kind='PLAYERS'");
             if (!successful.isEmpty()) {
                 if (successful.size()!=1) throw new IllegalStateException("Use an isolated player candidate database");
