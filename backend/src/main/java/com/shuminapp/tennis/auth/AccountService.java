@@ -12,9 +12,8 @@ public class AccountService {
     public AccountService(UserRepository users,PasswordEncoder encoder) { this.users=users;this.encoder=encoder; }
     @Transactional
     public long create(String actor,String username,String password,String role) {
-        if(username==null || password==null) throw new IllegalArgumentException();
-        username=username.toLowerCase(Locale.ROOT);validateRole(role);
-        if(!username.matches("[a-z0-9_.-]{3,64}") || password.length()<12 || password.getBytes(StandardCharsets.UTF_8).length>72) throw new IllegalArgumentException("Invalid account fields");
+        validateAccountFields(username,password,role);
+        username=username.toLowerCase(Locale.ROOT);
         long id=users.create(username,encoder.encode(password),role);users.audit(actor,"ACCOUNT_CREATED",username);return id;
     }
     @Transactional
@@ -22,5 +21,11 @@ public class AccountService {
         validateRole(role);var self=users.find(actor,false).orElseThrow();if(self.id()==id && (!role.equals("ADMIN") || !enabled)) throw new IllegalArgumentException("Cannot revoke own administrator account");
         users.update(id,role,enabled);users.audit(actor,"ACCOUNT_UPDATED",Long.toString(id));
     }
-    private void validateRole(String role) { if(role==null || !Set.of("MEMBER","ADVANCED","ADMIN").contains(role)) throw new IllegalArgumentException(); }
+    public static void validateAccountFields(String username,String password,String role) {
+        if(username==null || !username.toLowerCase(Locale.ROOT).matches("[a-z0-9_.-]{3,64}")) throw new IllegalArgumentException("Username must contain 3-64 letters, digits, underscores, dots or hyphens");
+        validateRole(role);
+        if(password==null || password.length()<12) throw new IllegalArgumentException("Password must contain at least 12 characters");
+        if(password.getBytes(StandardCharsets.UTF_8).length>72) throw new IllegalArgumentException("Password must not exceed 72 UTF-8 bytes");
+    }
+    private static void validateRole(String role) { if(role==null || !Set.of("MEMBER","ADVANCED","ADMIN").contains(role)) throw new IllegalArgumentException(); }
 }

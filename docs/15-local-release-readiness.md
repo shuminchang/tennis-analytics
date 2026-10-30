@@ -138,3 +138,10 @@ python3 scripts/ops/budget_stack.py \
 
 快照回應以 60 秒上限讀取；Docker 清理逾時仍保存 manifest 的結果與 cleanup_pending，不會因 dropdb 失聯遺失已驗證結果。cleanup_pending=true 只表示還有工具建立的還原庫／容器需查核，不能直接刪除其他庫。
 `python3 scripts/test/ops_checks.py` 的 4 案通過：雙行快照緩衝、回應逾時、dump 失敗不產生已驗證檔、還原成功但清理失聯仍保留結果。這些是無 Docker 的失敗模擬；另已對真實 PostgreSQL 驗證有界快照讀取（players=137483）。CI 已加入這 4 案。
+
+
+## 帳號驗收與 main 基準（2026-10-30）
+
+使用者後續明確授權提交帳號驗證修正及合併 main，取代前文當時「未授權合併」的範圍限制；仍不推送或部署。
+真實候選庫 test_admin 為啟用中的 ADMIN，01:29（Asia/Taipei）的 LOGIN_SUCCESS 與 last_login_at 確認已成功登入。未讀取密碼雜湊或重設密碼。AccountValidationTest／AccountTest 共 5 案重驗通過，管理員可讀帳號列表、會員不可讀；CLI 確認密碼不一致則退出且不建立帳號。使用者的管理頁手動確認另待回覆，與自動測試區分。
+帳號修正提交後以 git merge --ff-only 合併 feat/pre-release-features，保留各階段 commit；main 作為後續部署候選基準，不代表已在正式主機上線。既有 .vscode/settings.json 保留不提交。

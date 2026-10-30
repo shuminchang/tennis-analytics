@@ -1,6 +1,6 @@
 # 網球網站開發教學文件
 
-**目前進度（2026-10-30）：九階段功能已分階段提交至 feat/pre-release-features；後端 413 案、前端 41 案與端到端 9 案通過。本機候選資料庫已建立真實 Elo，備份及實際還原成功；資源限制實測結果見 [發布前工程驗收](15-local-release-readiness.md)。未推送或部署，外部備份目的地待定。**
+**目前進度（2026-10-30）：九階段功能與帳號驗證修正的交付基準為 main，來源分支 feat/pre-release-features 採 fast-forward 合併；後端 413 案、前端 41 案與端到端 9 案通過。本機候選資料庫已建立真實 Elo，備份及實際還原成功；資源限制實測結果見 [發布前工程驗收](15-local-release-readiness.md)。未推送或部署，外部備份目的地待定。**
 
 - [九階段交付追蹤](14-pre-release-roadmap.md)：範圍、規則與逐階段驗證。
 - [發布前工程驗收](15-local-release-readiness.md)：效能、CI、本機備份／還原與更新程序。
