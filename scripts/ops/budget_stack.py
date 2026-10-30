@@ -18,6 +18,7 @@ import uuid
 ROOT = Path(__file__).resolve().parents[2]
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('manifest', type=Path)
+parser.add_argument('--research', action='store_true')
 args = parser.parse_args()
 manifest = json.loads(args.manifest.read_text())
 dump = args.manifest.parent / 'database.dump'
@@ -74,7 +75,7 @@ try:
                env={**os.environ, 'POSTGRES_PASSWORD': password})
     # Persistent settings in this disposable test container only.
     for _ in range(60):
-        ready = subprocess.run(['docker', 'exec', db, 'pg_isready', '-U', 'budget_user', '-d', 'tennis_candidate'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=15)
+        ready = subprocess.run(['docker', 'exec', db, 'pg_isready', '-h', '127.0.0.1', '-U', 'budget_user', '-d', 'tennis_candidate'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=15)
         if ready.returncode == 0:
             break
         time.sleep(1)
@@ -85,7 +86,7 @@ try:
         run('docker', 'exec', db, 'psql', '-U', 'budget_user', '-d', 'tennis_candidate', '-c', 'ALTER SYSTEM SET ' + setting + ';', stdout=subprocess.DEVNULL)
     run('docker', 'restart', db, stdout=subprocess.DEVNULL)
     for _ in range(60):
-        ready = subprocess.run(['docker', 'exec', db, 'pg_isready', '-U', 'budget_user', '-d', 'tennis_candidate'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=15)
+        ready = subprocess.run(['docker', 'exec', db, 'pg_isready', '-h', '127.0.0.1', '-U', 'budget_user', '-d', 'tennis_candidate'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=15)
         if ready.returncode == 0:
             break
         time.sleep(1)
@@ -93,6 +94,7 @@ try:
         raise RuntimeError('Budget PostgreSQL did not restart')
     with dump.open('rb') as stream, (output / 'restore.log').open('w') as log:
         run('docker', 'exec', '-i', db, 'pg_restore', '-U', 'budget_user', '-d', 'tennis_candidate', '--no-owner', '--no-acl', '--exit-on-error', stdin=stream, stdout=subprocess.DEVNULL, stderr=log, timeout=1800)
+    run('docker', 'exec', db, 'psql', '-U', 'budget_user', '-d', 'tennis_candidate', '-v', 'ON_ERROR_STOP=1', '-c', 'ANALYZE;', stdout=subprocess.DEVNULL, timeout=180)
     print('Starting 448 MiB Java and 64 MiB Apache test containers...', flush=True)
     result = run('docker', 'run', '-d', '--name', app_name, '--network', network, '--memory', '448m', '--memory-swap', '448m', '--cpus', '.4',
                  '-v', str(jar) + ':/app/app.jar:ro', '-e', 'DB_URL=jdbc:postgresql://' + db_name + ':5432/tennis_candidate', '-e', 'DB_USERNAME=budget_user', '-e', 'DB_PASSWORD',
@@ -142,9 +144,21 @@ Header always set Content-Security-Policy "default-src 'self'; img-src 'self' da
     else:
         raise RuntimeError('Budget stack readiness timeout')
     print('Benchmarking through Apache with real source data...', flush=True)
-    run(sys.executable, str(ROOT / 'scripts/ops/benchmark.py'), '--base', base, '--authenticated', '--container', db_name, '--db-user', 'budget_user', '--output', str(output / 'performance.json'), stdout=(output / 'benchmark.log').open('w'), timeout=600)
+    run(sys.executable, str(ROOT / 'scripts/ops/benchmark.py'), '--base', base, '--authenticated', '--container', db_name, '--db-user', 'budget_user', '--output', str(output / 'performance.json'), *(['--research', '--measure-only'] if args.research else []), stdout=(output / 'benchmark.log').open('w'), timeout=600)
     report['performance'] = json.loads((output / 'performance.json').read_text())
+    if args.research:
+        report['latency_target_met'] = all(v['warm_p95_ms'] < 500 for v in report['performance'].values())
+        report['latency_target_misses'] = [k for k,v in report['performance'].items() if v['warm_p95_ms'] >= 500]
+        checkpoint()
+        run('node', str(ROOT / 'scripts/test/research_proxy_browser.mjs'), base.removesuffix('/tennis/api'), str(output), timeout=120)
+        report['browser'] = json.loads((output / 'browser.json').read_text())
     report['container_stats'] = [json.loads(run('docker', 'stats', '--no-stream', '--format', '{{json .}}', c, text=True, stdout=subprocess.PIPE).stdout) for c in containers]
+    report['cgroup'] = []
+    for c in containers:
+        raw = run('docker', 'exec', c, 'sh', '-c', 'cat /sys/fs/cgroup/memory.peak; cat /sys/fs/cgroup/memory.events; cat /sys/fs/cgroup/cpu.stat', text=True, stdout=subprocess.PIPE).stdout
+        report['cgroup'].append({'container':c[:12], 'memory_peak_bytes':int(raw.splitlines()[0]), 'events_and_cpu':raw.splitlines()[1:]})
+        if 'oom_kill 0' not in raw:
+            raise RuntimeError('Budget container OOM event')
     report['base'] = base
     report['status'] = 'SUCCEEDED'
     print('PASS: CPU/memory-bounded stack. Report: ' + str(output / 'report.json'), flush=True)

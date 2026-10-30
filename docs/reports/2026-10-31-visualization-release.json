@@ -1,0 +1,306 @@
+{
+  "recorded_at": "2026-10-31T02:29:32.043858+08:00",
+  "status": "LOCAL_ACCEPTANCE_COMPLETED",
+  "branch": "feat/visualization-lab",
+  "source_sha": "83733587353df8a41f2fd4f516147d5aa83f5a8d",
+  "source_backup_sha256": "84f887815df57bc162b70082144bc3cea63e1b29dba6fbdd03c0d8129e835523",
+  "jar_sha256": "cef54ce76d9843809429b32296c63be87164812ebe71850c3930166c061b6183",
+  "implementation_sha256": {
+    "backend/src/main/java/com/shuminapp/tennis/visualization/ResearchRepository.java": "1fb95bc67b41472facb08c72049d7971e1e4ae8b6149efe1b9119137c162c0ac",
+    "backend/src/main/java/com/shuminapp/tennis/visualization/ResearchService.java": "c0557f2e12e3740d90d08ef5c0f1af882240d341db5137cb394d0b950c7edaef",
+    "frontend/src/features/visualizations/ChartCanvas.tsx": "45e6319f1af4c44a9ea18a5b10a3a528288602c0e2214f0f7d8c525865746079",
+    "frontend/vite.config.ts": "025fe1b5be9b670a525c2597ba0220af6003d8a743fd3d04cbf8296c6b7b99a1"
+  },
+  "tests": {
+    "backend": 446,
+    "frontend_unit": 60,
+    "playwright": 17,
+    "frontend_lint": "PASSED",
+    "frontend_build": "PASSED"
+  },
+  "limits_mib": {
+    "postgres": 320,
+    "java": 448,
+    "apache": 64
+  },
+  "cpu_quotas": {
+    "postgres": 0.5,
+    "java": 0.4,
+    "apache": 0.1
+  },
+  "cgroups": [
+    {
+      "component": "postgres",
+      "memory_peak_bytes": 335544320,
+      "memory_peak_mib": 320.0,
+      "cgroup_events_and_cpu": [
+        "low 0",
+        "high 0",
+        "max 22521",
+        "oom 0",
+        "oom_kill 0",
+        "oom_group_kill 0",
+        "usage_usec 102328707",
+        "user_usec 85965449",
+        "system_usec 16363258",
+        "nice_usec 0",
+        "nr_periods 2770",
+        "nr_throttled 1850",
+        "throttled_usec 158791028",
+        "nr_bursts 0",
+        "burst_usec 0"
+      ]
+    },
+    {
+      "component": "java",
+      "memory_peak_bytes": 287596544,
+      "memory_peak_mib": 274.27,
+      "cgroup_events_and_cpu": [
+        "low 0",
+        "high 0",
+        "max 0",
+        "oom 0",
+        "oom_kill 0",
+        "oom_group_kill 0",
+        "usage_usec 35552690",
+        "user_usec 33473283",
+        "system_usec 2079406",
+        "nice_usec 0",
+        "nr_periods 1009",
+        "nr_throttled 851",
+        "throttled_usec 152416610",
+        "nr_bursts 0",
+        "burst_usec 0"
+      ]
+    },
+    {
+      "component": "apache",
+      "memory_peak_bytes": 13291520,
+      "memory_peak_mib": 12.68,
+      "cgroup_events_and_cpu": [
+        "low 0",
+        "high 0",
+        "max 0",
+        "oom 0",
+        "oom_kill 0",
+        "oom_group_kill 0",
+        "usage_usec 763703",
+        "user_usec 201733",
+        "system_usec 561970",
+        "nice_usec 0",
+        "nr_periods 333",
+        "nr_throttled 8",
+        "throttled_usec 578069",
+        "nr_bursts 0",
+        "burst_usec 0"
+      ]
+    }
+  ],
+  "latency_target_met_this_run": true,
+  "performance": {
+    "/v1/visualizations/metadata?tour=ATP": {
+      "cold_ms": 1105.03,
+      "warm_p50_ms": 112.06,
+      "warm_p95_ms": 267.51,
+      "warm_mean_ms": 124.57,
+      "samples": 20,
+      "maximum_response_bytes": 1312,
+      "sample": null,
+      "population": null
+    },
+    "/v1/visualizations/scatter?tour=ATP&rankingDate=2026-06-08&topN=100&x=height_cm&y=rank&color=hand": {
+      "cold_ms": 803.54,
+      "warm_p50_ms": 99.81,
+      "warm_p95_ms": 290.18,
+      "warm_mean_ms": 115.07,
+      "samples": 20,
+      "maximum_response_bytes": 10483,
+      "sample": {
+        "population": 100,
+        "valid": 99,
+        "excluded": 1,
+        "primaryReasons": [
+          {
+            "metric": "height_cm",
+            "code": "MISSING",
+            "count": 1
+          }
+        ]
+      },
+      "population": null
+    },
+    "/v1/visualizations/histogram?tour=ATP&rankingDate=2026-06-08&topN=100&metric=height_cm&bins=10": {
+      "cold_ms": 91.01,
+      "warm_p50_ms": 87.78,
+      "warm_p95_ms": 167.13,
+      "warm_mean_ms": 80.36,
+      "samples": 20,
+      "maximum_response_bytes": 1879,
+      "sample": {
+        "population": 100,
+        "valid": 99,
+        "excluded": 1,
+        "primaryReasons": [
+          {
+            "metric": "height_cm",
+            "code": "MISSING",
+            "count": 1
+          }
+        ]
+      },
+      "population": null
+    },
+    "/v1/visualizations/age-performance?tour=ATP&fromYear=2017&toYear=2026&surface=ALL": {
+      "cold_ms": 1689.49,
+      "warm_p50_ms": 55.75,
+      "warm_p95_ms": 85.06,
+      "warm_mean_ms": 55.24,
+      "samples": 20,
+      "maximum_response_bytes": 7208,
+      "sample": {
+        "population": 51682,
+        "valid": 51662,
+        "excluded": 20,
+        "reasons": [
+          {
+            "code": "AGE_MISSING",
+            "count": 20
+          }
+        ]
+      },
+      "population": null,
+      "concurrent_4": {
+        "requests": 16,
+        "p50_ms": 774.83,
+        "p95_ms": 993.68
+      }
+    },
+    "/v1/visualizations/profile-performance?tour=ATP&fromYear=2017&toYear=2026&surface=ALL&limit=1000": {
+      "cold_ms": 2795.62,
+      "warm_p50_ms": 93.14,
+      "warm_p95_ms": 289.82,
+      "warm_mean_ms": 130.13,
+      "samples": 20,
+      "maximum_response_bytes": 1030665,
+      "sample": {
+        "population": 6982,
+        "inspected": 1000,
+        "valid": 999,
+        "excluded": 1,
+        "omitted": 5982,
+        "reasons": [
+          {
+            "code": "height_cm:MISSING",
+            "count": 1
+          }
+        ]
+      },
+      "population": null
+    },
+    "/v1/visualizations/correlations?tour=ATP&fromYear=2017&toYear=2026&surface=ALL&limit=1000": {
+      "cold_ms": 2377.89,
+      "warm_p50_ms": 45.33,
+      "warm_p95_ms": 93.84,
+      "warm_mean_ms": 50.7,
+      "samples": 20,
+      "maximum_response_bytes": 29073,
+      "sample": null,
+      "population": 6982,
+      "concurrent_4": {
+        "requests": 16,
+        "p50_ms": 547.58,
+        "p95_ms": 909.4
+      }
+    },
+    "/v1/visualizations/age-performance?tour=WTA&fromYear=2017&toYear=2026&surface=ALL": {
+      "cold_ms": 898.61,
+      "warm_p50_ms": 66.03,
+      "warm_p95_ms": 81.38,
+      "warm_mean_ms": 58.56,
+      "samples": 20,
+      "maximum_response_bytes": 7271,
+      "sample": {
+        "population": 47986,
+        "valid": 47969,
+        "excluded": 17,
+        "reasons": [
+          {
+            "code": "AGE_MISSING",
+            "count": 17
+          }
+        ]
+      },
+      "population": null
+    },
+    "/v1/visualizations/profile-performance?tour=WTA&fromYear=2017&toYear=2026&surface=ALL&limit=1000": {
+      "cold_ms": 1587.9,
+      "warm_p50_ms": 39.12,
+      "warm_p95_ms": 63.87,
+      "warm_mean_ms": 47.21,
+      "samples": 20,
+      "maximum_response_bytes": 1011603,
+      "sample": {
+        "population": 6656,
+        "inspected": 1000,
+        "valid": 900,
+        "excluded": 100,
+        "omitted": 5656,
+        "reasons": [
+          {
+            "code": "height_cm:MISSING",
+            "count": 100
+          }
+        ]
+      },
+      "population": null
+    },
+    "/v1/visualizations/profile-performance?tour=ATP&fromYear=2017&toYear=2026&surface=ALL&limit=500": {
+      "cold_ms": 1580.21,
+      "warm_p50_ms": 49.9,
+      "warm_p95_ms": 102.43,
+      "warm_mean_ms": 55.26,
+      "samples": 20,
+      "maximum_response_bytes": 540802,
+      "sample": {
+        "population": 6982,
+        "inspected": 500,
+        "valid": 500,
+        "excluded": 0,
+        "omitted": 6482,
+        "reasons": []
+      },
+      "population": null
+    }
+  },
+  "browser": {
+    "status": "PASSED",
+    "errors": [],
+    "plots": [
+      {
+        "view": "age",
+        "canvasCount": 1,
+        "sourceDisclosed": true
+      },
+      {
+        "view": "profiles",
+        "canvasCount": 4,
+        "sourceDisclosed": true
+      }
+    ],
+    "security": "Apache CSP and self-hosted assets; public read-only research"
+  },
+  "cleanup_pending": false,
+  "limitations": [
+    "832 MiB / 1 CPU hard caps cover PG, Java and Apache only; not host OS, Docker, browser or existing Linode services",
+    "Container peaks include page cache, may occur at different times; PostgreSQL reached its 320 MiB cap and reclaimed memory, with oom=0 and oom_kill=0",
+    "Single-path warm p95 <500 ms passed in this final run; previous ATP 1000-profile run measured 687.35 ms, so this is not an all-load SLO",
+    "Four-worker p95 is about 0.9-1.0 seconds, not <500 ms; cold queries are reported separately",
+    "Local acceptance only; no main merge, push or deployment; external backup and Phase 10 pending"
+  ],
+  "prior_failed_checks": [
+    "PostgreSQL temporary initialization readiness race; fixed TCP readiness",
+    "10-year profile SQL timeout; fixed materialization and one-pass GROUPING SETS",
+    "Apache CSP blocked Vite inlined data fonts; fixed standalone assets without relaxing CSP",
+    "Prior maximum-window warm latency target miss retained; measurement mode permits remaining CSP/memory checks and explicitly records misses"
+  ]
+}

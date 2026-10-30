@@ -83,4 +83,4 @@ python3 scripts/test/player_search_e2e.py --spec visualizations.spec.ts
 
 本機缺少 libgbm 時，本輪僅把 libgbm1／libwayland-server0 解壓於 /tmp/tennis-browser-libs，透過 LD_LIBRARY_PATH 執行；未改系統套件。CI 原已用 playwright install --with-deps。E2E wrapper 增加 15 秒 Docker preflight；失聯視為失敗，日誌保留 .local/verification，不重置開發資料庫。
 本機截圖 .local/verification/explorer-real-desktop.png、explorer-real-mobile.png；人工來源截圖 frontend/test-results/explorer-*.png。截圖／日誌均 Git 忽略，不提交個人帳號或資料庫內容。
-下一步 **11.4 年齡－勝率與 Wilson 區間**，仍須依 11.1 的角色樣本、品質與來源年齡限制開發；本輪未提前實作。未合併 main、推送、部署或變更使用者 .vscode/settings.json。
+上述為 11.3 當時驗收。後續 11.4～11.7 的年齡／發球／進階工作台與整合驗收見 [21](21-visualization-research-delivery.md)；尚未合併 main、推送或正式部署。

@@ -45,7 +45,7 @@ def wait_url(url, process):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--spec", choices=["player-search.spec.ts", "visualizations.spec.ts"])
+    parser.add_argument("--spec", choices=["player-search.spec.ts", "visualizations.spec.ts", "research.spec.ts"])
     options = parser.parse_args()
     run("timeout", "15s", "docker", "version")
     if not JAR.exists():
@@ -53,6 +53,10 @@ def main():
     log_root = ROOT / '.local/verification'
     log_root.mkdir(parents=True, exist_ok=True)
     temp = Path(tempfile.mkdtemp(prefix='tennis-search-e2e-', dir=log_root))
+    immutable_jar = temp / 'application.jar'
+    shutil.copyfile(JAR, immutable_jar)
+    def cli(main, *arguments, **kwargs):
+        return run('java', '-Dloader.main=com.shuminapp.tennis.' + main, '-cp', str(immutable_jar), 'org.springframework.boot.loader.launch.PropertiesLauncher', *arguments, **kwargs)
     container = None
     processes = []
     logs = []
@@ -63,7 +67,7 @@ def main():
                         '-e', 'POSTGRES_PASSWORD=' + password, 'postgres:16-bookworm').stdout.strip()
         port = json.loads(run('docker', 'inspect', container).stdout)[0]['NetworkSettings']['Ports']['5432/tcp'][0]['HostPort']
         for _ in range(60):
-            result = subprocess.run(['docker', 'exec', container, 'pg_isready', '-U', 'tennis_test', '-d', 'tennis_e2e'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=5)
+            result = subprocess.run(['docker', 'exec', container, 'pg_isready', '-h', '127.0.0.1', '-U', 'tennis_test', '-d', 'tennis_e2e'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=5)
             if result.returncode == 0:
                 break
             time.sleep(.5)
@@ -76,7 +80,7 @@ def main():
         header = 'player_id,name_first,name_last,hand,dob,ioc,height,wikidata_id\n'
         (repo / 'atp').mkdir(); (repo / 'wta').mkdir()
         atp = '1,Roger,Federer,R,19810808,SUI,185,Q1\n2,U,Unknown,U,,,,\n3,Rafael,Nadal,L,19860603,ESP,185,Q3\n'
-        atp += ''.join(f'{n},Alex,Player{n:02},R,19900101,USA,180,\n' for n in range(10,30))
+        atp += ''.join(f'{n},Alex,Player{n:02},R,19900101,USA,{185 if n in (10,11) else 180},\n' for n in range(10,30))
         (repo / 'atp/atp_players.csv').write_text(header + atp)
         (repo / 'wta/wta_players.csv').write_text(header + '1,Serena,Williams,R,19810926,USA,175,Q2\n')
         ranking_rows = ''.join(f'{(date(2024, 1, 1) + timedelta(days=n)).strftime("%Y%m%d")},{n+1},1,{0 if n == 24 else ""}\n' for n in range(25))
@@ -88,12 +92,16 @@ def main():
                 writer = csv.DictWriter(stream, fieldnames=match_header); writer.writeheader()
                 if tour == 'atp':
                     for n in range(25):
-                        writer.writerow({'tourney_id':'fixture-open','tourney_name':'Fixture Open','tourney_level':'A','tourney_date':'20240101','round':'RR','match_num':n+1,'winner_id':1,'loser_id':3,'score':'W/O' if n == 0 else '6-3 6-4','surface':'Hard'})
+                        writer.writerow({'tourney_id':'fixture-open','tourney_name':'Fixture Open','tourney_level':'A','tourney_date':'20240101','round':'RR','match_num':n+1,'winner_id':1,'loser_id':3,'score':'W/O' if n == 0 else '6-3 6-4','surface':'Hard','winner_age':42,'loser_age':37,'w_ace':5,'w_df':2,'w_svpt':60,'w_1stIn':40,'w_1stWon':30,'w_2ndWon':12,'l_ace':1,'l_df':1,'l_svpt':50,'l_1stIn':30,'l_1stWon':20,'l_2ndWon':10})
+                    # Independent pair supplies >=3 qualified profiles for a nonempty research matrix,
+                    # without changing Federer/Nadal history, rankings or H2H expectations.
+                    for n in range(20):
+                        writer.writerow({'tourney_id':'fixture-open','tourney_name':'Fixture Open','tourney_level':'A','tourney_date':'20240101','round':'RR','match_num':1000+n,'winner_id':10,'loser_id':11,'score':'6-3 6-4','surface':'Hard','winner_age':34,'loser_age':34,'w_ace':2,'w_df':1,'w_svpt':60,'w_1stIn':40,'w_1stWon':30,'w_2ndWon':12,'l_ace':0,'l_df':0,'l_svpt':50,'l_1stIn':30,'l_1stWon':20,'l_2ndWon':10})
                     writer.writerow({'tourney_id':'fixture-2023','tourney_name':'Fixture 2023','tourney_level':'A','tourney_date':'20230101','round':'F','match_num':1,'winner_id':3,'loser_id':1,'score':'6-3 6-4'})
         run('git', 'add', '.', cwd=repo); run('git', 'commit', '-qm', 'synthetic player fixture', cwd=repo)
         sha = run('git', 'rev-parse', 'HEAD', cwd=repo).stdout.strip()
         archive = temp / 'archive'
-        run(str(ROOT / 'backend/source-snapshot'), 'prepare', str(repo), 'https://example.com/tennis', sha, str(archive))
+        cli('ingestion.SourceSnapshotCli', 'prepare', str(repo), 'https://example.com/tennis', sha, str(archive))
         api_port, ui_port = free_port(), free_port()
         while ui_port == api_port:
             ui_port = free_port()
@@ -101,13 +109,13 @@ def main():
                'DB_USERNAME': 'tennis_test', 'DB_PASSWORD': password, 'IMPORT_TARGET': 'candidate',
                'SERVER_PORT': str(api_port), 'LOGGING_LEVEL_ROOT': 'WARN'}
         with (temp / 'import.log').open('w') as log:
-            run(str(ROOT / 'backend/import-players'), str(repo), 'https://example.com/tennis', sha, str(archive), 'a' * 40, env=env, output=log)
+            cli('ingestion.PlayerImportCli', str(repo), 'https://example.com/tennis', sha, str(archive), 'a' * 40, env=env, output=log)
         with (temp / 'rankings.log').open('w') as log:
-            run(str(ROOT / 'backend/import-rankings'), str(repo), 'https://example.com/tennis', sha, str(archive), 'a' * 40, env=env, output=log)
+            cli('ingestion.RankingImportCli', str(repo), 'https://example.com/tennis', sha, str(archive), 'a' * 40, env=env, output=log)
         with (temp / 'matches.log').open('w') as log:
-            run(str(ROOT / 'backend/import-matches'), str(repo), 'https://example.com/tennis', sha, str(archive), 'a' * 40, env=env, output=log)
+            cli('ingestion.MatchImportCli', str(repo), 'https://example.com/tennis', sha, str(archive), 'a' * 40, env=env, output=log)
         with (temp / 'elo.log').open('w') as log:
-            run(str(ROOT / 'backend/rebuild-elo'), env=env, output=log)
+            cli('features.EloCli', env=env, output=log)
         # Synthetic accounts exist only in this disposable container.
         crypto = sorted((Path.home() / '.m2/repository/org/springframework/security/spring-security-crypto').glob('*/spring-security-crypto-*.jar'))[-1]
         logging = sorted((Path.home() / '.m2/repository/org/springframework/spring-jcl').glob('*/spring-jcl-*.jar'))[-1]
@@ -119,7 +127,7 @@ def main():
                 f"INSERT INTO app_users(username,password_hash,role) VALUES('{username}','{password_hash}','{role}')")
         env['APP_RATE_REQUESTS'] = '10000'  # Separate rate-limit tests exercise the production limits.
         backend_log = (temp / 'backend.log').open('w'); logs.append(backend_log)
-        backend = subprocess.Popen(['java', '-jar', str(JAR)], env=env, stdout=backend_log, stderr=subprocess.STDOUT)
+        backend = subprocess.Popen(['java', '-jar', str(immutable_jar)], env=env, stdout=backend_log, stderr=subprocess.STDOUT)
         processes.append(backend)
         wait_url(f'http://127.0.0.1:{api_port}/tennis/api/v1/health', backend)
         ui_log = (temp / 'frontend.log').open('w'); logs.append(ui_log)

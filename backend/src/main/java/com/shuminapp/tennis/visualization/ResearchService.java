@@ -33,13 +33,13 @@ public class ResearchService {
     public Profiles profiles(ResearchRequest r) {
         if(!METRICS.contains(r.x()) || !METRICS.contains(r.y()) || r.x().equals(r.y())) throw new IllegalArgumentException();
         var source=repository.source();return cached("researchProfiles",source,r,()->{
-            var selected=repository.profiles(source,r);var points=new ArrayList<ProfilePoint>();var excluded=new TreeMap<String,Long>();
+            var study=repository.study(source,r,true);var selected=study.profiles();var points=new ArrayList<ProfilePoint>();var excluded=new TreeMap<String,Long>();
             for(var row:selected.items()) {
                 String reason=profileReason(row,r.x(),r.y());if(reason!=null) { excluded.merge(reason,1L,Long::sum);continue; }
                 points.add(new ProfilePoint(row.tour(),row.playerId(),row.displayName(),row.season(),row.surface(),row.hand(),row.metrics().get(r.x()).value(),row.metrics().get(r.y()).value(),row.matches()));
             }
             long inspected=selected.items().size();var sample=new ProfileSample(selected.population(),inspected,points.size(),inspected-points.size(),selected.population()-inspected,excluded.entrySet().stream().map(e->new Exclusion(e.getKey(),e.getValue())).toList());
-            return new Profiles(context("player_season_surface",source,r),r.x(),r.y(),sample,"MOST_MATCHES_THEN_ID_YEAR_SURFACE",selected.items(),List.copyOf(points),repository.slices(source,r,false),repository.slices(source,r,true),List.of("POST_MATCH_DESCRIPTIVE_ONLY","REPEATED_PLAYERS_NOT_INDEPENDENT","OPPONENT_STRENGTH_AND_ERA_NOT_CONTROLLED","BOUNDED_COHORT_NOT_FULL_POPULATION"));
+            return new Profiles(context("player_season_surface",source,r),r.x(),r.y(),sample,"MOST_MATCHES_THEN_ID_YEAR_SURFACE",selected.items(),List.copyOf(points),study.surfaces(),study.hands(),List.of("POST_MATCH_DESCRIPTIVE_ONLY","REPEATED_PLAYERS_NOT_INDEPENDENT","OPPONENT_STRENGTH_AND_ERA_NOT_CONTROLLED","BOUNDED_COHORT_NOT_FULL_POPULATION"));
         });
     }
     static String profileReason(Profile p,String x,String y) {

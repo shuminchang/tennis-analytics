@@ -22,8 +22,12 @@ public class ResearchRepository {
         if(rows.isEmpty() || rows.stream().anyMatch(r->r.snapshot!=snapshot) || rows.stream().anyMatch(r->!r.sha.equals(base.snapshotSha())) || rows.stream().map(MatchRun::rules).distinct().count()!=1) throw new VisualizationRepository.NotReady();
         var last=rows.getLast();
         String revision=jdbc.queryForObject("""
-            SELECT md5(coalesce(string_agg(q.id::text||':'||q.status||':'||q.role||':'||i.metric_code,',' ORDER BY q.id,i.metric_code),''))
-            FROM quality_issues q JOIN quality_issue_impacts i ON i.issue_id=q.id JOIN import_runs r ON r.id=q.run_id WHERE r.status='SUCCEEDED'
+            SELECT md5(
+                coalesce((SELECT string_agg(q.id::text||':'||q.status||':'||q.role||':'||i.metric_code,',' ORDER BY q.id,i.metric_code)
+                    FROM quality_issues q JOIN quality_issue_impacts i ON i.issue_id=q.id JOIN import_runs r ON r.id=q.run_id WHERE r.status='SUCCEEDED'),'')
+                || '|' || coalesce((SELECT string_agg(d.run_id::text||':'||d.tour||':'||d.tourney_id||':'||d.scope_status,',' ORDER BY d.run_id,d.tour,d.tourney_id)
+                    FROM tournament_decisions d JOIN import_runs r ON r.id=d.run_id WHERE r.status='SUCCEEDED'),'')
+            )
             """,String.class);
         return new Source(base,last.id,last.rules,revision,"v_stat_matches-live");
     }
@@ -39,7 +43,7 @@ public class ResearchRepository {
                 FROM quality_issues q JOIN quality_issue_impacts i ON i.issue_id=q.id
                 JOIN match_sources s ON s.run_id=q.run_id AND s.source_file_id=q.source_file_id AND s.record_number=q.record_number
                 WHERE q.status='OPEN' AND s.run_id=? GROUP BY s.match_id,q.role
-            ), sides AS (
+            ), sides AS MATERIALIZED (
                 SELECT m.id,m.tour,extract(year from m.tourney_date)::integer AS season,coalesce(m.surface,'Unknown') AS surface,v.*,
                     coalesce(b.age_blocked,false) OR coalesce(br.age_blocked,false) AS age_blocked,
                     coalesce(b.serve_blocked,false) OR coalesce(br.serve_blocked,false) AS serve_blocked
@@ -92,18 +96,27 @@ public class ResearchRepository {
         count(*) FILTER(WHERE serve_ok) AS sn,coalesce(sum(first_won::bigint+second_won) FILTER(WHERE serve_ok),0) AS snum,coalesce(sum(svpt) FILTER(WHERE serve_ok),0) AS sden
         """;
     public record ProfileRows(List<Profile> items,long population) { }
-    public ProfileRows profiles(Source source,ResearchRequest r) {
+    public record StudyRows(ProfileRows profiles,List<Slice> surfaces,List<Slice> hands) { }
+    public ProfileRows profiles(Source source,ResearchRequest r) { return study(source,r,false).profiles(); }
+    public StudyRows study(Source source,ResearchRequest r,boolean includeSlices) {
         var q=enriched(source,r);var args=new ArrayList<>(Arrays.asList(q.args()));args.add(r.limit());
-        String sql=q.sql()+"SELECT player_id,name,season,surface,hand,height_cm,height_reason,"+TOTALS+",count(*) OVER() AS population FROM enriched GROUP BY player_id,name,season,surface,hand,height_cm,height_reason ORDER BY matches DESC,player_id,season,surface LIMIT ?";
-        long[] total={0};var items=jdbc.query(sql,(rs,n)->{ total[0]=rs.getLong("population");var measures=measures(rs);
-            Double height=rs.getObject("height_cm")==null?null:rs.getDouble("height_cm");boolean valid=rs.getString("height_reason").equals("VALID");
-            measures.put("height_cm",new Measure(valid?height:null,valid?1:0,0,0,valid));
-            return new Profile(r.tour(),rs.getInt("player_id"),rs.getString("name"),rs.getInt("season"),rs.getString("surface"),rs.getString("hand"),rs.getLong("matches"),Collections.unmodifiableMap(measures),rs.getString("height_reason"));
-        },args.toArray());return new ProfileRows(List.copyOf(items),total[0]);
-    }
-    public List<Slice> slices(Source source,ResearchRequest r,boolean hands) {
-        var q=enriched(source,r);String dims=hands?"'ALL' AS season,surface,hand,opponent_hand":"season::text,surface,'ALL' AS hand,'ALL' AS opponent_hand";
-        return jdbc.query(q.sql()+"SELECT "+dims+","+TOTALS+" FROM enriched GROUP BY 1,2,3,4 ORDER BY 1,2,3,4",(rs,n)->new Slice(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getLong("matches"),Collections.unmodifiableMap(measures(rs))),q.args());
+        String grouping=includeSlices?"GROUP BY GROUPING SETS ((player_id,name,season,surface,hand,height_cm,height_reason),(season,surface),(surface,hand,opponent_hand))":"GROUP BY player_id,name,season,surface,hand,height_cm,height_reason";
+        String kind=includeSlices?"CASE WHEN grouping(player_id)=0 THEN 'PROFILE' WHEN grouping(season)=0 THEN 'SURFACE' ELSE 'HAND' END":"'PROFILE'";
+        String opponent=includeSlices?"opponent_hand":"NULL::text AS opponent_hand";
+        String sql=q.sql()+", aggregated AS (SELECT "+kind+" AS kind,player_id,name,season,surface,hand,height_cm,height_reason,"+opponent+","+TOTALS+" FROM enriched "+grouping+"), numbered AS (SELECT *,count(*) OVER(PARTITION BY kind) AS population,row_number() OVER(PARTITION BY kind ORDER BY matches DESC,player_id,season,surface) AS position FROM aggregated) SELECT * FROM numbered WHERE kind<>'PROFILE' OR position<=? ORDER BY kind,CASE WHEN kind='PROFILE' THEN position END,season,surface,hand,opponent_hand";
+        long[] population={0};var items=new ArrayList<Profile>();var surfaces=new ArrayList<Slice>();var hands=new ArrayList<Slice>();
+        jdbc.query(sql,rs->{
+            String rowKind=rs.getString("kind");
+            if(rowKind.equals("PROFILE")) { population[0]=rs.getLong("population");var measures=measures(rs);
+                Double height=rs.getObject("height_cm")==null?null:rs.getDouble("height_cm");boolean valid=rs.getString("height_reason").equals("VALID");
+                measures.put("height_cm",new Measure(valid?height:null,valid?1:0,0,0,valid));
+                items.add(new Profile(r.tour(),rs.getInt("player_id"),rs.getString("name"),rs.getInt("season"),rs.getString("surface"),rs.getString("hand"),rs.getLong("matches"),Collections.unmodifiableMap(measures),rs.getString("height_reason")));
+            } else {
+                boolean isHand=rowKind.equals("HAND");var row=new Slice(isHand?"ALL":rs.getString("season"),rs.getString("surface"),isHand?rs.getString("hand"):"ALL",isHand?rs.getString("opponent_hand"):"ALL",rs.getLong("matches"),Collections.unmodifiableMap(measures(rs)));
+                (isHand?hands:surfaces).add(row);
+            }
+        },args.toArray());
+        return new StudyRows(new ProfileRows(List.copyOf(items),population[0]),List.copyOf(surfaces),List.copyOf(hands));
     }
     private static LinkedHashMap<String,Measure> measures(java.sql.ResultSet rs) throws java.sql.SQLException {
         var out=new LinkedHashMap<String,Measure>();long n=rs.getLong("matches"),wins=rs.getLong("wins");

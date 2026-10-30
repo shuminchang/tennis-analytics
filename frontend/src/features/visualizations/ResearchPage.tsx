@@ -47,5 +47,5 @@ function AgeResults({ data, en }: { data: Ages; en: boolean }) {
   </>;
 }
 export function ResearchNote({ source, en }: { source: ResearchInfo["source"]; en: boolean }) {
-  return <details className="explorer-source"><summary>{en ? "Research source and methods" : "研究來源與方法"}</summary><p>{en ? "Jeff Sackmann tennis data · CC BY-NC-SA 4.0. Reviewed source coverage only; not causal inference or complete career statistics." : "Jeff Sackmann 網球資料 · CC BY-NC-SA 4.0。僅限已納入來源範圍，不代表因果或完整生涯。"}</p><p><code>{source.playersAndRankings.snapshotSha}</code><br/>stats-v1 · research-v1 · {en ? "Match run" : "比賽批次"} {source.matchRunId}</p></details>;
+  return <details className="explorer-source"><summary>{en ? "Research source and methods" : "研究來源與方法"}</summary><p>{en ? "Jeff Sackmann tennis data · CC BY-NC-SA 4.0. Reviewed source coverage only; not causal inference or complete career statistics." : "Jeff Sackmann 網球資料 · CC BY-NC-SA 4.0。僅限已納入來源範圍，不代表因果或完整生涯。"}</p><p><a href="https://github.com/JeffSackmann" target="_blank" rel="noreferrer">Jeff Sackmann / Tennis Abstract ↗</a> · <a href={source.playersAndRankings.repositoryUrl} target="_blank" rel="noreferrer">{en ? "Source archive ↗" : "來源封存 ↗"}</a><br/><code>{source.playersAndRankings.snapshotSha}</code><br/>stats-v1 · research-v1 · {en ? "Match run" : "比賽批次"} {source.matchRunId}</p></details>;
 }

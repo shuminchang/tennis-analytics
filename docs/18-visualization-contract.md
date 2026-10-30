@@ -183,4 +183,4 @@ python3 -m json.tool /tmp/visualization-contract-inspection.json
 ```
 
 SQL 限時 90 秒、輸出無密碼與來源本機封存路徑；用公開來源資料計數，不重跑 CSV 或匯入。Docker 失聯時保留錯誤日誌，不以空檔當報告。
-11.1 的指標、MVP DTO、權限與上限在本文件定版；來源真實性與 Phase 10 仍有明確限制。11.2 已依此契約實作三個公開端點與 fixture parity、品質、日期、快取及逾時驗證；11.3 UI 也已交付（見 [20](20-visualization-explorer.md)），下一步 11.4，不提前完成未實作路由。
+11.1 的指標、MVP DTO、權限與上限在本文件定版；來源真實性與 Phase 10 仍有明確限制。11.2 已依此契約實作三個公開端點與 fixture parity、品質、日期、快取及逾時驗證；11.3 UI 也已交付（見 [20](20-visualization-explorer.md)），11.4～11.7 交付、研究資料字典與驗收見 [21](21-visualization-research-delivery.md)。

@@ -14,7 +14,7 @@ export default function ChartCanvas({ option, label, onHover, onOpen, exportName
     return () => { resize.disconnect();instance.dispose();chart.current = null; };
   }, []);
   useEffect(() => {
-    const instance = chart.current!;element.current?.setAttribute("aria-busy", "true");instance.setOption(option, { notMerge: true });
+    const instance = chart.current!;element.current?.setAttribute("aria-busy", "true");instance.setOption({ textStyle: { fontFamily: '"DM Sans Variable", "Noto Sans TC Variable", sans-serif' }, ...option }, { notMerge: true });
     const hover = (event: ECElementEvent) => { const p = (event.data as { point?: Point })?.point;if (p) onHover?.(p); };
     const open = (event: ECElementEvent) => { const p = (event.data as { point?: Point })?.point;if (p) onOpen?.(p); };
     instance.on("mouseover", hover);instance.on("click", open);

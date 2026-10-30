@@ -5,6 +5,8 @@ import { defineConfig } from "vite";
 export default defineConfig({
   base: "/tennis/",
   plugins: [react()],
+  // Keep self-hosted fonts compatible with the production font-src self policy.
+  build: { assetsInlineLimit: 0 },
   server: {
     proxy: {
       "/tennis/api": {
