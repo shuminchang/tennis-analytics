@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { lazy, Suspense, useEffect } from "react";
+import { Routes, Route, Link, NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import PlayerSearchPage from "./players/PlayerSearchPage";
 import PlayerDetailPage from "./players/PlayerDetailPage";
@@ -13,12 +13,15 @@ import About from "./features/About";
 import Favorites from "./features/Favorites";
 import "./App.css";
 
+const ExplorerPage = lazy(() => import("./features/visualizations/ExplorerPage"));
+
 export default function App() {
   const { t, i18n } = useTranslation();
+  const location = useLocation();
   useEffect(() => {
     document.documentElement.lang = i18n.language;
-    document.title = `${t("nav")} · ${t("brand")}`;
-  }, [i18n.language, t]);
+    document.title = `${location.pathname.startsWith("/visualizations") ? (i18n.language === "en" ? "Data Explorer" : "資料探索") : t("nav")} · ${t("brand")}`;
+  }, [i18n.language, t, location.pathname]);
   function changeLanguage() {
     const next = i18n.language === "en" ? "zh-TW" : "en";
     void i18n.changeLanguage(next);
@@ -41,11 +44,12 @@ export default function App() {
           {t("brand")}
         </Link>
         <nav aria-label={t("nav")}>
-          <Link to="/players" className="nav-active">
+          <Link to="/players" className={location.pathname.startsWith("/players") ? "nav-active" : undefined}>
             {t("nav")}
           </Link>
           <Link to="/">{i18n.language === "en" ? "Home" : "首頁"}</Link>
           <Link to="/rankings">{i18n.language === "en" ? "Rankings" : "排名"}</Link>
+          <NavLink to="/visualizations" className={({ isActive }) => isActive ? "nav-active" : undefined}>{i18n.language === "en" ? "Explorer" : "資料探索"}</NavLink>
           <Link to="/h2h">H2H</Link>
           <Link to="/compare">{i18n.language === "en" ? "Compare" : "比較"}</Link>
           <Link to="/favorites">{i18n.language === "en" ? "Saved" : "收藏"}</Link>
@@ -69,6 +73,7 @@ export default function App() {
           <Route path="/compare" element={<Compare />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/account" element={<Account />} />
+          <Route path="/visualizations" element={<Suspense fallback={<p role="status">{i18n.language === "en" ? "Loading explorer…" : "正在載入探索頁面…"}</p>}><ExplorerPage /></Suspense>} />
           <Route path="/rankings" element={<Rankings />} />
           <Route path="/tournaments" element={<Tournaments />} />
           <Route path="/tournaments/:tour/:id" element={<TournamentDetail />} />

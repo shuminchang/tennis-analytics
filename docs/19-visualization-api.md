@@ -1,6 +1,6 @@
 # Phase 11.2：視覺化聚合 API
 
-狀態：**已實作、測試與本機候選資料驗收**（2026-10-31）。分支 feat/visualization-lab；前端 11.3 尚未實作，Phase 10 正式部署未完成。
+狀態：**已實作、測試與本機候選資料驗收**（2026-10-31）。分支 feat/visualization-lab；前端 11.3 已完成，見 [20 UI 驗收](20-visualization-explorer.md)，Phase 10 正式部署未完成。
 契約：[18 visualization-v1](18-visualization-contract.md)。此切片以同日排名小母體 JOIN 球員，不新增 migration／資料預計算表，不安裝圖表套件。
 
 ## 提供的端點
@@ -110,4 +110,4 @@ cp backend/target/tennis-0.0.1-SNAPSHOT.jar .local/verification/visualization-ap
 
 smoke 工具限制 localhost、只發 GET、比對既有 11.1 報告；來源更新後需先更新獨立基準，不將新資料與舊數字混比。EXPLAIN SQL 強制 READ ONLY／REPEATABLE READ、statement_timeout=5s。Docker 失聯或錯誤視為未通過，不自動重置資料庫。
 完整日誌保存在 .local/verification/。本輪無候選資料寫入、原始資料重匯、正式部署或推送；.vscode/settings.json 保留。
-下一步 **11.3 Data Explorer MVP**：接這三個端點做散布圖、直方圖與篩選／URL／球員連結，先完成圖表套件 spike，再依 frontend-design 技能設計。
+後續 **11.3 Data Explorer MVP** 已完成，見 [20 UI 驗收](20-visualization-explorer.md)；下一步為 11.4 年齡與勝率擴充。

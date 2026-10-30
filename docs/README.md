@@ -2,14 +2,17 @@
 
 **目前進度（2026-10-30）：九階段功能與帳號驗證修正的交付基準為 main，來源分支 feat/pre-release-features 採 fast-forward 合併；後端 413 案、前端 41 案與端到端 9 案通過。本機候選資料庫已建立真實 Elo，備份及實際還原成功；資源限制實測結果見 [發布前工程驗收](15-local-release-readiness.md)。未推送或部署，外部備份目的地待定。**
 
+**視覺化分支進度（2026-10-31）：feat/visualization-lab 已完成 11.1～11.3，尚未合併 main。11.2 後端 431 案；11.3 前端 53 案與完整瀏覽器 12 案通過，詳見下列交付文件。**
+
 - [九階段交付追蹤](14-pre-release-roadmap.md)：後續交付階段 1～9 的範圍、規則與逐階段驗證。
 - [發布前工程驗收](15-local-release-readiness.md)：後續交付 Phase 10 的正式部署前置、效能、CI、本機備份／還原與更新程序；**正式部署尚未驗收**。
 - [網球數據視覺化研究與資料可行性](16-visualization-research.md)：使用者指定的 8 個網站、額外參考來源、真實資料完整性、圖表與統計方法評估（2026-10-30）。
-- [後續交付 Phase 11：視覺化 Roadmap](17-visualization-roadmap.md)：11.1～11.2 已完成；其餘互動式散布圖、直方圖、年齡／勝率、發球、場地與進階分析待開發。
+- [後續交付 Phase 11：視覺化 Roadmap](17-visualization-roadmap.md)：11.1～11.3 已完成；年齡／勝率、發球、場地與進階分析待開發。
 - [Phase 11.1 指標與 API 契約](18-visualization-contract.md)：visualization-v1 定版規則、人工手算、真實唯讀報告；11.2 已驗收。
-- [Phase 11.2 API 驗收](19-visualization-api.md)：metadata／scatter／histogram、431 個後端測試與真實候選庫結果；下一步 11.3。
+- [Phase 11.2 API 驗收](19-visualization-api.md)：metadata／scatter／histogram、431 個後端測試與真實候選庫結果；11.3 已完成。
+- [Phase 11.3 Data Explorer](20-visualization-explorer.md)：互動圖表、可分享條件、鍵盤資料表、53 個前端測試與 12 個瀏覽器流程；下一步 11.4。
 
-**階段編號說明**：[原始教學大綱](../doc/網球統計網站規格與開發文件.md) 的階段 0～13 為歷史教學規劃（原階段 11 是 Elo）；本索引的後續交付 Phase 11 是 **新視覺化擴充提案**，並非將 Elo 改名或宣稱 Phase 10 已部署。研究與 Roadmap 文件已建立；11.1 契約與 11.2 三個 API 已驗收，11.3 圖表仍未實作。
+**階段編號說明**：[原始教學大綱](../doc/網球統計網站規格與開發文件.md) 的階段 0～13 為歷史教學規劃（原階段 11 是 Elo）；本索引的後續交付 Phase 11 是 **新視覺化擴充提案**，並非將 Elo 改名或宣稱 Phase 10 已部署。研究與 Roadmap 文件已建立；11.1 契約、11.2 三個 API 與 11.3 圖表已本機驗收；尚未正式部署。
 
 以下按時間保留開發歷程；「尚未實作」只表示該段記錄當時的狀態。
 

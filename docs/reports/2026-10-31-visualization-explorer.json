@@ -1,0 +1,70 @@
+{
+  "verifiedOn": "2026-10-31",
+  "phase": "11.3",
+  "echarts": "6.1.0",
+  "frontendTests": 53,
+  "browserTests": 12,
+  "newBrowserTests": 3,
+  "backendTestsPreviouslyVerified": 431,
+  "backendRerun": false,
+  "lintPassed": true,
+  "buildPassed": true,
+  "largeChunkWarningRetained": true,
+  "assets": {
+    "entry": {
+      "file": "index-D9YdXMLD.js",
+      "bytes": 449690,
+      "gzipBytes": 135364
+    },
+    "explorer": {
+      "file": "ExplorerPage-DkGLEsud.js",
+      "bytes": 15829,
+      "gzipBytes": 6273
+    },
+    "charts": {
+      "file": "ExplorerCharts-DidzzDvm.js",
+      "bytes": 553130,
+      "gzipBytes": 184498
+    }
+  },
+  "spike": {
+    "echarts": "6.1.0",
+    "format": "Vite minified ES library probe; not the final application chunk",
+    "variants": {
+      "modular": {
+        "bytes": 749287,
+        "gzipBytes": 212872
+      },
+      "full": {
+        "bytes": 1512888,
+        "gzipBytes": 428475
+      }
+    }
+  },
+  "realBrowser": {
+    "results": [
+      {
+        "tour": "ATP",
+        "population": 100,
+        "valid": 99,
+        "width": 1440,
+        "overflow": false
+      },
+      {
+        "tour": "WTA",
+        "population": 100,
+        "valid": 52,
+        "width": 390,
+        "overflow": false
+      }
+    ],
+    "pageErrors": []
+  },
+  "migrationAdded": false,
+  "candidateWrites": false,
+  "pushed": false,
+  "deployed": false,
+  "limits": "Local browser correctness and build size only; no claim of final host, TLS, concurrent or 1 GB stack acceptance for the expanded UI.",
+  "newBrowserRecheckAfterPolicyGuard": 3,
+  "gzipMethod": "node:zlib gzipSync default settings"
+}

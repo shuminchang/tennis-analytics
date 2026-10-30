@@ -4,7 +4,9 @@
   padding: 0 64px;
 }
 .site-header {
-  height: 100px;
+  min-height: 100px;
+  height: auto;
+  padding: 20px 0;
   border-bottom: 1px solid var(--line);
   display: flex;
   align-items: center;
@@ -450,7 +452,10 @@ footer a {
     padding: 0 18px;
   }
   .site-header {
-    height: 76px;
+    min-height: 76px;
+    height: auto;
+    padding: 18px 0;
+    gap: 14px;
   }
   .brand {
     font-size: 17px;
@@ -460,7 +465,7 @@ footer a {
     gap: 18px;
   }
   .nav-active {
-    display: none;
+    display: inline-flex;
   }
   .hero {
     grid-template-columns: 1fr;

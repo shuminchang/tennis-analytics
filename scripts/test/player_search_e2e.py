@@ -4,6 +4,7 @@ Prerequisites: backend JAR built, npm ci, npx playwright install chromium.
 Never reads .env or uses the development PostgreSQL volume.
 """
 import json
+import argparse
 import csv
 from datetime import date, timedelta
 import os
@@ -43,6 +44,10 @@ def wait_url(url, process):
     raise RuntimeError('Server readiness timeout: ' + url)
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--spec", choices=["player-search.spec.ts", "visualizations.spec.ts"])
+    options = parser.parse_args()
+    run("timeout", "15s", "docker", "version")
     if not JAR.exists():
         raise RuntimeError('Build backend JAR before running this script')
     log_root = ROOT / '.local/verification'
@@ -124,7 +129,7 @@ def main():
         wait_url(f'http://127.0.0.1:{ui_port}/tennis/', ui)
         browser_env = {**os.environ, 'E2E_BASE_URL': f'http://127.0.0.1:{ui_port}'}
         browser_env.pop('E2E_MOCK_API', None)
-        subprocess.run(['npm', 'run', 'test:e2e'], cwd=FRONTEND,
+        subprocess.run(['npm', 'run', 'test:e2e'] + (['--', options.spec] if options.spec else []), cwd=FRONTEND,
                        env=browser_env, check=True, timeout=180)
         print('PASS: synthetic Git -> archive -> PostgreSQL import -> HTTP API -> browser')
     except Exception:

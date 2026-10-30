@@ -1,6 +1,6 @@
 # 後續交付 Phase 11：互動式網球統計視覺化 Roadmap
 
-狀態：**11.1～11.2 已完成；11.3～11.7 待開始**｜建檔：2026-10-30｜提案名稱：Tennis Data Explorer
+狀態：**11.1～11.3 已完成；11.4～11.7 待開始**｜建檔：2026-10-30｜提案名稱：Tennis Data Explorer
 
 相關文件：
 - [研究與資料可行性評估](16-visualization-research.md)：外部 8 + 額外參考、現有 DB 計數、統計分析陷阱與來源。
@@ -34,7 +34,7 @@
 | --- | --- | --- | --- | --- |
 | 11.1 | 指標契約、品質資格、資料探勘 SQL | 指標字典、母體、排除、分母、日期與授權邊界 | V12/V18；研究文件 | 已完成，見 [18 契約](18-visualization-contract.md) |
 | 11.2 | 後端聚合與 API | metadata、scatter、histogram；索引／快取／契約測試 | 11.1 | 已完成，見 [19 API 驗收](19-visualization-api.md) |
-| 11.3 | Data Explorer MVP | React 散布圖＋直方圖、X/Y/color／巡迴／日期／Top N、工具提示 | 11.2 | 待開始 |
+| 11.3 | Data Explorer MVP | React 散布圖＋直方圖、X/Y/color／巡迴／日期／Top N、工具提示 | 11.2 | 已完成，見 [20 UI 驗收](20-visualization-explorer.md) |
 | 11.4 | 年齡－勝率與信賴區間 | 以 player-match 雙視角聚合，分組曲線與 Wilson CI | 11.1–11.3 | 待開始 |
 | 11.5 | 發球、持拍手與場地 | ACE／雙誤／一發得分、分場地熱圖、左右手分組比較 | 11.4 指標與樣本共用 | 待開始 |
 | 11.6 | 進階統計工作台 | Box Plot、相關性矩陣、Pairwise N、Hexbin、匯出 | 11.5；效能實測 | 待開始 |
@@ -105,6 +105,8 @@ GET /tennis/api/v1/visualizations/correlations?tour=ATP&fromYear=2010&toYear=202
 - 指標手算與 SQL 回應一致；限定最大筆數、超時、錯誤狀態、越權與快取失效測試通過。
 
 ## 5. 11.3｜前端 Data Explorer MVP
+
+已交付 `/tennis/visualizations`、模組化 ECharts spike、散布圖／直方圖、URL／雙語／資料表、53 個前端測試與完整 12 個瀏覽器流程驗證。詳細及 bundle 成本見 [20 UI 驗收](20-visualization-explorer.md)。
 
 建議新增：
 - `frontend/src/features/visualizations/`：ExplorerPage、FilterPanel、ChartFrame、ScatterPlot、Histogram、SampleFootnote、API types 與 i18n 文案。

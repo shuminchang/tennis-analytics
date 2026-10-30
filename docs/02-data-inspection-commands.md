@@ -1884,3 +1884,9 @@ timeout 20s docker compose exec -T db psql -XqAt -v ON_ERROR_STOP=1 \
 ```
 
 ATP／WTA Top 100 母體均 100、身高有效 99／52，HTTP 散點與直方圖各自樣本加總符合 11.1 基準。各巡迴三端點首次＋20 次暖請求，暖 p95 10.082～14.857 ms；為本機循序 HTTP，非正式主機併發驗收。Top 100 EXPLAIN 使用既有索引、100 筆、執行 4.606 ms；本輪不新增 migration。見 [驗收與限制](19-visualization-api.md) 及 [報告](reports/2026-10-31-visualization-api.json)。
+
+## 2026-10-31：Phase 11.3 圖表資料呈現核對
+
+本輪沒有重跑 CSV 或新增探索 SQL，未寫入候選庫；只用新 UI 的 GET 查詢核對 11.1／11.2 基準：ATP／WTA 最新 Top 100 母體均 100、有效身高 99／52，散點與直方圖各自揭露分母與排除原因。
+桌機 1440px、手機 390px 實際瀏覽與截圖確認無 pageerror／頁面水平溢出；三端點來源、規則版本與日期不一致時不顯示混合結果。CLI 原始檔保持不變。
+見 [11.3 驗收](20-visualization-explorer.md) 及 [報告](reports/2026-10-31-visualization-explorer.json)。測試資料由隔離 E2E 容器建立／匯入，不能把人工 Roger／Serena fixture 的 N=1 當成真實 Top 100 統計。
