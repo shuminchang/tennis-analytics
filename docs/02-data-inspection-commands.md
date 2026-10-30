@@ -1869,3 +1869,18 @@ python3 -m json.tool /tmp/visualization-contract-inspection.json
 發球與年齡以 player-match 雙視角、角色與 RECORD 品質影響分開判斷：ACE 有效 ATP 203458、WTA 94964；年齡有效 389236／178386。不可直接拿 docs/16「同場雙方完整」的比賽數乘二當本次分母。
 查核 source_snapshots 欄位使用 commit_sha；初稿 git_commit 尚未執行便在 information_schema 核對修正。原值不變，所有已提交報告均為成功執行結果。
 完整指標、分母、零值、樣本門檻、API DTO／權限／成本上限見 [18 契約](18-visualization-contract.md)。
+
+## 2026-10-31：Phase 11.2 真實 API 與查詢計畫
+
+新端點以成功球員／排名來源、精確日期及角色品質契約提供圖表資料；未重跑來源匯入。工作目錄 `/home/shumin/tennis-analytics`：
+
+```bash
+# 先依 docs/19 啟動 8082 的本機候選驗證服務並設定 DB_*，不要輸出密碼。
+python3 scripts/test/visualization_api_smoke.py
+# SQL 固定對照既有 PLAYERS=1、RANKINGS=3、2026-06-08；READ ONLY，非通用發布腳本。
+timeout 20s docker compose exec -T db psql -XqAt -v ON_ERROR_STOP=1 \
+  -U tennis_admin -d tennis_candidate < scripts/data/visualization_api_explain.sql \
+  > /tmp/visualization-api-plan.json
+```
+
+ATP／WTA Top 100 母體均 100、身高有效 99／52，HTTP 散點與直方圖各自樣本加總符合 11.1 基準。各巡迴三端點首次＋20 次暖請求，暖 p95 10.082～14.857 ms；為本機循序 HTTP，非正式主機併發驗收。Top 100 EXPLAIN 使用既有索引、100 筆、執行 4.606 ms；本輪不新增 migration。見 [驗收與限制](19-visualization-api.md) 及 [報告](reports/2026-10-31-visualization-api.json)。

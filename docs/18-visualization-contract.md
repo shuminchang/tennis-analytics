@@ -1,6 +1,6 @@
 # Phase 11.1：視覺化指標、品質與 API 契約
 
-狀態：**11.1 設計與本機唯讀驗收完成；11.2 API／11.3 UI 尚未實作**。版本 `visualization-v1`，定版日期 2026-10-30。
+狀態：**11.1 設計與本機唯讀驗收完成；11.2 API 已實作驗收，11.3 UI 尚未實作**。版本 `visualization-v1`，定版日期 2026-10-30。
 依據：[研究](16-visualization-research.md)、[Roadmap](17-visualization-roadmap.md)、V12 stats-v1／V14 公開排名／V18 讀模型，以及既有來源與品質保存規則。Phase 10 正式部署未完成。
 
 ## 1. 本輪決策與開發邊界
@@ -9,7 +9,7 @@
 - 100～250 cm（含端點）沿用 player-rules-v1 的品質界線；非空且型別正確仍須無 OPEN HEIGHT_ANALYSIS。140～230 只是前次研究過濾，正式規則不採用。132 cm 等範圍內來源值保留，不因此宣稱已驗證為成年身高。
 - 可見球員重用 PlayerRepository 的成功來源及 PLAYER_SEARCH 排除。排名重用 v_public_rankings 的成功來源，不從原始排名衝突隔離列補回資料。
 - 比賽資格重用 analytics_matches.eligible（stats-v1）；W/O、DEF、空白／不明比分排除，有比分的 RET 納入。不改既有勝率、H2H、Elo 或舊 SVG 圖表。
-- 不新增資料表、migration、套件或正式 API。先以 V18＋players／rankings 的有界查詢設計 11.2；需要新索引時先提供 EXPLAIN，再用 V19+，不能回改既有 migration。
+- 11.1 當時不新增資料表、migration、套件或正式 API；11.2 已依此完成三個端點，未新增 migration。先以 V18＋players／rankings 的有界查詢設計；需要新索引時先提供 EXPLAIN，再用 V19+，不能回改既有 migration。
 - 相關矩陣、逐拍、性別與人氣不在 MVP；不存在的欄位不能由 ATP/WTA、姓名或賽果推測。
 
 ## 2. 觀測粒度與可配對規則
@@ -86,7 +86,7 @@ Wilson 是描述性二項區間；同球員重複出賽、對手、年代及場�
 
 直方圖採等寬 bins：使用有效 height 的 min/max，不依無效值決定邊界；[left,right)，最後一箱含右端點。min=max 時回傳單箱 [value-0.5,value+0.5]，避免零寬。無有效值時 domain=null、bins=[]；每箱 count 合計等於 valid，空箱保留，不能把零計數當缺值。
 
-## 5. 11.2 API 契約（定版目標，現在不存在）
+## 5. 11.2 API 契約（已實作，見 [API 驗收](19-visualization-api.md)）
 
 路由共用 `/tennis/api` context path。Java 使用明確 DTO；不可將 JDBC 原始 map／內部檔案路徑直接序列化。
 
@@ -183,4 +183,4 @@ python3 -m json.tool /tmp/visualization-contract-inspection.json
 ```
 
 SQL 限時 90 秒、輸出無密碼與來源本機封存路徑；用公開來源資料計數，不重跑 CSV 或匯入。Docker 失聯時保留錯誤日誌，不以空檔當報告。
-11.1 的指標、MVP DTO、權限與上限在本文件定版；來源真實性與 Phase 10 仍有明確限制。下一步 11.2 以此契約實作三個公開端點及 fixture parity、品質、日期、快取與越權測試；不提前完成 11.4／11.6 路由。
+11.1 的指標、MVP DTO、權限與上限在本文件定版；來源真實性與 Phase 10 仍有明確限制。11.2 已依此契約實作三個公開端點與 fixture parity、品質、日期、快取及逾時驗證；下一步為 11.3 UI，不提前完成 11.4／11.6 路由。

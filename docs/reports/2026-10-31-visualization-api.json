@@ -1,0 +1,67 @@
+{
+  "verifiedOn": "2026-10-31",
+  "phase": "11.2",
+  "backendTests": 431,
+  "newTests": 15,
+  "frontendChanged": false,
+  "migrationAdded": false,
+  "candidateWrites": false,
+  "apiSmoke": {
+    "sourceSha": "83733587353df8a41f2fd4f516147d5aa83f5a8d",
+    "tests": [
+      {
+        "tour": "ATP",
+        "endpoint": "metadata",
+        "coldMs": 338.353,
+        "warmP95Ms": 12.167,
+        "warmCalls": 20
+      },
+      {
+        "tour": "ATP",
+        "endpoint": "scatter",
+        "coldMs": 39.89,
+        "warmP95Ms": 14.857,
+        "warmCalls": 20
+      },
+      {
+        "tour": "ATP",
+        "endpoint": "histogram",
+        "coldMs": 32.229,
+        "warmP95Ms": 11.582,
+        "warmCalls": 20
+      },
+      {
+        "tour": "WTA",
+        "endpoint": "metadata",
+        "coldMs": 21.066,
+        "warmP95Ms": 12.903,
+        "warmCalls": 20
+      },
+      {
+        "tour": "WTA",
+        "endpoint": "scatter",
+        "coldMs": 42.017,
+        "warmP95Ms": 10.368,
+        "warmCalls": 20
+      },
+      {
+        "tour": "WTA",
+        "endpoint": "histogram",
+        "coldMs": 14.365,
+        "warmP95Ms": 10.082,
+        "warmCalls": 20
+      }
+    ],
+    "sequential": true,
+    "writes": false,
+    "warmTargetPassed": true
+  },
+  "queryPlan": {
+    "executionMs": 4.606,
+    "planningMs": 3.372,
+    "rows": 100,
+    "format": "PostgreSQL EXPLAIN ANALYZE BUFFERS JSON",
+    "artifactSha256": "1d2acda99dda65ba1f8cad346138001853da0c0db1828c16e8af1be2e91384bc"
+  },
+  "limits": "Sequential localhost requests, 256 MiB JVM heap, ActiveProcessorCount=1; PostgreSQL not cgroup-limited in this run. No Apache/TLS/concurrency or production claim."
+}

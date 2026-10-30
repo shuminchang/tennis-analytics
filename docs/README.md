@@ -5,10 +5,11 @@
 - [九階段交付追蹤](14-pre-release-roadmap.md)：後續交付階段 1～9 的範圍、規則與逐階段驗證。
 - [發布前工程驗收](15-local-release-readiness.md)：後續交付 Phase 10 的正式部署前置、效能、CI、本機備份／還原與更新程序；**正式部署尚未驗收**。
 - [網球數據視覺化研究與資料可行性](16-visualization-research.md)：使用者指定的 8 個網站、額外參考來源、真實資料完整性、圖表與統計方法評估（2026-10-30）。
-- [後續交付 Phase 11：視覺化 Roadmap](17-visualization-roadmap.md)：11.1 已完成；其餘互動式散布圖、直方圖、年齡／勝率、發球、場地與進階分析待開發。
-- [Phase 11.1 指標與 API 契約](18-visualization-contract.md)：visualization-v1 定版規則、人工手算、真實唯讀報告；下一步 11.2。
+- [後續交付 Phase 11：視覺化 Roadmap](17-visualization-roadmap.md)：11.1～11.2 已完成；其餘互動式散布圖、直方圖、年齡／勝率、發球、場地與進階分析待開發。
+- [Phase 11.1 指標與 API 契約](18-visualization-contract.md)：visualization-v1 定版規則、人工手算、真實唯讀報告；11.2 已驗收。
+- [Phase 11.2 API 驗收](19-visualization-api.md)：metadata／scatter／histogram、431 個後端測試與真實候選庫結果；下一步 11.3。
 
-**階段編號說明**：[原始教學大綱](../doc/網球統計網站規格與開發文件.md) 的階段 0～13 為歷史教學規劃（原階段 11 是 Elo）；本索引的後續交付 Phase 11 是 **新視覺化擴充提案**，並非將 Elo 改名或宣稱 Phase 10 已部署。研究與 Roadmap 文件已建立；11.1 指標、品質與 API 契約已完成，新增 API／圖表仍未實作。
+**階段編號說明**：[原始教學大綱](../doc/網球統計網站規格與開發文件.md) 的階段 0～13 為歷史教學規劃（原階段 11 是 Elo）；本索引的後續交付 Phase 11 是 **新視覺化擴充提案**，並非將 Elo 改名或宣稱 Phase 10 已部署。研究與 Roadmap 文件已建立；11.1 契約與 11.2 三個 API 已驗收，11.3 圖表仍未實作。
 
 以下按時間保留開發歷程；「尚未實作」只表示該段記錄當時的狀態。
 
