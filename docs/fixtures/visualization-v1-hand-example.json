@@ -1,0 +1,185 @@
+{
+  "purpose": "Synthetic specification oracle only; not imported into any database",
+  "players": [
+    {
+      "tour": "ATP",
+      "id": 1,
+      "height": 180,
+      "hand": "R"
+    },
+    {
+      "tour": "ATP",
+      "id": 2,
+      "height": null,
+      "hand": "L"
+    },
+    {
+      "tour": "ATP",
+      "id": 3,
+      "height": 3,
+      "hand": "U",
+      "heightBlocked": true
+    },
+    {
+      "tour": "ATP",
+      "id": 4,
+      "height": 140,
+      "hand": null,
+      "heightBlocked": true
+    }
+  ],
+  "rankings": [
+    {
+      "date": "2024-01-01",
+      "player": 1,
+      "rank": 1,
+      "points": 0
+    },
+    {
+      "date": "2024-01-01",
+      "player": 2,
+      "rank": 2,
+      "points": null
+    },
+    {
+      "date": "2024-01-01",
+      "player": 3,
+      "rank": 3,
+      "points": null
+    },
+    {
+      "date": "2024-01-01",
+      "player": 4,
+      "rank": 4,
+      "points": null
+    }
+  ],
+  "matches": [
+    {
+      "id": 1,
+      "score": "6-4 RET",
+      "eligible": true,
+      "surface": "Hard",
+      "winner": {
+        "player": 1,
+        "age": 20,
+        "ace": 2,
+        "df": 1,
+        "svpt": 20,
+        "firstIn": 12,
+        "firstWon": 8
+      },
+      "loser": {
+        "player": 2,
+        "age": 30,
+        "ace": 1,
+        "df": 0,
+        "svpt": 10,
+        "firstIn": 6,
+        "firstWon": 3
+      }
+    },
+    {
+      "id": 2,
+      "score": "6-3 6-3",
+      "eligible": true,
+      "surface": "Clay",
+      "winner": {
+        "player": 2,
+        "age": 30,
+        "ace": 0,
+        "df": 1,
+        "svpt": 10,
+        "firstIn": 5,
+        "firstWon": 4
+      },
+      "loser": {
+        "player": 1,
+        "age": 20,
+        "ace": 3,
+        "df": 0,
+        "svpt": 30,
+        "firstIn": 20,
+        "firstWon": 12
+      }
+    },
+    {
+      "id": 3,
+      "score": "W/O",
+      "eligible": false,
+      "surface": "Grass",
+      "winner": {
+        "player": 1,
+        "age": 20,
+        "ace": 9,
+        "df": 0,
+        "svpt": 10,
+        "firstIn": 10,
+        "firstWon": 10
+      },
+      "loser": {
+        "player": 3,
+        "age": 25,
+        "ace": 0,
+        "df": 0,
+        "svpt": 10,
+        "firstIn": 10,
+        "firstWon": 0
+      }
+    },
+    {
+      "id": 4,
+      "score": "6-2 RET",
+      "eligible": true,
+      "surface": "Hard",
+      "winner": {
+        "player": 3,
+        "age": 25,
+        "ace": null,
+        "df": 0,
+        "svpt": 0,
+        "firstIn": 0,
+        "firstWon": 0,
+        "serveBlocked": true
+      },
+      "loser": {
+        "player": 1,
+        "age": 21,
+        "ageBlocked": true,
+        "ace": 0,
+        "df": 2,
+        "svpt": 10,
+        "firstIn": 5,
+        "firstWon": 3
+      }
+    }
+  ],
+  "expected": {
+    "matches": 3,
+    "perspectives": 6,
+    "wins": 3,
+    "losses": 3,
+    "ageValid": 5,
+    "player1": {
+      "matches": 3,
+      "wins": 1,
+      "aceNumerator": 5,
+      "aceDenominator": 60,
+      "dfNumerator": 3,
+      "dfDenominator": 60,
+      "firstWonNumerator": 23,
+      "firstInDenominator": 37
+    },
+    "heightCohort": {
+      "population": 4,
+      "valid": 1,
+      "excluded": 3,
+      "quality": 2,
+      "missing": 1
+    },
+    "wilsonOneOfThree": [
+      0.06149194472039621,
+      0.7923403991979523
+    ]
+  }
+}

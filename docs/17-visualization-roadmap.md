@@ -1,6 +1,6 @@
 # 後續交付 Phase 11：互動式網球統計視覺化 Roadmap
 
-狀態：**規劃中，未開工**｜建檔：2026-10-30｜提案名稱：Tennis Data Explorer
+狀態：**11.1 指標與契約已完成；11.2～11.7 待開始**｜建檔：2026-10-30｜提案名稱：Tennis Data Explorer
 
 相關文件：
 - [研究與資料可行性評估](16-visualization-research.md)：外部 8 + 額外參考、現有 DB 計數、統計分析陷阱與來源。
@@ -32,7 +32,7 @@
 
 | 階段 | 工作包 | 核心成果 | 依賴 | 狀態 |
 | --- | --- | --- | --- | --- |
-| 11.1 | 指標契約、品質資格、資料探勘 SQL | 指標字典、母體、排除、分母、日期與授權邊界 | V12/V18；研究文件 | 待開始 |
+| 11.1 | 指標契約、品質資格、資料探勘 SQL | 指標字典、母體、排除、分母、日期與授權邊界 | V12/V18；研究文件 | 已完成，見 [18 契約](18-visualization-contract.md) |
 | 11.2 | 後端聚合與 API | metadata、scatter、histogram；索引／快取／契約測試 | 11.1 | 待開始 |
 | 11.3 | Data Explorer MVP | React 散布圖＋直方圖、X/Y/color／巡迴／日期／Top N、工具提示 | 11.2 | 待開始 |
 | 11.4 | 年齡－勝率與信賴區間 | 以 player-match 雙視角聚合，分組曲線與 Wilson CI | 11.1–11.3 | 待開始 |
@@ -43,6 +43,8 @@
 **與 Phase 10 的關係**：Phase 11 可先在本機獨立開發與驗收；正式上線必須先完成 Phase 10 的 HTTPS、資源、權限、備份與回滾驗收，不因編號順序隱含已部署。
 
 ## 3. 11.1｜指標／資料資格規格（先做）
+
+已交付：[visualization-v1 定版契約](18-visualization-contract.md)、8 個人工契約測試、真實候選庫唯讀報告。API／UI 尚未實作。
 
 ### 交付
 - 定義可選維度白名單及資料型別：X / Y = height_cm、rank、ranking_points、age_at_match、ace_rate、double_fault_rate、first_serve_points_won、match_win_rate、elo 等；色彩分組 = tour、hand、surface、ranking_band。
@@ -137,7 +139,7 @@ GET /tennis/api/v1/visualizations/correlations?tour=ATP&fromYear=2010&toYear=202
 
 ## 8. 工作方式與 Git 建議
 
-- 建議由最新 `main` 建立 `feat/visualization-lab`，各子階段小型 commit，實際建立分支及 commit 需另行授權。
+- 建議由最新 `main` 建立 `feat/visualization-lab`，各子階段小型 commit，使用者本輪已授權先提交研究文件並完成 11.1，已建立該分支；後續 11.2 開發與推送／部署不因文件存在自動授權。
 - 11.1 完成後才能批准資料模型及 API 契約；11.2、11.3 以小型可驗收切片推出，避免一次引進 8 種圖表造成回歸風險。
 - 文件狀態務必由「規劃中」改成「已實作」、「已測試」、「已在本機驗收」或「正式部署」的真實狀態，不能因文件存在就標完成。
 - 既有 `.vscode/settings.json` 為使用者未追蹤檔案，不修改、不加入 commit；不得接觸真實資料寫入、部署、推送。

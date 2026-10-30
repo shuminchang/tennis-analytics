@@ -1849,3 +1849,23 @@ python3 scripts/ops/benchmark.py --authenticated
 Elo 是規則化衍生資料，與來源比分／排名分開；同一規則與輸入重用成功批次，勿因日期近似將圖表稱為逐場實際時間線。
 備份已實際還原並核對 22 項表／讀模型計數及約束；工具只刪除自己建立的空還原庫。外部目的地依使用者決定待定。命令會建立本機衍生模型／備份或短暫 QA 帳號，不能當成純唯讀探索指令。
 完整實測、可重現命令與限制見 [發布前工程驗收](15-local-release-readiness.md) 及 [摘要報告](reports/2026-10-30-local-verification.json)。
+
+## 2026-10-30：Phase 11.1 指標資格核對
+
+工作目錄 `/home/shumin/tennis-analytics`：
+
+```bash
+python3 scripts/test/visualization_contract_checks.py
+timeout 15s docker version
+timeout 120s docker compose exec -T db psql -XqAt -v ON_ERROR_STOP=1 \
+  -U tennis_admin -d tennis_candidate \
+  < scripts/data/visualization_contract_inspection.sql \
+  > /tmp/visualization-contract-inspection.json
+python3 -m json.tool /tmp/visualization-contract-inspection.json
+```
+
+此 SQL 強制 REPEATABLE READ／READ ONLY、statement_timeout=90s，唯讀核對新指標資格，不重跑 CSV 探索、不寫入來源或業務表。8 個人工規格 oracle 測試通過；不是已實作的 API 測試。
+結果：[報告](reports/2026-10-30-visualization-contract.json)。原始球員／排名／比賽總數與 docs/16 相同。採可見球員及既有 100..250＋HEIGHT_ANALYSIS 規則，ATP 身高有效 4154、WTA 1343；最新 Top 100 為 99／52 人，與前輪相同。相較研究的 140..230，ATP 多一筆既有 132 cm（211522），不是新匯入。
+發球與年齡以 player-match 雙視角、角色與 RECORD 品質影響分開判斷：ACE 有效 ATP 203458、WTA 94964；年齡有效 389236／178386。不可直接拿 docs/16「同場雙方完整」的比賽數乘二當本次分母。
+查核 source_snapshots 欄位使用 commit_sha；初稿 git_commit 尚未執行便在 information_schema 核對修正。原值不變，所有已提交報告均為成功執行結果。
+完整指標、分母、零值、樣本門檻、API DTO／權限／成本上限見 [18 契約](18-visualization-contract.md)。

@@ -1,0 +1,160 @@
+{
+  "elo": [
+    {
+      "id": 1,
+      "status": "SUCCEEDED",
+      "matches": 286774,
+      "input_sha256": "96b65961bb6a53d9c9e2e07a423b73f0104fdd72e51002344b7fd7264a56c954",
+      "rules_sha256": "18bb0bf0ba712550cc60926c5a7de3553a099cd9ddedcee7d0633c1e5c209df4"
+    }
+  ],
+  "baseline": [
+    {
+      "tour": "ATP",
+      "matches": 199389,
+      "players": 66912,
+      "eligible": 197404,
+      "rankings": 3419216,
+      "displayed": 199059
+    },
+    {
+      "tour": "WTA",
+      "matches": 162182,
+      "players": 70571,
+      "eligible": 89370,
+      "rankings": 2153811,
+      "displayed": 89881
+    }
+  ],
+  "database": "tennis_candidate",
+  "snapshots": [
+    {
+      "id": 1,
+      "commit_sha": "83733587353df8a41f2fd4f516147d5aa83f5a8d",
+      "repository_url": "https://github.com/Aneeshers/tennis-sackmann-archive"
+    }
+  ],
+  "checked_at": "2026-10-30T15:46:37.274166+00:00",
+  "perspectives": [
+    {
+      "tour": "ATP",
+      "wins": 197404,
+      "df_valid": 203458,
+      "ace_valid": 203458,
+      "age_valid": 389236,
+      "population": 394808,
+      "first_valid": 203456,
+      "ace_numerator": 1168079,
+      "ace_denominator": 16186618,
+      "maximum_valid_age": 63.6,
+      "minimum_valid_age": 14.2,
+      "age_quality_blocked": 0,
+      "serve_quality_blocked": 3
+    },
+    {
+      "tour": "WTA",
+      "wins": 89370,
+      "df_valid": 94891,
+      "ace_valid": 94964,
+      "age_valid": 178386,
+      "population": 178740,
+      "first_valid": 94967,
+      "ace_numerator": 245079,
+      "ace_denominator": 6674568,
+      "maximum_valid_age": 67.4,
+      "minimum_valid_age": 7.6,
+      "age_quality_blocked": 0,
+      "serve_quality_blocked": 8
+    }
+  ],
+  "latest_top100": [
+    {
+      "tour": "ATP",
+      "population": 100,
+      "height_valid": 99,
+      "ranking_date": "2026-06-08",
+      "height_missing": 1,
+      "points_missing": 0,
+      "height_excluded": 0
+    },
+    {
+      "tour": "WTA",
+      "population": 100,
+      "height_valid": 52,
+      "ranking_date": "2026-06-08",
+      "height_missing": 48,
+      "points_missing": 0,
+      "height_excluded": 0
+    }
+  ],
+  "metric_version": "visualization-v1",
+  "analytics_state": {
+    "singleton": true,
+    "refreshed_at": "2026-10-29T17:02:31.025436+00:00",
+    "source_run_id": 4
+  },
+  "visible_players": [
+    {
+      "tour": "ATP",
+      "population": 66909,
+      "height_valid": 4154,
+      "height_missing": 62748,
+      "height_excluded": 7,
+      "height_quality_blocked": 7
+    },
+    {
+      "tour": "WTA",
+      "population": 70570,
+      "height_valid": 1343,
+      "height_missing": 69227,
+      "height_excluded": 0,
+      "height_quality_blocked": 0
+    }
+  ],
+  "successful_imports": [
+    {
+      "id": 1,
+      "status": "SUCCEEDED",
+      "data_kind": "PLAYERS",
+      "snapshot_id": 1
+    },
+    {
+      "id": 3,
+      "status": "SUCCEEDED",
+      "data_kind": "RANKINGS",
+      "snapshot_id": 1
+    },
+    {
+      "id": 4,
+      "status": "SUCCEEDED",
+      "data_kind": "MATCHES",
+      "snapshot_id": 1
+    }
+  ],
+  "transaction_read_only": "on",
+  "comparison_to_research_16": {
+    "unchanged_source_counts": true,
+    "unchanged_latest_top100_height_coverage": true,
+    "note": "Research paired both sides; this contract counts valid individual player-match sides. These sample counts are not interchangeable."
+  },
+  "verification": {
+    "contract_fixture_tests": 8,
+    "api_implemented": false,
+    "migration_added": false,
+    "source_written": false
+  },
+  "height_range_delta": {
+    "query": "SELECT tour,player_id,height_cm FROM players WHERE height_cm BETWEEN 100 AND 250 AND height_cm NOT BETWEEN 140 AND 230 ORDER BY tour,player_id",
+    "rows": [
+      {
+        "tour": "ATP",
+        "player_id": 211522,
+        "height_cm": 132
+      }
+    ]
+  },
+  "artifacts": {
+    "scripts/data/visualization_contract_inspection.sql": "a1efc41824285f54c18e5390b9394b937f2a0b9e30c5fafac144460ae9d4b928",
+    "docs/fixtures/visualization-v1-hand-example.json": "7382f596ab663cb8539863ca15d442307fe5bfed72dfde236f60e4eb68bae96a"
+  }
+}
