@@ -1890,3 +1890,7 @@ ATP／WTA Top 100 母體均 100、身高有效 99／52，HTTP 散點與直方圖
 本輪沒有重跑 CSV 或新增探索 SQL，未寫入候選庫；只用新 UI 的 GET 查詢核對 11.1／11.2 基準：ATP／WTA 最新 Top 100 母體均 100、有效身高 99／52，散點與直方圖各自揭露分母與排除原因。
 桌機 1440px、手機 390px 實際瀏覽與截圖確認無 pageerror／頁面水平溢出；三端點來源、規則版本與日期不一致時不顯示混合結果。CLI 原始檔保持不變。
 見 [11.3 驗收](20-visualization-explorer.md) 及 [報告](reports/2026-10-31-visualization-explorer.json)。測試資料由隔離 E2E 容器建立／匯入，不能把人工 Roger／Serena fixture 的 N=1 當成真實 Top 100 統計。
+
+## Phase 11.4 年齡樣本（2026-10-31）
+
+重用 docs/fixtures 的四場人工資料於獨立 PostgreSQL 測試容器，ResearchAgeTest 驗 6 個雙視角／5 個有效年齡與角色排除、RET/W/O、Wilson、空年／場地及十年上限，3 案通過。未重跑 CSV、未改原始或候選資料。新即時 v_stat_matches 查詢依當前品質與來源交易快照產出，避免把物化資格的舊狀態當成即時結果。見 docs/21-visualization-research-delivery.md。

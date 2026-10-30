@@ -13,6 +13,7 @@ import About from "./features/About";
 import Favorites from "./features/Favorites";
 import "./App.css";
 
+const ResearchPage = lazy(() => import("./features/visualizations/ResearchPage"));
 const ExplorerPage = lazy(() => import("./features/visualizations/ExplorerPage"));
 
 export default function App() {
@@ -73,6 +74,7 @@ export default function App() {
           <Route path="/compare" element={<Compare />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/account" element={<Account />} />
+          <Route path="/visualizations/research" element={<Suspense fallback={<p role="status">Loading…</p>}><ResearchPage /></Suspense>} />
           <Route path="/visualizations" element={<Suspense fallback={<p role="status">{i18n.language === "en" ? "Loading explorer…" : "正在載入探索頁面…"}</p>}><ExplorerPage /></Suspense>} />
           <Route path="/rankings" element={<Rankings />} />
           <Route path="/tournaments" element={<Tournaments />} />

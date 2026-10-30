@@ -1,5 +1,5 @@
 import { Component, lazy, Suspense, useState, type ReactNode } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { get } from "../api";
@@ -17,7 +17,7 @@ class ChartBoundary extends Component<{ children: ReactNode; en: boolean }, { fa
 export default function ExplorerPage() {
   const { i18n } = useTranslation();const en = i18n.language === "en";const [params, setParams] = useSearchParams();
   let filters = defaults;let invalid = false;try { filters = parseFilters(params); } catch { invalid = true; }
-  return <section className="explorer-page"><header className="explorer-heading"><div><p className="explorer-kicker">TENNIS DATA EXPLORER / 01</p><h1>{en ? "Put a question" : "把問題，"}<br/><em>{en ? "on the chart." : "放進座標。"}</em></h1><p>{en ? "Explore one ranking snapshot. Compare source observations, understand the missing pieces." : "從同一天的排名出發，比較來源觀測，也看見缺失的部分。"}</p></div><div className="explorer-stamp"><span>{en ? "OBSERVE / COMPARE / QUESTION" : "觀察 ／ 比較 ／ 提問"}</span><strong>ATP<br/>WTA</strong><span>{en ? "One player. One point." : "同一母體，一人一點。"}</span></div></header>
+  return <section className="explorer-page"><header className="explorer-heading"><div><p className="explorer-kicker">TENNIS DATA EXPLORER / 01</p><h1>{en ? "Put a question" : "把問題，"}<br/><em>{en ? "on the chart." : "放進座標。"}</em></h1><p>{en ? "Explore one ranking snapshot. Compare source observations, understand the missing pieces." : "從同一天的排名出發，比較來源觀測，也看見缺失的部分。"}</p><Link to="/visualizations/research">{en ? "Match research ↗" : "比賽研究 ↗"}</Link></div><div className="explorer-stamp"><span>{en ? "OBSERVE / COMPARE / QUESTION" : "觀察 ／ 比較 ／ 提問"}</span><strong>ATP<br/>WTA</strong><span>{en ? "One player. One point." : "同一母體，一人一點。"}</span></div></header>
     {invalid ? <div className="explorer-state" role="alert"><h2>{en ? "Invalid explorer filters" : "探索條件無效"}</h2><p>{en ? "Check the date, axis pair and query limits." : "請檢查日期、座標配對與查詢上限。"}</p><button onClick={() => setParams(filterParams(defaults))}>{en ? "Reset filters" : "重設條件"}</button></div> : <Explorer key={params.toString()} filters={filters} searchKey={params.toString()} onApply={setParams} en={en}/>}
   </section>;
 }

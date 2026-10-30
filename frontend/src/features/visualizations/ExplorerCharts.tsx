@@ -1,30 +1,13 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { init, use as registerCharts, type EChartsCoreOption, type EChartsType, type ECElementEvent } from "echarts/core";
+import { use as registerCharts, type EChartsCoreOption } from "echarts/core";
 import { ScatterChart, BarChart } from "echarts/charts";
 import { GridComponent, TooltipComponent, LegendComponent, AriaComponent, DataZoomSliderComponent } from "echarts/components";
 import { CanvasRenderer } from "echarts/renderers";
+import Canvas from "./ChartCanvas";
 import { groupLabel, interval, labels, type Scatter, type Histogram, type Point } from "./model";
 registerCharts([ScatterChart, BarChart, GridComponent, TooltipComponent, LegendComponent, AriaComponent, DataZoomSliderComponent, CanvasRenderer]);
 
-function Canvas({ option, label, onHover, onOpen }: { option: EChartsCoreOption; label: string; onHover?: (p: Point) => void; onOpen?: (p: Point) => void }) {
-  const element = useRef<HTMLDivElement>(null);const chart = useRef<EChartsType | null>(null);
-  useEffect(() => {
-    const instance = init(element.current!, null, { renderer: "canvas" });chart.current = instance;
-    instance.on("finished", () => element.current?.setAttribute("aria-busy", "false"));
-    void document.fonts?.ready.then(() => { if (!instance.isDisposed()) instance.resize(); });
-    const resize = new ResizeObserver(() => instance.resize());resize.observe(element.current!);
-    return () => { resize.disconnect();instance.dispose();chart.current = null; };
-  }, []);
-  useEffect(() => {
-    const instance = chart.current!;element.current?.setAttribute("aria-busy", "true");instance.setOption(option, { notMerge: true });
-    const hover = (event: ECElementEvent) => { const p = (event.data as { point?: Point })?.point;if (p) onHover?.(p); };
-    const open = (event: ECElementEvent) => { const p = (event.data as { point?: Point })?.point;if (p) onOpen?.(p); };
-    instance.on("mouseover", hover);instance.on("click", open);
-    return () => { instance.off("mouseover", hover);instance.off("click", open); };
-  }, [option, onHover, onOpen]);
-  return <div ref={element} className="explorer-canvas" aria-busy="true" role="img" aria-label={label} />;
-}
 const colors: Record<string, string> = { R: "#244f3a", L: "#a2502a", U: "#386e83", A: "#755586", UNKNOWN: "#6b7369", ALL: "#244f3a" };
 const symbols: Record<string, string> = { R: "circle", L: "triangle", U: "diamond", A: "rect", UNKNOWN: "pin", ALL: "circle" };
 const base = () => ({ animation: !window.matchMedia?.("(prefers-reduced-motion: reduce)").matches, animationDuration: 300, textStyle: { fontFamily: '"DM Sans Variable", "Noto Sans TC Variable", sans-serif', color: "#1e3529" } });

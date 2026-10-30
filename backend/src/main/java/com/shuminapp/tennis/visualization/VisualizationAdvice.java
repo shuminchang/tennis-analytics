@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.*;
 public class VisualizationAdvice {
     @ExceptionHandler({IllegalArgumentException.class,java.time.DateTimeException.class})
     ResponseEntity<?> invalid(Exception e) { return ResponseEntity.badRequest().body(Map.of("code","INVALID_REQUEST","message","Check visualization parameters.")); }
-    @ExceptionHandler({DataAccessException.class,VisualizationRepository.NotReady.class,org.springframework.transaction.TransactionException.class})
+    @ExceptionHandler({DataAccessException.class,org.springframework.cache.Cache.ValueRetrievalException.class,VisualizationRepository.NotReady.class,org.springframework.transaction.TransactionException.class})
     ResponseEntity<?> unavailable(Exception e) { return ResponseEntity.status(503).body(Map.of("code","UNAVAILABLE","message","Visualization source is temporarily unavailable.")); }
 }
