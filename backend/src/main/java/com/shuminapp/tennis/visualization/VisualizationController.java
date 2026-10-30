@@ -18,4 +18,6 @@ public class VisualizationController {
 
     @GetMapping("/profile-performance") public ResearchDtos.Profiles profiles(@RequestParam MultiValueMap<String,String> p) { return research.profiles(ResearchRequest.parse("profiles",p)); }
 
+    @GetMapping("/correlations") public ResearchDtos.Workbench workbench(@RequestParam MultiValueMap<String,String> p) { return research.workbench(ResearchRequest.parse("correlations",p)); }
+
 }

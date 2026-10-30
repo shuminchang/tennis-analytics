@@ -50,4 +50,22 @@ public class ResearchService {
         return null;
     }
 
+    public Workbench workbench(ResearchRequest r) {
+        if(!METRICS.contains(r.x()) || !METRICS.contains(r.y()) || r.x().equals(r.y())) throw new IllegalArgumentException();
+        var source=repository.source();return cached("researchWorkbench",source,r,()->{
+            var selected=repository.profiles(source,r);var cells=new ArrayList<Correlation>();var boxes=new ArrayList<Box>();
+            for(String x:METRICS) {
+                double[] values=selected.items().stream().map(p->p.metrics().get(x)).filter(m->m.qualified() && m.value()!=null).mapToDouble(Measure::value).toArray();boxes.add(ResearchStatistics.box(x,values));
+                for(String y:METRICS) {
+                    var pairs=selected.items().stream().filter(p->profileReason(p,x,y)==null).toList();
+                    double[] a=pairs.stream().mapToDouble(p->p.metrics().get(x).value()).toArray(),b=pairs.stream().mapToDouble(p->p.metrics().get(y).value()).toArray();
+                    cells.add(new Correlation(x,y,pairs.size(),ResearchStatistics.pearson(a,b),ResearchStatistics.spearman(a,b),pairs.size()<20));
+                }
+            }
+            var pairs=selected.items().stream().filter(p->profileReason(p,r.x(),r.y())==null).toList();
+            double[] x=pairs.stream().mapToDouble(p->p.metrics().get(r.x()).value()).toArray(),y=pairs.stream().mapToDouble(p->p.metrics().get(r.y()).value()).toArray();
+            return new Workbench(context("player_season_surface",source,r),METRICS,selected.population(),selected.items().size(),selected.population()-selected.items().size(),"MOST_MATCHES_THEN_ID_YEAR_SURFACE",r.x(),r.y(),List.copyOf(cells),List.copyOf(boxes),ResearchStatistics.hexes(x,y),List.of("PAIRWISE_COMPLETE_OBSERVATIONS","REPEATED_PLAYERS_NOT_INDEPENDENT","EXPLORATORY_MULTIPLE_COMPARISONS","DESCRIPTIVE_NOT_CAUSAL"));
+        });
+    }
+
 }

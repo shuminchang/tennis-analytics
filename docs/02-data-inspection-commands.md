@@ -1898,3 +1898,7 @@ ATP／WTA Top 100 母體均 100、身高有效 99／52，HTTP 散點與直方圖
 ## Phase 11.5 指標分母（2026-10-31）
 
 ResearchProfilesTest 以同一四場fixture驗獨立有效分母、角色SERVE_STATS、有效零、明示上限與注入拒絕；與年齡共6案通過。真實庫僅GET初探2017～2026：ATP年齡51682視角/51662有效；profile6982、選500、省略6482，不是全體樣本。原始CSV與候選資料未寫入。完整規則與性能限制見 docs/21-visualization-research-delivery.md。
+
+## 2026-10-31：Phase 11.6 研究工作台
+
+完成進階相關矩陣、Type-7 箱型圖、真實 hexbin 與 CSV／PNG 匯出；後端研究 12 案、前端 60 案及 lint/build 通過。驗證指令、統計定義、權限、選樣與匯出限制見 [研究交付紀錄](21-visualization-research-delivery.md#116-進階研究工作台與匯出)。不寫入候選庫、不推送／部署；11.7 整合驗收接續處理。

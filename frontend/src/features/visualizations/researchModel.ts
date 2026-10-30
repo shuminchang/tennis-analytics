@@ -1,6 +1,6 @@
 import type { Source } from "./model";
 export type ResearchSource = { playersAndRankings: Source; matchRunId: number; matchRules: { transformSha: string; qualitySha: string; scopeSha: string }; qualityRevision: string; readModel: string };
-export type ResearchFilters = { tour: "ATP" | "WTA"; fromYear: number; toYear: number; surface: string; binWidth: number; group: string; view: "age" | "profiles"; x: string; y: string; limit: number };
+export type ResearchFilters = { tour: "ATP" | "WTA"; fromYear: number; toYear: number; surface: string; binWidth: number; group: string; view: "age" | "profiles" | "workbench"; x: string; y: string; limit: number };
 export type ResearchContext = { grain: string; tour: string; fromYear: number; toYear: number; surface: string; metricVersion: string; source: ResearchSource };
 export type ResearchInfo = { source: ResearchSource; earliestMatchYear: number | null; latestMatchYear: number | null; maxYears: number; maxProfiles: number };
 export type AgeBin = { lowerAge: number; upperAge: number; surface: string; matches: number; wins: number; winRate: number; lower95: number; upper95: number; lowSample: boolean };
@@ -15,7 +15,7 @@ export function researchFilters(p: URLSearchParams): ResearchFilters {
   const fromYear = year(from), toYear = year(to);if (fromYear > toYear || toYear - fromYear > 9) throw Error("Ten years maximum");
   const binWidth = +(p.get("binWidth") ?? "1");if (![1, 5].includes(binWidth)) throw Error("Invalid bins");
   const view = p.get("view") ?? "age", x = p.get("x") ?? "height_cm", y = p.get("y") ?? "ace_rate", limit = p.get("limit") ?? "500";
-  if (!["age", "profiles"].includes(view) || !researchMetrics.includes(x) || !researchMetrics.includes(y) || x === y || !/^\d{1,4}$/.test(limit) || +limit < 1 || +limit > 1000) throw Error("Invalid metrics");
+  if (!["age", "profiles", "workbench"].includes(view) || !researchMetrics.includes(x) || !researchMetrics.includes(y) || x === y || !/^\d{1,4}$/.test(limit) || +limit < 1 || +limit > 1000) throw Error("Invalid metrics");
   return { tour: tour as ResearchFilters["tour"], fromYear, toYear, surface, group, binWidth, view: view as ResearchFilters["view"], x, y, limit: +limit };
 }
 export function researchParams(f: ResearchFilters) { return new URLSearchParams(Object.entries(f).map(([k, v]) => [k, String(v)])); }
@@ -31,3 +31,7 @@ export const metricValue = (key: string, value: number | null | undefined) => va
 export function studyApiParams(f: ResearchFilters) {
   const p = researchParams(f);for (const key of f.view === "age" ? ["view", "x", "y", "limit"] : ["view", "binWidth", "group"]) p.delete(key);return p;
 }
+export type Correlation = { x: string; y: string; n: number; pearson: number | null; spearman: number | null; lowSample: boolean };
+export type BoxSummary = { metric: string; n: number; lowerWhisker: number | null; q1: number | null; median: number | null; q3: number | null; upperWhisker: number | null; outliers: number[] };
+export type HexCell = { x: number; y: number; count: number; vertices: number[][] };
+export type Workbench = { selectionRule: string; context: ResearchContext; metrics: string[]; population: number; inspected: number; omitted: number; x: string; y: string; correlations: Correlation[]; boxes: BoxSummary[]; hexbin: { observations: number; cells: HexCell[]; xDomain: {min:number;max:number}|null; yDomain: {min:number;max:number}|null } };

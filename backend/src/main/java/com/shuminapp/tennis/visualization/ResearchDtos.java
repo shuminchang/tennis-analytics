@@ -20,4 +20,10 @@ public final class ResearchDtos {
     public record ProfileSample(long population,long inspected,long valid,long excluded,long omitted,List<Exclusion> reasons) { }
     public record Profiles(Context context,String x,String y,ProfileSample sample,String selectionRule,List<Profile> items,List<ProfilePoint> points,List<Slice> surfaces,List<Slice> hands,List<String> warnings) { }
 
+    public record Correlation(String x,String y,int n,Double pearson,Double spearman,boolean lowSample) { }
+    public record Box(String metric,int n,Double lowerWhisker,Double q1,Double median,Double q3,Double upperWhisker,List<Double> outliers) { }
+    public record HexCell(double x,double y,long count,List<List<Double>> vertices) { }
+    public record Hexes(int observations,VisualizationDtos.Domain xDomain,VisualizationDtos.Domain yDomain,List<HexCell> cells) { }
+    public record Workbench(Context context,List<String> metrics,long population,int inspected,long omitted,String selectionRule,String x,String y,List<Correlation> correlations,List<Box> boxes,Hexes hexbin,List<String> warnings) { }
+
 }
