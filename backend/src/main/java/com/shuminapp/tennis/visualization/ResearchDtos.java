@@ -13,4 +13,11 @@ public final class ResearchDtos {
     public record AgeBin(double lowerAge,double upperAge,String surface,long matches,long wins,Double winRate,Double lower95,Double upper95,boolean lowSample) { }
     public record Ages(Context context,int binWidth,Sample sample,List<AgeBin> items,List<String> warnings) { }
     public record Info(Source source,Integer earliestMatchYear,Integer latestMatchYear,int maxYears,int maxProfiles,List<String> warnings) { }
+    public record Measure(Double value,long observations,long numerator,long denominator,boolean qualified) { }
+    public record Profile(String tour,int playerId,String displayName,int season,String surface,String hand,long matches,Map<String,Measure> metrics,String heightReason) { }
+    public record Slice(String season,String surface,String hand,String opponentHand,long matches,Map<String,Measure> metrics) { }
+    public record ProfilePoint(String tour,int playerId,String displayName,int season,String surface,String hand,double x,double y,long matches) { }
+    public record ProfileSample(long population,long inspected,long valid,long excluded,long omitted,List<Exclusion> reasons) { }
+    public record Profiles(Context context,String x,String y,ProfileSample sample,String selectionRule,List<Profile> items,List<ProfilePoint> points,List<Slice> surfaces,List<Slice> hands,List<String> warnings) { }
+
 }

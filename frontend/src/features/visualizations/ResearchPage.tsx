@@ -3,8 +3,9 @@ import { Link, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { get } from "../api";
-import { percent, researchFilters, researchParams, type ResearchFilters, type ResearchInfo, type Ages } from "./researchModel";
+import { percent, researchFilters, researchParams, studyApiParams, researchMetrics, metricLabel, type ResearchFilters, type ResearchInfo, type Ages, type Profiles } from "./researchModel";
 import "./explorer.css";
+const ProfileResults = lazy(() => import("./ResearchProfiles"));
 const Charts = lazy(() => import("./ResearchCharts"));
 export default function ResearchPage() {
   const { i18n } = useTranslation();const en = i18n.language === "en";const [params, setParams] = useSearchParams();let filters: ResearchFilters | null = null;
@@ -15,10 +16,10 @@ export default function ResearchPage() {
 function Study({ filters, onApply, en }: { filters: ResearchFilters; onApply: (p: URLSearchParams) => void; en: boolean }) {
   const info = useQuery({ queryKey: ["research-info", filters.tour], queryFn: ({ signal }) => get<ResearchInfo>(`/v1/visualizations/research-metadata?tour=${filters.tour}`, signal), retry: false, staleTime: 30_000 });
   const resolved = { ...filters, fromYear: filters.fromYear || info.data?.latestMatchYear || 2024, toYear: filters.toYear || info.data?.latestMatchYear || 2024 };
-  const result = useQuery({ queryKey: ["research-age", resolved, info.data?.source], queryFn: ({ signal }) => get<Ages>(`/v1/visualizations/age-performance?${researchParams(resolved)}`, signal), enabled: !!info.data, retry: false, staleTime: 30_000 });
+  const result = useQuery({ queryKey: ["research-data", resolved, info.data?.source], queryFn: ({ signal }) => get<Ages | Profiles>(`/v1/visualizations/${filters.view === "age" ? "age-performance" : "profile-performance"}?${studyApiParams(resolved)}`, signal), enabled: !!info.data, retry: false, staleTime: 30_000 });
   const mismatch = result.data && info.data && JSON.stringify(result.data.context.source) !== JSON.stringify(info.data.source);
-  return <><StudyFilters key={`${resolved.fromYear}-${resolved.toYear}`} filters={resolved} en={en} onApply={onApply}/>
-    {info.isError || result.isError || mismatch ? <div className="explorer-state" role="alert">{en ? "Research source unavailable or changed. Please retry." : "研究來源暫時不可用或已變更，請重試。"}<button onClick={() => { void info.refetch();void result.refetch(); }}>{en ? "Retry" : "重試"}</button></div> : result.isPending || result.isFetching ? <p role="status">{en ? "Reading match observations…" : "正在讀取比賽觀測…"}</p> : <AgeResults data={result.data} en={en}/>}</>;
+  return <><div className="research-tabs">{(["age", "profiles"] as const).map(view => <button key={view} className={filters.view === view ? "explorer-apply" : "explorer-quiet"} onClick={() => onApply(researchParams({ ...resolved, view }))}>{view === "age" ? (en ? "Age & wins" : "年齡與勝率") : (en ? "Serve & surfaces" : "發球與場地")}</button>)}</div><StudyFilters key={`${resolved.fromYear}-${resolved.toYear}`} filters={resolved} en={en} onApply={onApply}/>
+    {info.isError || result.isError || mismatch ? <div className="explorer-state" role="alert">{en ? "Research source unavailable or changed. Please retry." : "研究來源暫時不可用或已變更，請重試。"}<button onClick={() => { void info.refetch();void result.refetch(); }}>{en ? "Retry" : "重試"}</button></div> : result.isPending || result.isFetching ? <p role="status">{en ? "Reading match observations…" : "正在讀取比賽觀測…"}</p> : filters.view === "age" ? <AgeResults data={result.data as Ages} en={en}/> : <Suspense fallback={<p role="status">Loading…</p>}><ProfileResults data={result.data as Profiles} en={en}/></Suspense>}</>;
 }
 function StudyFilters({ filters, onApply, en }: { filters: ResearchFilters; onApply: (p: URLSearchParams) => void; en: boolean }) {
   const [draft, setDraft] = useState(filters);
@@ -27,8 +28,9 @@ function StudyFilters({ filters, onApply, en }: { filters: ResearchFilters; onAp
     <label>{en ? "From year" : "起始年"}<input type="number" min={1800} max={2100} required value={draft.fromYear} onChange={e => setDraft({ ...draft, fromYear: +e.target.value })}/></label>
     <label>{en ? "To year" : "結束年"}<input type="number" min={1800} max={2100} required value={draft.toYear} onChange={e => setDraft({ ...draft, toYear: +e.target.value })}/></label>
     <label>{en ? "Surface" : "場地"}<select value={draft.surface} onChange={e => setDraft({ ...draft, surface: e.target.value })}>{["ALL", "Hard", "Clay", "Grass", "Carpet", "Unknown"].map(s => <option key={s}>{s}</option>)}</select></label>
-    <label>{en ? "Age bin width" : "年齡箱寬"}<select value={draft.binWidth} onChange={e => setDraft({ ...draft, binWidth: +e.target.value })}><option value="1">1</option><option value="5">5</option></select></label>
-    <label>{en ? "Group" : "分組"}<select value={draft.group} onChange={e => setDraft({ ...draft, group: e.target.value })}><option value="overall">{en ? "Overall" : "整體"}</option><option value="surface">{en ? "By surface" : "分場地"}</option></select></label>
+    {draft.view === "age" && <><label>{en ? "Age bin width" : "年齡箱寬"}<select value={draft.binWidth} onChange={e => setDraft({ ...draft, binWidth: +e.target.value })}><option value="1">1</option><option value="5">5</option></select></label>
+    <label>{en ? "Group" : "分組"}<select value={draft.group} onChange={e => setDraft({ ...draft, group: e.target.value })}><option value="overall">{en ? "Overall" : "整體"}</option><option value="surface">{en ? "By surface" : "分場地"}</option></select></label></>}
+    {draft.view !== "age" && <>{(["x", "y"] as const).map(key => <label key={key}>{key.toUpperCase()} {en ? "metric" : "指標"}<select value={draft[key]} onChange={e => setDraft({ ...draft, [key]: e.target.value })}>{researchMetrics.map(m => <option key={m} value={m}>{metricLabel(m, en)}</option>)}</select></label>)}<label>{en ? "Maximum profiles" : "最多賽季場地觀測"}<input type="number" min={1} max={1000} required value={draft.limit} onChange={e => setDraft({ ...draft, limit: +e.target.value })}/></label></>}
     <button className="explorer-apply">{en ? "Apply research filters" : "套用研究條件"}</button>
   </form>;
 }
@@ -42,5 +44,5 @@ function AgeResults({ data, en }: { data: Ages; en: boolean }) {
   </>;
 }
 export function ResearchNote({ source, en }: { source: ResearchInfo["source"]; en: boolean }) {
-  return <details className="explorer-source"><summary>{en ? "Research source and methods" : "研究來源與方法"}</summary><p>{en ? "Jeff Sackmann tennis data · CC BY-NC-SA 4.0. Reviewed source coverage only; not causal inference or complete career statistics." : "Jeff Sackmann 網球資料 · CC BY-NC-SA 4.0。僅限已納入來源範圍，不代表因果或完整生涯。"}</p><p><code>{source.playersAndRankings.snapshotSha}</code><br/>stats-v1 · research-v1 · {en ? "Match run" : "比賽批次"} {source.matchRunId} · {source.readModel}</p></details>;
+  return <details className="explorer-source"><summary>{en ? "Research source and methods" : "研究來源與方法"}</summary><p>{en ? "Jeff Sackmann tennis data · CC BY-NC-SA 4.0. Reviewed source coverage only; not causal inference or complete career statistics." : "Jeff Sackmann 網球資料 · CC BY-NC-SA 4.0。僅限已納入來源範圍，不代表因果或完整生涯。"}</p><p><code>{source.playersAndRankings.snapshotSha}</code><br/>stats-v1 · research-v1 · {en ? "Match run" : "比賽批次"} {source.matchRunId}</p></details>;
 }

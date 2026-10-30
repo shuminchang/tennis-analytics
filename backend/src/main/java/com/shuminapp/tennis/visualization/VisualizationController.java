@@ -16,4 +16,6 @@ public class VisualizationController {
     @GetMapping("/research-metadata") public ResearchDtos.Info researchMetadata(@RequestParam MultiValueMap<String,String> p) { return research.info(ResearchRequest.parse("info",p)); }
     @GetMapping("/age-performance") public ResearchDtos.Ages age(@RequestParam MultiValueMap<String,String> p) { return research.ages(ResearchRequest.parse("age",p)); }
 
+    @GetMapping("/profile-performance") public ResearchDtos.Profiles profiles(@RequestParam MultiValueMap<String,String> p) { return research.profiles(ResearchRequest.parse("profiles",p)); }
+
 }

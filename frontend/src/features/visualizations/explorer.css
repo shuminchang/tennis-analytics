@@ -62,3 +62,6 @@
 .research-filters { display: flex; flex-wrap: wrap; gap: 16px; padding: 24px 0; border-bottom: 1px solid var(--line); margin-bottom: 28px; align-items: end; }
 .research-filters label { display: grid; gap: 8px; font-size: 12px; flex: 1 1 110px; min-width: 0; }
 .research-filters input, .research-filters select { width: 100%; min-width: 0; padding: 10px; border: 1px solid var(--line); background: #faf9f3; color: var(--ink); }
+.research-tabs { display:flex;flex-wrap:wrap;gap:20px;margin-top:24px;align-items:center; }
+.research-metric-select { display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:24px 0;font-size:12px; }
+.research-metric-select select { padding:10px;border:1px solid var(--line);background:#faf9f3;max-width:100%; }

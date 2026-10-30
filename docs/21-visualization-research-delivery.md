@@ -1,6 +1,6 @@
 # Phase 11.4～11.7 研究工作台交付
 
-目前：11.4 年齡與勝率已實作，11.5～11.7 進行中。使用者授權自主完成剩餘階段並依階段提交；不推送或正式部署，不修改 .vscode/settings.json。
+目前：11.4～11.5 已實作，11.6～11.7 進行中。使用者授權自主完成剩餘階段並依階段提交；不推送或正式部署，不修改 .vscode/settings.json。
 
 ## 11.4 年齡與勝率
 
@@ -19,3 +19,13 @@ npm --prefix frontend test
 npm --prefix frontend run lint
 npm --prefix frontend run build
 ```
+
+## 11.5 發球、場地、慣用手與有界觀測
+
+新增 `/profile-performance?tour=ATP&fromYear=2024&toYear=2024&surface=ALL&x=height_cm&y=ace_rate&limit=500`。profile grain 為 player_season_surface，不把週排名 JOIN 成重複球員。
+六個固定指標：height_cm、match_win_rate、ace_rate、double_fault_rate、first_serve_points_won、serve_points_won；X/Y 不可相同。每個率獨立回傳 value、有效場次、分子／分母與 qualified。缺值為 null、零分子保留零，不平均百分比。SERVE_STATS 按角色／RECORD 排除，AGE_ANALYSIS 不誤排發球。
+繪圖門檻沿11.1：勝率≥10場；發球各自≥5有效場及100發球分，一發得分改為50個進一發。未達門檻仍保留原始比率與分母於表格，圖上不冒充可靠配對。
+limit=1..1000、預設500；依合格比賽數DESC、player ID、年、場地固定選樣，回 population／inspected／valid／excluded／omitted，population=valid+excluded+omitted。這不是代表性隨機抽樣，無法用來推論全體因果。
+整窗場地／年份熱圖及己方／對手慣用手彙總在profile上限前計算，與選出的散點母體明確分開。未知／U／A分組不猜測；慣用手／身高為球員快照屬性，未控制對手強度與年代。
+驗證：年齡＋profile 共6個後端測試，前端57案、lint／build通過。fixture 的A跨場地 ACE合計5/60、一發23/37，Hard／Clay整窗各3/40；角色發球標記只影響該方，另一方及有效零值仍保留。上限1明示省略4個profile。
+真實候選庫僅GET初步冷查詢：ATP2017～2026年齡約2.11s、profile約3.70s；profile人口6982、檢視500、省略6482。這不是最終受限環境驗收；11.7另測暖快取、併發、記憶體與極限窗口，不以目前數字宣稱所有冷查詢<500ms。
