@@ -1981,3 +1981,29 @@ lint／build 與真實候選庫唯讀互補機率檢查通過。瀏覽器初次�
 提交前研究補充：本版未加入獨立 H2H；Kovalchik 的 Prize Probit 曾使用 H2H 勝敗，
 但不能據此推論本站加入後必然改善。年齡／身高目前僅整組驗證，
 個別消融及 H2H 增益尚未驗證，已明確記於 [相遇勝率文件](23-matchup-probability.md)。
+
+
+## main 整合與工程驗收（2026-10-31）
+
+使用者授權先做版本整合及最新工程驗收。main已由721bc22快轉至67d8996，
+保留視覺化、UI與勝率的各階段commit；使用者.vscode/settings.json未追蹤檔保留。
+工作目錄為專案根目錄：
+
+```bash
+git switch main
+git merge --ff-only feat/matchup-probability
+python3 scripts/test/release_report_checks.py
+LD_LIBRARY_PATH="$PWD/.local/verification/browser-libs/extracted/usr/lib/x86_64-linux-gnu" \
+  python3 scripts/ops/budget_stack.py \
+  .local/backups/20261029T170402Z-6f9e68/manifest.json --research --matchup
+python3 scripts/test/release_report_checks.py \
+  --report .local/verification/budget-2dba7733/report.json
+```
+
+真實備份隔離還原、13端點單路暖p95<500ms、機率／日期及CSP／手機驗證通過；
+五組四路併發p95約589～2588ms，沒有達到500ms，明列latency_slo=NOT_MET。
+PG／Java／Apache記憶體峰值約320／309.3／14.68MiB，無OOM且自建資源已清理。
+新驗收門檻4案與既有維運4／視覺化契約8／模型契約3案通過。
+HTTP測量批次間配速以遵守正式限流，不隱藏429或延長逾時。
+使用者提供GitHub網址，origin已設定；推送尚需操作者登入，遠端CI尚未驗證。
+詳細數字、限制及可重現證據見 [main整合驗收](24-main-release-acceptance.md)。

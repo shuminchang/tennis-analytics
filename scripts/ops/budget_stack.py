@@ -18,8 +18,11 @@ import uuid
 ROOT = Path(__file__).resolve().parents[2]
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('manifest', type=Path)
+parser.add_argument('--matchup', action='store_true', help='Also measure and validate matchup APIs')
 parser.add_argument('--research', action='store_true')
 args = parser.parse_args()
+if args.matchup and not args.research:
+    raise ValueError('--matchup requires --research')
 manifest = json.loads(args.manifest.read_text())
 dump = args.manifest.parent / 'database.dump'
 if manifest.get('status') != 'SUCCEEDED' or not manifest.get('restore_verified'):
@@ -144,11 +147,11 @@ Header always set Content-Security-Policy "default-src 'self'; img-src 'self' da
     else:
         raise RuntimeError('Budget stack readiness timeout')
     print('Benchmarking through Apache with real source data...', flush=True)
-    run(sys.executable, str(ROOT / 'scripts/ops/benchmark.py'), '--base', base, '--authenticated', '--container', db_name, '--db-user', 'budget_user', '--output', str(output / 'performance.json'), *(['--research', '--measure-only'] if args.research else []), stdout=(output / 'benchmark.log').open('w'), timeout=600)
+    run(sys.executable, str(ROOT / 'scripts/ops/benchmark.py'), '--base', base, '--authenticated', '--container', db_name, '--db-user', 'budget_user', '--output', str(output / 'performance.json'), *(['--research', '--measure-only'] if args.research else []), *(['--matchup'] if args.matchup else []), stdout=(output / 'benchmark.log').open('w'), timeout=600)
     report['performance'] = json.loads((output / 'performance.json').read_text())
     if args.research:
-        report['latency_target_met'] = all(v['warm_p95_ms'] < 500 for v in report['performance'].values())
-        report['latency_target_misses'] = [k for k,v in report['performance'].items() if v['warm_p95_ms'] >= 500]
+        report['latency_target_met'] = all(v['single_target_met'] and v.get('concurrent_4',{}).get('target_met',True) for v in report['performance'].values())
+        report['latency_target_misses'] = [k for k,v in report['performance'].items() if not v['single_target_met'] or not v.get('concurrent_4',{}).get('target_met',True)]
         checkpoint()
         run('node', str(ROOT / 'scripts/test/research_proxy_browser.mjs'), base.removesuffix('/tennis/api'), str(output), timeout=120)
         report['browser'] = json.loads((output / 'browser.json').read_text())
@@ -161,7 +164,7 @@ Header always set Content-Security-Policy "default-src 'self'; img-src 'self' da
             raise RuntimeError('Budget container OOM event')
     report['base'] = base
     report['status'] = 'SUCCEEDED'
-    print('PASS: CPU/memory-bounded stack. Report: ' + str(output / 'report.json'), flush=True)
+    print('COMPLETED: CPU/memory-bounded stack (see latency_target_met separately). Report: ' + str(output / 'report.json'), flush=True)
 except BaseException as error:
     report.update(status='FAILED', failure=type(error).__name__)
     raise

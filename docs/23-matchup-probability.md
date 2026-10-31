@@ -1,7 +1,7 @@
 # 兩位球員相遇勝率：研究、實作與驗收
 
 2026-10-31。實驗功能 `matchup-v1`，分支 `feat/matchup-probability`，
-從 `19a6ff5`（feat/visualization-lab）建立；尚未合併 main、推送或部署。
+從 `19a6ff5`（feat/visualization-lab）建立；後續已依使用者授權合併 main，未推送或部署；見 [整合驗收](24-main-release-acceptance.md)。
 本輪不修改候選資料庫內容，模型輸入以唯讀交易匯出。
 
 ## 研究後的選擇

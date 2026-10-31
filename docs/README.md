@@ -2,11 +2,13 @@
 
 **目前進度（2026-10-30）：九階段功能與帳號驗證修正的交付基準為 main，來源分支 feat/pre-release-features 採 fast-forward 合併；後端 413 案、前端 41 案與端到端 9 案通過。本機候選資料庫已建立真實 Elo，備份及實際還原成功；資源限制實測結果見 [發布前工程驗收](15-local-release-readiness.md)。未推送或部署，外部備份目的地待定。**
 
-**視覺化分支進度（2026-10-31）：feat/visualization-lab 已完成 11.1～11.7 本機交付，尚未合併 main。後端 446 案、前端 60 案、完整瀏覽器 17 案及 lint/build 通過。832MiB／1 CPU 隔離還原與 Apache CSP 檢查完成；四路併發與最大回應的延遲仍有明示限制，不代表正式部署或全面 SLO 達標。**
+**main 整合（2026-10-31）：視覺化、介面修正及相遇勝率已快轉合併至 main 的 67d8996；本機工程驗收完成：單路達標、四路併發未達標，結果見 [main 整合與工程驗收](24-main-release-acceptance.md)。尚未推送或部署；origin已設定，遠端 CI 待GitHub登入與推送。**
+
+**視覺化驗收（2026-10-31）：feat/visualization-lab 已完成 11.1～11.7 本機交付，後續已隨相遇勝率整合至 main。後端 446 案、前端 60 案、完整瀏覽器 17 案及 lint/build 通過。832MiB／1 CPU 隔離還原與 Apache CSP 檢查完成；四路併發與最大回應的延遲仍有明示限制，不代表正式部署或全面 SLO 達標。**
 
 功能入口 `/tennis/visualizations`、`/tennis/visualizations/research`；年齡／發球及選取觀測 CSV 為公開；進階相關性、箱型／Hexbin 與其匯出需 ADVANCED／ADMIN。逐階段實作、使用指南、資料字典與測量見 [研究工作台交付](21-visualization-research-delivery.md)。
 
-- [兩位球員相遇勝率](23-matchup-probability.md)：新增姓名選取、Elo／場地／年齡／身高模型、逐年時間驗證與缺值退回；研究與真實快照回測已完成，後端454／前端73／瀏覽器21案及模型契約3案通過；分支 feat/matchup-probability，本輪提交相遇勝率功能，尚未合併或部署。
+- [兩位球員相遇勝率](23-matchup-probability.md)：新增姓名選取、Elo／場地／年齡／身高模型、逐年時間驗證與缺值退回；研究與真實快照回測已完成，後端454／前端73／瀏覽器21案及模型契約3案通過；原分支 feat/matchup-probability，已提交並合併 main，尚未部署。
 
 - [圖表與資料瀏覽修正](22-ui-refinements.md)：圖表比例、整數Elo、各表格排序、空白索引不查詢與姓名取代ID；後端446／前端68／瀏覽器20案通過，並補上姓名搜尋選取與舊後端辨識，本輪已依授權整理提交，未推送或部署。
 

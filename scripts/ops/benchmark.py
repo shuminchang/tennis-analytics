@@ -23,11 +23,14 @@ parser.add_argument('--base', default='http://127.0.0.1:8082/tennis/api')
 parser.add_argument('--output', default='.local/verification/performance.json')
 parser.add_argument('--authenticated', action='store_true')
 parser.add_argument('--measure-only', action='store_true', help='Research suite: record timing target misses without skipping remaining acceptance checks')
+parser.add_argument('--matchup', action='store_true', help='Include source-compatible matchup APIs in isolated research acceptance')
 parser.add_argument('--research', action='store_true', help='Bounded visualization/research endpoint suite (requires authenticated owned budget container)')
 parser.add_argument('--database', default='tennis_candidate')
 parser.add_argument('--container')
 parser.add_argument('--db-user')
 args = parser.parse_args()
+if args.matchup and not args.research:
+    raise ValueError('Matchup acceptance requires the isolated research suite')
 if args.measure_only and not args.research:
     raise ValueError('Measure-only applies to research acceptance only')
 if args.research and (not args.authenticated or not args.container):
@@ -88,8 +91,34 @@ try:
                  '/v1/visualizations/age-performance?' + window.replace('ATP', 'WTA'),
                  '/v1/visualizations/profile-performance?' + window.replace('ATP', 'WTA') + '&limit=1000',
                  '/v1/visualizations/profile-performance?' + window + '&limit=500']
+    if args.matchup:
+        paths += ['/v1/matchup-prediction/metadata?tour=ATP',
+                  '/v1/matchup-prediction?tour=ATP&first=103819&second=104745&asOf=2019-07-01&surface=Grass&bestOf=5',
+                  '/v1/matchup-prediction?tour=ATP&first=206173&second=207989&asOf=2026-06-08&surface=Clay&bestOf=3',
+                  '/v1/matchup-prediction?tour=WTA&first=216347&second=214544&asOf=2026-06-08&surface=Clay&bestOf=3']
+    def validate_payload(path, payload):
+        if '/matchup-prediction?' in path:
+            if payload.get('available') is not True:
+                raise RuntimeError('Matchup fixture must have enough actual history')
+            estimate=payload['prediction'];a,b=estimate['firstProbability'],estimate['secondProbability']
+            if not 0<=a<=1 or not 0<=b<=1 or abs(a+b-1)>1e-12:
+                raise RuntimeError('Invalid complementary probabilities')
+            from datetime import date,timedelta
+            if date.fromisoformat(payload['historyBefore'])!=date.fromisoformat(payload['asOf'])-timedelta(days=21):
+                raise RuntimeError('History cutoff mismatch')
+    # Preserve production 240/min rate limiting. Pause BETWEEN measured batches,
+    # leaving budget for authentication/browser checks; never retry or hide HTTP 429.
+    request_window=time.monotonic();scheduled_requests=0
+    def reserve(count):
+        global request_window,scheduled_requests
+        if args.matchup and scheduled_requests+count>180:
+            print('Pacing acceptance batches to preserve production rate limits...',flush=True)
+            while time.monotonic()-request_window<61:time.sleep(1)
+            request_window=time.monotonic();scheduled_requests=0
+        scheduled_requests+=count
     result = {}
     for path in paths:
+        reserve(21)
         samples = []; max_bytes = 0; first_body = None
         for attempt in range(21):
             start = time.perf_counter()
@@ -98,9 +127,11 @@ try:
                     raise RuntimeError('Non-success response')
                 payload = response.read(); max_bytes = max(max_bytes, len(payload))
             samples.append((time.perf_counter() - start) * 1000)
+            validate_payload(path,json.loads(payload))
             if attempt == 0: first_body = json.loads(payload)
         warm = sorted(samples[1:])
-        result[path] = {'cold_ms': round(samples[0], 2), 'warm_p50_ms': round(statistics.median(warm), 2), 'warm_p95_ms': round(warm[18], 2), 'warm_mean_ms': round(statistics.mean(warm), 2), 'samples': 20, 'maximum_response_bytes': max_bytes, 'sample': first_body.get('sample'), 'population':first_body.get('population')}
+        result[path] = {'cold_ms': round(samples[0], 2), 'warm_p50_ms': round(statistics.median(warm), 2), 'warm_p95_ms': round(warm[18], 2), 'warm_mean_ms': round(statistics.mean(warm), 2), 'samples': 20, 'maximum_response_bytes': max_bytes, 'sample': first_body.get('sample'), 'population':first_body.get('population'), 'single_target_met':warm[18] < (1000 if '/h2h?' in path else 500)}
+        if '/matchup-prediction?' in path: result[path]['prediction_sample']={k:first_body[k] for k in ['available','asOf','historyBefore','prediction']}
         output = Path(args.output);output.parent.mkdir(parents=True, exist_ok=True);output.write_text(json.dumps(result, indent=2) + '\n')
     if args.research:
         # Warm, same-key concurrent GETs; each worker owns its HTTP connection.
@@ -111,17 +142,18 @@ try:
             start = time.perf_counter()
             request = urllib.request.Request(args.base + path, headers={'Cookie': cookie_header})
             with urllib.request.urlopen(request, timeout=15) as response:
-                response.read()
+                validate_payload(path,json.loads(response.read()))
             return (time.perf_counter() - start) * 1000
-        for path in [paths[3], paths[5]]:
+        for path in [paths[3], paths[5]] + ([p for p in paths if '/matchup-prediction?' in p] if args.matchup else []):
+            reserve(16)
             with ThreadPoolExecutor(max_workers=4) as pool:
                 samples = sorted(pool.map(timed, [path] * 16))
-            result[path]['concurrent_4'] = {'requests':16, 'p50_ms':round(statistics.median(samples),2), 'p95_ms':round(samples[-1],2)}
+            result[path]['concurrent_4'] = {'requests':16, 'p50_ms':round(statistics.median(samples),2), 'p95_ms':round(samples[-1],2), 'target_ms':500, 'target_met':samples[-1]<500}
     output = Path(args.output);output.parent.mkdir(parents=True, exist_ok=True);output.write_text(json.dumps(result, indent=2) + '\n')
     print(json.dumps(result, indent=2))
-    if any(row['warm_p95_ms'] >= (1000 if '/h2h?' in path else 500) for path, row in result.items()):
+    if any(not row['single_target_met'] or not row.get('concurrent_4',{}).get('target_met',True) for row in result.values()):
         if args.measure_only:
-            print('MEASURED TARGET MISS: warm p95 exceeds 500ms; this is not a passing latency SLO')
+            print('MEASURED TARGET MISS: single-request or concurrent p95 exceeds target; this is not a passing latency SLO')
         else:
             raise SystemExit('FAIL: warm p95 exceeds target; cold timings remain separately reported')
 finally:

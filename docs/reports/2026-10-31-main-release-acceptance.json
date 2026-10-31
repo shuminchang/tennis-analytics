@@ -1,0 +1,477 @@
+{
+  "source_backup_sha256": "84f887815df57bc162b70082144bc3cea63e1b29dba6fbdd03c0d8129e835523",
+  "jar_sha256": "32b457cb59f5af55dae8b522de6241b19c4954ee7e6db5792721082a30acc1b6",
+  "limits_mib": {
+    "postgres": 320,
+    "java": 448,
+    "apache": 64
+  },
+  "cpu_quotas": {
+    "postgres": 0.5,
+    "java": 0.4,
+    "apache": 0.1
+  },
+  "status": "SUCCEEDED",
+  "owned_network": "tennis_budget_net_2dba7733",
+  "owned_container_names": [
+    "tennis_budget_db_2dba7733",
+    "tennis_budget_app_2dba7733",
+    "tennis_budget_proxy_2dba7733"
+  ],
+  "created_container_ids": [
+    "23ba1b9dcca74a42e2353ff86b42fd511a9dafc7ab97451a02fbf8b950ec4589",
+    "b6c1a4275578c5452dc171bc82068d73ad3f52962e8847214cc7c03e436c40e8",
+    "685e99d312dcdd3cf6497d661b1719cade788a84e2e0906eeeaa65e211898895"
+  ],
+  "performance": {
+    "/v1/visualizations/metadata?tour=ATP": {
+      "cold_ms": 258.9,
+      "warm_p50_ms": 75.07,
+      "warm_p95_ms": 283.3,
+      "warm_mean_ms": 85.27,
+      "samples": 20,
+      "maximum_response_bytes": 1312,
+      "sample": null,
+      "population": null,
+      "single_target_met": true
+    },
+    "/v1/visualizations/scatter?tour=ATP&rankingDate=2026-06-08&topN=100&x=height_cm&y=rank&color=hand": {
+      "cold_ms": 203.06,
+      "warm_p50_ms": 65.85,
+      "warm_p95_ms": 203.66,
+      "warm_mean_ms": 74.04,
+      "samples": 20,
+      "maximum_response_bytes": 10483,
+      "sample": {
+        "population": 100,
+        "valid": 99,
+        "excluded": 1,
+        "primaryReasons": [
+          {
+            "metric": "height_cm",
+            "code": "MISSING",
+            "count": 1
+          }
+        ]
+      },
+      "population": null,
+      "single_target_met": true
+    },
+    "/v1/visualizations/histogram?tour=ATP&rankingDate=2026-06-08&topN=100&metric=height_cm&bins=10": {
+      "cold_ms": 19.46,
+      "warm_p50_ms": 18.26,
+      "warm_p95_ms": 101.73,
+      "warm_mean_ms": 43.89,
+      "samples": 20,
+      "maximum_response_bytes": 1879,
+      "sample": {
+        "population": 100,
+        "valid": 99,
+        "excluded": 1,
+        "primaryReasons": [
+          {
+            "metric": "height_cm",
+            "code": "MISSING",
+            "count": 1
+          }
+        ]
+      },
+      "population": null,
+      "single_target_met": true
+    },
+    "/v1/visualizations/age-performance?tour=ATP&fromYear=2017&toYear=2026&surface=ALL": {
+      "cold_ms": 1435.49,
+      "warm_p50_ms": 61.08,
+      "warm_p95_ms": 100.78,
+      "warm_mean_ms": 64.63,
+      "samples": 20,
+      "maximum_response_bytes": 7208,
+      "sample": {
+        "population": 51682,
+        "valid": 51662,
+        "excluded": 20,
+        "reasons": [
+          {
+            "code": "AGE_MISSING",
+            "count": 20
+          }
+        ]
+      },
+      "population": null,
+      "single_target_met": true,
+      "concurrent_4": {
+        "requests": 16,
+        "p50_ms": 550.9,
+        "p95_ms": 1342.16,
+        "target_ms": 500,
+        "target_met": false
+      }
+    },
+    "/v1/visualizations/profile-performance?tour=ATP&fromYear=2017&toYear=2026&surface=ALL&limit=1000": {
+      "cold_ms": 2062.06,
+      "warm_p50_ms": 103.81,
+      "warm_p95_ms": 183.58,
+      "warm_mean_ms": 104.57,
+      "samples": 20,
+      "maximum_response_bytes": 1030665,
+      "sample": {
+        "population": 6982,
+        "inspected": 1000,
+        "valid": 999,
+        "excluded": 1,
+        "omitted": 5982,
+        "reasons": [
+          {
+            "code": "height_cm:MISSING",
+            "count": 1
+          }
+        ]
+      },
+      "population": null,
+      "single_target_met": true
+    },
+    "/v1/visualizations/correlations?tour=ATP&fromYear=2017&toYear=2026&surface=ALL&limit=1000": {
+      "cold_ms": 4071.31,
+      "warm_p50_ms": 59.02,
+      "warm_p95_ms": 89.94,
+      "warm_mean_ms": 66.81,
+      "samples": 20,
+      "maximum_response_bytes": 29073,
+      "sample": null,
+      "population": 6982,
+      "single_target_met": true,
+      "concurrent_4": {
+        "requests": 16,
+        "p50_ms": 578.35,
+        "p95_ms": 2588.29,
+        "target_ms": 500,
+        "target_met": false
+      }
+    },
+    "/v1/visualizations/age-performance?tour=WTA&fromYear=2017&toYear=2026&surface=ALL": {
+      "cold_ms": 2796.59,
+      "warm_p50_ms": 65.27,
+      "warm_p95_ms": 79.02,
+      "warm_mean_ms": 59.12,
+      "samples": 20,
+      "maximum_response_bytes": 7271,
+      "sample": {
+        "population": 47986,
+        "valid": 47969,
+        "excluded": 17,
+        "reasons": [
+          {
+            "code": "AGE_MISSING",
+            "count": 17
+          }
+        ]
+      },
+      "population": null,
+      "single_target_met": true
+    },
+    "/v1/visualizations/profile-performance?tour=WTA&fromYear=2017&toYear=2026&surface=ALL&limit=1000": {
+      "cold_ms": 1433.39,
+      "warm_p50_ms": 48.23,
+      "warm_p95_ms": 129.09,
+      "warm_mean_ms": 66.19,
+      "samples": 20,
+      "maximum_response_bytes": 1011603,
+      "sample": {
+        "population": 6656,
+        "inspected": 1000,
+        "valid": 900,
+        "excluded": 100,
+        "omitted": 5656,
+        "reasons": [
+          {
+            "code": "height_cm:MISSING",
+            "count": 100
+          }
+        ]
+      },
+      "population": null,
+      "single_target_met": true
+    },
+    "/v1/visualizations/profile-performance?tour=ATP&fromYear=2017&toYear=2026&surface=ALL&limit=500": {
+      "cold_ms": 1811.45,
+      "warm_p50_ms": 46.65,
+      "warm_p95_ms": 178.77,
+      "warm_mean_ms": 68.0,
+      "samples": 20,
+      "maximum_response_bytes": 540802,
+      "sample": {
+        "population": 6982,
+        "inspected": 500,
+        "valid": 500,
+        "excluded": 0,
+        "omitted": 6482,
+        "reasons": []
+      },
+      "population": null,
+      "single_target_met": true
+    },
+    "/v1/matchup-prediction/metadata?tour=ATP": {
+      "cold_ms": 62.66,
+      "warm_p50_ms": 71.22,
+      "warm_p95_ms": 98.4,
+      "warm_mean_ms": 63.08,
+      "samples": 20,
+      "maximum_response_bytes": 190,
+      "sample": null,
+      "population": null,
+      "single_target_met": true
+    },
+    "/v1/matchup-prediction?tour=ATP&first=103819&second=104745&asOf=2019-07-01&surface=Grass&bestOf=5": {
+      "cold_ms": 333.75,
+      "warm_p50_ms": 80.66,
+      "warm_p95_ms": 185.17,
+      "warm_mean_ms": 102.17,
+      "samples": 20,
+      "maximum_response_bytes": 3210,
+      "sample": null,
+      "population": null,
+      "single_target_met": true,
+      "prediction_sample": {
+        "available": true,
+        "asOf": "2019-07-01",
+        "historyBefore": "2019-06-10",
+        "prediction": {
+          "method": "ELO_AGE_HEIGHT",
+          "firstProbability": 0.5490749887942589,
+          "secondProbability": 0.45092501120574113,
+          "validation": {
+            "n": 4835,
+            "brier": 0.21508956622764444,
+            "logLoss": 0.6189696960342163,
+            "accuracy": 0.6564632885211996
+          }
+        }
+      },
+      "concurrent_4": {
+        "requests": 16,
+        "p50_ms": 506.27,
+        "p95_ms": 1002.39,
+        "target_ms": 500,
+        "target_met": false
+      }
+    },
+    "/v1/matchup-prediction?tour=ATP&first=206173&second=207989&asOf=2026-06-08&surface=Clay&bestOf=3": {
+      "cold_ms": 149.77,
+      "warm_p50_ms": 72.38,
+      "warm_p95_ms": 89.18,
+      "warm_mean_ms": 67.48,
+      "samples": 20,
+      "maximum_response_bytes": 3190,
+      "sample": null,
+      "population": null,
+      "single_target_met": true,
+      "prediction_sample": {
+        "available": true,
+        "asOf": "2026-06-08",
+        "historyBefore": "2026-05-18",
+        "prediction": {
+          "method": "ELO_AGE_HEIGHT",
+          "firstProbability": 0.5394672179829453,
+          "secondProbability": 0.4605327820170547,
+          "validation": {
+            "n": 4920,
+            "brier": 0.2167901085448108,
+            "logLoss": 0.6206655759054108,
+            "accuracy": 0.6420731707317073
+          }
+        }
+      },
+      "concurrent_4": {
+        "requests": 16,
+        "p50_ms": 447.06,
+        "p95_ms": 589.37,
+        "target_ms": 500,
+        "target_met": false
+      }
+    },
+    "/v1/matchup-prediction?tour=WTA&first=216347&second=214544&asOf=2026-06-08&surface=Clay&bestOf=3": {
+      "cold_ms": 80.94,
+      "warm_p50_ms": 66.5,
+      "warm_p95_ms": 139.63,
+      "warm_mean_ms": 69.5,
+      "samples": 20,
+      "maximum_response_bytes": 3190,
+      "sample": null,
+      "population": null,
+      "single_target_met": true,
+      "prediction_sample": {
+        "available": true,
+        "asOf": "2026-06-08",
+        "historyBefore": "2026-05-18",
+        "prediction": {
+          "method": "ELO_AGE_HEIGHT",
+          "firstProbability": 0.40986705774556415,
+          "secondProbability": 0.5901329422544359,
+          "validation": {
+            "n": 4496,
+            "brier": 0.21817428788329016,
+            "logLoss": 0.6248714209509519,
+            "accuracy": 0.6436832740213523
+          }
+        }
+      },
+      "concurrent_4": {
+        "requests": 16,
+        "p50_ms": 497.32,
+        "p95_ms": 810.37,
+        "target_ms": 500,
+        "target_met": false
+      }
+    }
+  },
+  "latency_target_met": false,
+  "latency_target_misses": [
+    "/v1/visualizations/age-performance?tour=ATP&fromYear=2017&toYear=2026&surface=ALL",
+    "/v1/visualizations/correlations?tour=ATP&fromYear=2017&toYear=2026&surface=ALL&limit=1000",
+    "/v1/matchup-prediction?tour=ATP&first=103819&second=104745&asOf=2019-07-01&surface=Grass&bestOf=5",
+    "/v1/matchup-prediction?tour=ATP&first=206173&second=207989&asOf=2026-06-08&surface=Clay&bestOf=3",
+    "/v1/matchup-prediction?tour=WTA&first=216347&second=214544&asOf=2026-06-08&surface=Clay&bestOf=3"
+  ],
+  "browser": {
+    "status": "PASSED",
+    "errors": [],
+    "plots": [
+      {
+        "view": "age",
+        "canvasCount": 1,
+        "sourceDisclosed": true
+      },
+      {
+        "view": "profiles",
+        "canvasCount": 4,
+        "sourceDisclosed": true
+      },
+      {
+        "view": "matchup",
+        "protected": true,
+        "source": "authenticated calculations separately verified"
+      }
+    ],
+    "security": "Apache CSP and self-hosted assets; public read-only research"
+  },
+  "container_stats": [
+    {
+      "BlockIO": "8.37GB / 7.48GB",
+      "CPUPerc": "0.08%",
+      "Container": "23ba1b9dcca74a42e2353ff86b42fd511a9dafc7ab97451a02fbf8b950ec4589",
+      "ID": "23ba1b9dcca7",
+      "MemPerc": "65.93%",
+      "MemUsage": "211MiB / 320MiB",
+      "Name": "tennis_budget_db_2dba7733",
+      "NetIO": "1.53MB / 2.71MB",
+      "PIDs": "11"
+    },
+    {
+      "BlockIO": "129MB / 201kB",
+      "CPUPerc": "0.33%",
+      "Container": "b6c1a4275578c5452dc171bc82068d73ad3f52962e8847214cc7c03e436c40e8",
+      "ID": "b6c1a4275578",
+      "MemPerc": "50.50%",
+      "MemUsage": "226.2MiB / 448MiB",
+      "Name": "tennis_budget_app_2dba7733",
+      "NetIO": "3.31MB / 59.7MB",
+      "PIDs": "33"
+    },
+    {
+      "BlockIO": "11.1MB / 4.1kB",
+      "CPUPerc": "0.01%",
+      "Container": "685e99d312dcdd3cf6497d661b1719cade788a84e2e0906eeeaa65e211898895",
+      "ID": "685e99d312dc",
+      "MemPerc": "12.16%",
+      "MemUsage": "7.781MiB / 64MiB",
+      "Name": "tennis_budget_proxy_2dba7733",
+      "NetIO": "58.6MB / 60.8MB",
+      "PIDs": "13"
+    }
+  ],
+  "cgroup": [
+    {
+      "container": "23ba1b9dcca7",
+      "memory_peak_bytes": 335544320,
+      "events_and_cpu": [
+        "low 0",
+        "high 0",
+        "max 23175",
+        "oom 0",
+        "oom_kill 0",
+        "oom_group_kill 0",
+        "usage_usec 117038402",
+        "user_usec 89086273",
+        "system_usec 27952128",
+        "nice_usec 0",
+        "nr_periods 3278",
+        "nr_throttled 2016",
+        "throttled_usec 195283969",
+        "nr_bursts 0",
+        "burst_usec 0"
+      ]
+    },
+    {
+      "container": "b6c1a4275578",
+      "memory_peak_bytes": 324321280,
+      "events_and_cpu": [
+        "low 0",
+        "high 0",
+        "max 0",
+        "oom 0",
+        "oom_kill 0",
+        "oom_group_kill 0",
+        "usage_usec 23625172",
+        "user_usec 21232698",
+        "system_usec 2392473",
+        "nice_usec 0",
+        "nr_periods 1072",
+        "nr_throttled 509",
+        "throttled_usec 80859781",
+        "nr_bursts 0",
+        "burst_usec 0"
+      ]
+    },
+    {
+      "container": "685e99d312dc",
+      "memory_peak_bytes": 15388672,
+      "events_and_cpu": [
+        "low 0",
+        "high 0",
+        "max 0",
+        "oom 0",
+        "oom_kill 0",
+        "oom_group_kill 0",
+        "usage_usec 949283",
+        "user_usec 244660",
+        "system_usec 704623",
+        "nice_usec 0",
+        "nr_periods 356",
+        "nr_throttled 29",
+        "throttled_usec 2239372",
+        "nr_bursts 0",
+        "burst_usec 0"
+      ]
+    }
+  ],
+  "base": "http://127.0.0.1:58695/tennis/api",
+  "cleanup_pending": false,
+  "cleanup_resources": [],
+  "application_commit": "67d8996",
+  "baseline_backend_tests": 454,
+  "baseline_frontend_tests": 73,
+  "baseline_browser_tests": 21,
+  "model_contract_tests": 3,
+  "acceptance_gate_tests": 4,
+  "remote_ci_status": "PENDING_AUTHENTICATION",
+  "remote_repository": "https://github.com/shuminchang/tennis-analytics",
+  "functional_resource_acceptance": "PASSED",
+  "latency_slo": "NOT_MET",
+  "measurement_scope": "isolated restored real backup; 832 MiB / 1 CPU service quotas, not whole-host or production acceptance",
+  "tool_sha256": {
+    "scripts/ops/benchmark.py": "de7d627c96a512a533077de3caa6988e4da7cf6a55cfbf2ae371aaa62899658e",
+    "scripts/ops/budget_stack.py": "52618984e4c22320979d19e5b1852f6a26f77b60c2853e6694bce874ef3365fe",
+    "scripts/test/research_proxy_browser.mjs": "608480747db15dce6b1d2ea77e563458ec6ffd9628f9feefaae7315341cb5bd8",
+    "scripts/test/release_report_checks.py": "8b917317bc69153fe7a03688e1835bd042d060951c2d4728b211d43916486774"
+  }
+}
