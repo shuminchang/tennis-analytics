@@ -1,0 +1,2 @@
+# Offline training and isolated browser acceptance only; not a server dependency.
+numpy==2.0.1

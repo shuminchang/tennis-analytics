@@ -33,3 +33,6 @@ __pycache__/
 # Local verification logs and database backups
 .local/verification/
 .local/backups/
+
+# Offline matchup training inputs (derived from local candidate data)
+.local/model-training/

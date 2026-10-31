@@ -45,7 +45,7 @@ def wait_url(url, process):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--spec", choices=["player-search.spec.ts", "visualizations.spec.ts", "research.spec.ts", "ui-refinements.spec.ts"])
+    parser.add_argument("--spec", choices=["player-search.spec.ts", "visualizations.spec.ts", "research.spec.ts", "ui-refinements.spec.ts", "matchup.spec.ts"])
     options = parser.parse_args()
     run("timeout", "15s", "docker", "version")
     if not JAR.exists():
@@ -116,6 +116,12 @@ def main():
             cli('ingestion.MatchImportCli', str(repo), 'https://example.com/tennis', sha, str(archive), 'a' * 40, env=env, output=log)
         with (temp / 'elo.log').open('w') as log:
             cli('features.EloCli', env=env, output=log)
+        # Build a source-compatible baseline artifact from this disposable fixture only.
+        # Small samples intentionally cannot fit an augmented model.
+        with (temp / 'model.log').open('w') as log:
+            cli('prediction.MatchupExportCli', str(temp / 'model.csv'), str(temp / 'model-meta.json'), env=env, output=log)
+            run('python3', 'scripts/model/train_matchup.py', str(temp / 'model.csv'), str(temp / 'model-meta.json'), str(temp / 'model.json'), output=log)
+        env['APP_MATCHUP_MODEL'] = (temp / 'model.json').as_uri()
         # Synthetic accounts exist only in this disposable container.
         crypto = sorted((Path.home() / '.m2/repository/org/springframework/security/spring-security-crypto').glob('*/spring-security-crypto-*.jar'))[-1]
         logging = sorted((Path.home() / '.m2/repository/org/springframework/spring-jcl').glob('*/spring-jcl-*.jar'))[-1]

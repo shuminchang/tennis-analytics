@@ -1,0 +1,2700 @@
+{
+  "schema": 1,
+  "version": "matchup-v1",
+  "featureVersion": "prior-date-embargo21-v1",
+  "embargoDays": 21,
+  "features": [
+    "overall_elo_delta_400",
+    "surface_elo_delta_400",
+    "age_delta_10",
+    "age_squared_delta_100",
+    "height_delta_10",
+    "best_of_five_elo_delta_400"
+  ],
+  "source": {
+    "playersAndRankings": {
+      "repositoryUrl": "https://github.com/Aneeshers/tennis-sackmann-archive",
+      "snapshotSha": "83733587353df8a41f2fd4f516147d5aa83f5a8d",
+      "playerRunId": 1,
+      "rankingRunId": 3,
+      "matchRunId": null,
+      "playerRules": {
+        "transformSha": "4f3e79d898885d88ff0e91b380e1e70c45db2815e8c52afbcf2b1fbf4a104311",
+        "qualitySha": "4f3e79d898885d88ff0e91b380e1e70c45db2815e8c52afbcf2b1fbf4a104311",
+        "scopeSha": "4f3e79d898885d88ff0e91b380e1e70c45db2815e8c52afbcf2b1fbf4a104311"
+      },
+      "rankingRules": {
+        "transformSha": "7fe8ca9d915dc90a2fdbcc358502cc8e99fb812a4caecae6ca7c7bad2af2b50d",
+        "qualitySha": "7fe8ca9d915dc90a2fdbcc358502cc8e99fb812a4caecae6ca7c7bad2af2b50d",
+        "scopeSha": "7fe8ca9d915dc90a2fdbcc358502cc8e99fb812a4caecae6ca7c7bad2af2b50d"
+      },
+      "qualityRevision": "deeced641062d1bb4785b0976de49110"
+    },
+    "matchRunId": 4,
+    "matchRules": {
+      "transformSha": "3ce10e075c1a94bb7f6b71dd510a0c490f389beb331b0da89736fffefd41e449",
+      "qualitySha": "3ce10e075c1a94bb7f6b71dd510a0c490f389beb331b0da89736fffefd41e449",
+      "scopeSha": "c7bc8d40a918b882dff1cf4f640f775f4485c73ca01202fda480a75c175b9d5d"
+    },
+    "qualityRevision": "8ce66f36196e981caf1192b7da461daa",
+    "readModel": "v_stat_matches-live"
+  },
+  "eloInputSha": "96b65961bb6a53d9c9e2e07a423b73f0104fdd72e51002344b7fd7264a56c954",
+  "eloRulesSha": "18bb0bf0ba712550cc60926c5a7de3553a099cd9ddedcee7d0633c1e5c209df4",
+  "datasetSha256": "825ab46f594089c4a77052d6741774493a98cd2c618973c914fd5a1469e59eaf",
+  "sourceLastDate": "2026-05-25",
+  "sourceMatches": {
+    "ATP": 197404,
+    "WTA": 89370
+  },
+  "eloReplayMaxError": 2.2737367544323206e-13,
+  "orientation": "smaller source player identity first, no intercept; swapping negates every feature",
+  "minPriorMatches": 10,
+  "maxInactiveDays": 365,
+  "maxPhysicalObservationDays": 365,
+  "minSurfaceMatches": 5,
+  "maxSurfaceInactiveDays": 730,
+  "minimumTrainingRows": 1000,
+  "minimumValidationRows": 200,
+  "models": {
+    "ATP": [
+      {
+        "year": 2005,
+        "availableFrom": "2005-01-01",
+        "trainFrom": "1997-01-01",
+        "trainThrough": "2002-12-10",
+        "validationFrom": "2003-01-01",
+        "validationThrough": "2004-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.866675345626878,
+          0.6867618566376616,
+          0.0,
+          0.0,
+          0.0,
+          0.44550421835920795
+        ],
+        "augmentedCoefficients": [
+          0.8472509676079083,
+          0.7267236079332944,
+          -0.38122206722502805,
+          0.06538870686537339,
+          0.03591316452590803,
+          0.4528912888605557
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 16867,
+        "trainingCompleteCases": 16754,
+        "validation": {
+          "baseline": {
+            "n": 5171,
+            "brier": 0.22364086894174365,
+            "logLoss": 0.6413865605698595,
+            "accuracy": 0.6426223167665829
+          },
+          "elo": {
+            "n": 5171,
+            "brier": 0.21606200272266116,
+            "logLoss": 0.620633841145101,
+            "accuracy": 0.6511313092245213
+          },
+          "selected": {
+            "n": 5171,
+            "brier": 0.2144394041239966,
+            "logLoss": 0.61677651621987,
+            "accuracy": 0.6575130535679753
+          },
+          "completeCases": 5137,
+          "augmentedCompleteCases": {
+            "n": 5137,
+            "brier": 0.21458865191850382,
+            "logLoss": 0.6170927489856695,
+            "accuracy": 0.6566089157095581
+          }
+        }
+      },
+      {
+        "year": 2006,
+        "availableFrom": "2006-01-01",
+        "trainFrom": "1998-01-01",
+        "trainThrough": "2003-12-10",
+        "validationFrom": "2004-01-01",
+        "validationThrough": "2005-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.8373359118405489,
+          0.719537744764281,
+          0.0,
+          0.0,
+          0.0,
+          0.5209509490462632
+        ],
+        "augmentedCoefficients": [
+          0.8083448448004955,
+          0.7652247449281767,
+          -0.35596747659615374,
+          0.12453437622129529,
+          0.03143212649124672,
+          0.5293390793428775
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 16501,
+        "trainingCompleteCases": 16405,
+        "validation": {
+          "baseline": {
+            "n": 5382,
+            "brier": 0.21965574361594628,
+            "logLoss": 0.6327932650636456,
+            "accuracy": 0.6475287997027127
+          },
+          "elo": {
+            "n": 5382,
+            "brier": 0.21311678919731095,
+            "logLoss": 0.6139428799103845,
+            "accuracy": 0.6579338535860275
+          },
+          "selected": {
+            "n": 5382,
+            "brier": 0.21041240332037142,
+            "logLoss": 0.6075083679620628,
+            "accuracy": 0.6610925306577481
+          },
+          "completeCases": 5340,
+          "augmentedCompleteCases": {
+            "n": 5340,
+            "brier": 0.21053735410792884,
+            "logLoss": 0.6078125178839725,
+            "accuracy": 0.6608614232209737
+          }
+        }
+      },
+      {
+        "year": 2007,
+        "availableFrom": "2007-01-01",
+        "trainFrom": "1999-01-01",
+        "trainThrough": "2004-12-10",
+        "validationFrom": "2005-01-01",
+        "validationThrough": "2006-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.8178598558579735,
+          0.7128681756975341,
+          0.0,
+          0.0,
+          0.0,
+          0.5736315331317784
+        ],
+        "augmentedCoefficients": [
+          0.7758371400592031,
+          0.7702176265656538,
+          -0.3926623262819885,
+          0.13529145281978253,
+          0.0377296594175178,
+          0.5902446399843619
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 16216,
+        "trainingCompleteCases": 16119,
+        "validation": {
+          "baseline": {
+            "n": 5341,
+            "brier": 0.2151246096943897,
+            "logLoss": 0.6207404241100491,
+            "accuracy": 0.6571803033139861
+          },
+          "elo": {
+            "n": 5341,
+            "brier": 0.20967778531886774,
+            "logLoss": 0.6055749252583567,
+            "accuracy": 0.6657929226736566
+          },
+          "selected": {
+            "n": 5341,
+            "brier": 0.20713150594764512,
+            "logLoss": 0.5994536999977075,
+            "accuracy": 0.6678524620857518
+          },
+          "completeCases": 5289,
+          "augmentedCompleteCases": {
+            "n": 5289,
+            "brier": 0.20743155479483819,
+            "logLoss": 0.6001553124888538,
+            "accuracy": 0.667233881641142
+          }
+        }
+      },
+      {
+        "year": 2008,
+        "availableFrom": "2008-01-01",
+        "trainFrom": "2000-01-01",
+        "trainThrough": "2005-12-10",
+        "validationFrom": "2006-01-01",
+        "validationThrough": "2007-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.8636522912545482,
+          0.7772537603074404,
+          0.0,
+          0.0,
+          0.0,
+          0.5107582743297754
+        ],
+        "augmentedCoefficients": [
+          0.8172649350665461,
+          0.826810158857551,
+          -0.395338110501271,
+          0.1915159766418721,
+          0.023160051327328384,
+          0.48861652323495114
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.001,
+        "trainingN": 16153,
+        "trainingCompleteCases": 16049,
+        "validation": {
+          "baseline": {
+            "n": 5249,
+            "brier": 0.21538314973915948,
+            "logLoss": 0.6220882380381171,
+            "accuracy": 0.6606972756715564
+          },
+          "elo": {
+            "n": 5249,
+            "brier": 0.20911537573305533,
+            "logLoss": 0.604063127189494,
+            "accuracy": 0.6671746999428463
+          },
+          "selected": {
+            "n": 5249,
+            "brier": 0.20742115732875974,
+            "logLoss": 0.5997840005556143,
+            "accuracy": 0.6692703372070871
+          },
+          "completeCases": 5189,
+          "augmentedCompleteCases": {
+            "n": 5189,
+            "brier": 0.20788566187623828,
+            "logLoss": 0.6008243517388155,
+            "accuracy": 0.6679514357294276
+          }
+        }
+      },
+      {
+        "year": 2009,
+        "availableFrom": "2009-01-01",
+        "trainFrom": "2001-01-01",
+        "trainThrough": "2006-12-10",
+        "validationFrom": "2007-01-01",
+        "validationThrough": "2008-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.8921807655862762,
+          0.7749838992413498,
+          0.0,
+          0.0,
+          0.0,
+          0.47051549906101653
+        ],
+        "augmentedCoefficients": [
+          0.8393118678462971,
+          0.8333376346831173,
+          -0.4099758753142179,
+          0.16055878264961768,
+          0.016488194079668415,
+          0.48291958641759386
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 16028,
+        "trainingCompleteCases": 15911,
+        "validation": {
+          "baseline": {
+            "n": 5180,
+            "brier": 0.21411291568258997,
+            "logLoss": 0.620413648449569,
+            "accuracy": 0.6664092664092665
+          },
+          "elo": {
+            "n": 5180,
+            "brier": 0.20838327911324675,
+            "logLoss": 0.6025370996423638,
+            "accuracy": 0.6745173745173745
+          },
+          "selected": {
+            "n": 5180,
+            "brier": 0.20582625089229256,
+            "logLoss": 0.5960936751704536,
+            "accuracy": 0.6752895752895753
+          },
+          "completeCases": 5125,
+          "augmentedCompleteCases": {
+            "n": 5125,
+            "brier": 0.20592929649359515,
+            "logLoss": 0.59628230901939,
+            "accuracy": 0.6749268292682927
+          }
+        }
+      },
+      {
+        "year": 2010,
+        "availableFrom": "2010-01-01",
+        "trainFrom": "2002-01-01",
+        "trainThrough": "2007-12-10",
+        "validationFrom": "2008-01-01",
+        "validationThrough": "2009-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.885113014260253,
+          0.7658773153397155,
+          0.0,
+          0.0,
+          0.0,
+          0.5176885075350365
+        ],
+        "augmentedCoefficients": [
+          0.8347143363485202,
+          0.8159261689347101,
+          -0.39454444905907665,
+          0.2223774154463625,
+          0.02043980249934415,
+          0.5267809257051974
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 15806,
+        "trainingCompleteCases": 15676,
+        "validation": {
+          "baseline": {
+            "n": 5104,
+            "brier": 0.20719506282839087,
+            "logLoss": 0.6012766194243643,
+            "accuracy": 0.6788793103448276
+          },
+          "elo": {
+            "n": 5104,
+            "brier": 0.20302340636198105,
+            "logLoss": 0.5893421704676036,
+            "accuracy": 0.6802507836990596
+          },
+          "selected": {
+            "n": 5104,
+            "brier": 0.20099118387369624,
+            "logLoss": 0.5840459743850992,
+            "accuracy": 0.6769200626959248
+          },
+          "completeCases": 5063,
+          "augmentedCompleteCases": {
+            "n": 5063,
+            "brier": 0.2010484932926373,
+            "logLoss": 0.5841500363652574,
+            "accuracy": 0.6766739087497531
+          }
+        }
+      },
+      {
+        "year": 2011,
+        "availableFrom": "2011-01-01",
+        "trainFrom": "2003-01-01",
+        "trainThrough": "2008-12-10",
+        "validationFrom": "2009-01-01",
+        "validationThrough": "2010-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.9125659155154675,
+          0.7468243840799954,
+          0.0,
+          0.0,
+          0.0,
+          0.5855142493143686
+        ],
+        "augmentedCoefficients": [
+          0.8598307140959288,
+          0.7892258219406124,
+          -0.41923879732635777,
+          0.1810260013801636,
+          0.025585777394666012,
+          0.5538519245071698
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.001,
+        "trainingN": 15692,
+        "trainingCompleteCases": 15551,
+        "validation": {
+          "baseline": {
+            "n": 5124,
+            "brier": 0.20698349452029147,
+            "logLoss": 0.6026036270764031,
+            "accuracy": 0.6807181889149102
+          },
+          "elo": {
+            "n": 5124,
+            "brier": 0.20243972807931443,
+            "logLoss": 0.5890120940737545,
+            "accuracy": 0.6816939890710383
+          },
+          "selected": {
+            "n": 5124,
+            "brier": 0.20143047834568645,
+            "logLoss": 0.5860673522856227,
+            "accuracy": 0.6814988290398126
+          },
+          "completeCases": 5092,
+          "augmentedCompleteCases": {
+            "n": 5092,
+            "brier": 0.2016827006210467,
+            "logLoss": 0.5866419613314139,
+            "accuracy": 0.6808719560094265
+          }
+        }
+      },
+      {
+        "year": 2012,
+        "availableFrom": "2012-01-01",
+        "trainFrom": "2004-01-01",
+        "trainThrough": "2009-12-10",
+        "validationFrom": "2010-01-01",
+        "validationThrough": "2011-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.9543285933660408,
+          0.7244853812425558,
+          0.0,
+          0.0,
+          0.0,
+          0.5751364427068141
+        ],
+        "augmentedCoefficients": [
+          0.9029979429923437,
+          0.7674558640753636,
+          -0.4324157467781048,
+          0.14437525936495044,
+          0.03233385309447066,
+          0.580749476083303
+        ],
+        "eloRidge": 0.001,
+        "augmentedRidge": 0.001,
+        "trainingN": 15809,
+        "trainingCompleteCases": 15666,
+        "validation": {
+          "baseline": {
+            "n": 5051,
+            "brier": 0.2085461995659088,
+            "logLoss": 0.6071539667083035,
+            "accuracy": 0.6774896060186102
+          },
+          "elo": {
+            "n": 5051,
+            "brier": 0.2036852223953665,
+            "logLoss": 0.5921742017025226,
+            "accuracy": 0.6850128687388636
+          },
+          "selected": {
+            "n": 5051,
+            "brier": 0.20241436215357372,
+            "logLoss": 0.5888311348885574,
+            "accuracy": 0.6840229657493566
+          },
+          "completeCases": 5020,
+          "augmentedCompleteCases": {
+            "n": 5020,
+            "brier": 0.20236890322236506,
+            "logLoss": 0.5887270759111395,
+            "accuracy": 0.6840637450199203
+          }
+        }
+      },
+      {
+        "year": 2013,
+        "availableFrom": "2013-01-01",
+        "trainFrom": "2005-01-01",
+        "trainThrough": "2010-12-10",
+        "validationFrom": "2011-01-01",
+        "validationThrough": "2012-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.9783887495904279,
+          0.7121067330789072,
+          0.0,
+          0.0,
+          0.0,
+          0.5829390684293588
+        ],
+        "augmentedCoefficients": [
+          0.9214212557600556,
+          0.7558459500618395,
+          -0.44578455425907143,
+          0.09367783432057256,
+          0.03746835395473035,
+          0.5900080078166339
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 15645,
+        "trainingCompleteCases": 15506,
+        "validation": {
+          "baseline": {
+            "n": 5123,
+            "brier": 0.20136029570229827,
+            "logLoss": 0.5874545229923779,
+            "accuracy": 0.6913917626390786
+          },
+          "elo": {
+            "n": 5123,
+            "brier": 0.19727277050833875,
+            "logLoss": 0.5760454129176922,
+            "accuracy": 0.6968573101698223
+          },
+          "selected": {
+            "n": 5123,
+            "brier": 0.1958929530686362,
+            "logLoss": 0.5725734205974014,
+            "accuracy": 0.6964669139176264
+          },
+          "completeCases": 5095,
+          "augmentedCompleteCases": {
+            "n": 5095,
+            "brier": 0.19572197619048978,
+            "logLoss": 0.5721885708348734,
+            "accuracy": 0.6969578017664377
+          }
+        }
+      },
+      {
+        "year": 2014,
+        "availableFrom": "2014-01-01",
+        "trainFrom": "2006-01-01",
+        "trainThrough": "2011-12-10",
+        "validationFrom": "2012-01-01",
+        "validationThrough": "2013-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.9967521113296053,
+          0.6945374615409752,
+          0.0,
+          0.0,
+          0.0,
+          0.5779411481566351
+        ],
+        "augmentedCoefficients": [
+          0.9457932581610362,
+          0.7320112033053957,
+          -0.4122530310708337,
+          -0.005418248105040082,
+          0.05707045808531121,
+          0.5841412396517859
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 15478,
+        "trainingCompleteCases": 15346,
+        "validation": {
+          "baseline": {
+            "n": 5050,
+            "brier": 0.20367940859103517,
+            "logLoss": 0.5939417654775518,
+            "accuracy": 0.6835643564356436
+          },
+          "elo": {
+            "n": 5050,
+            "brier": 0.19908659875516316,
+            "logLoss": 0.5804826513509405,
+            "accuracy": 0.6877227722772277
+          },
+          "selected": {
+            "n": 5050,
+            "brier": 0.19841853831359826,
+            "logLoss": 0.5785181969478862,
+            "accuracy": 0.6857425742574258
+          },
+          "completeCases": 5028,
+          "augmentedCompleteCases": {
+            "n": 5028,
+            "brier": 0.19835661926004988,
+            "logLoss": 0.5783808201458656,
+            "accuracy": 0.6861575178997613
+          }
+        }
+      },
+      {
+        "year": 2015,
+        "availableFrom": "2015-01-01",
+        "trainFrom": "2007-01-01",
+        "trainThrough": "2012-12-10",
+        "validationFrom": "2013-01-01",
+        "validationThrough": "2014-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.8898413840906282,
+          0.7029879143452121,
+          0.0,
+          0.0,
+          0.0,
+          0.3920126137846781
+        ],
+        "augmentedCoefficients": [
+          0.9511058006264741,
+          0.7568258455449864,
+          -0.40457377213536816,
+          0.01619243113894501,
+          0.06037397178477571,
+          0.584527430557005
+        ],
+        "eloRidge": 0.01,
+        "augmentedRidge": 0.001,
+        "trainingN": 15427,
+        "trainingCompleteCases": 15312,
+        "validation": {
+          "baseline": {
+            "n": 4832,
+            "brier": 0.20992750285570005,
+            "logLoss": 0.6097896493853812,
+            "accuracy": 0.6682533112582781
+          },
+          "elo": {
+            "n": 4832,
+            "brier": 0.20470168219329063,
+            "logLoss": 0.5934078320011552,
+            "accuracy": 0.6730132450331126
+          },
+          "selected": {
+            "n": 4832,
+            "brier": 0.20422434702888098,
+            "logLoss": 0.5916911011672114,
+            "accuracy": 0.6738410596026491
+          },
+          "completeCases": 4808,
+          "augmentedCompleteCases": {
+            "n": 4808,
+            "brier": 0.20402849299071119,
+            "logLoss": 0.5912657374250087,
+            "accuracy": 0.6747088186356073
+          }
+        }
+      },
+      {
+        "year": 2016,
+        "availableFrom": "2016-01-01",
+        "trainFrom": "2008-01-01",
+        "trainThrough": "2013-12-10",
+        "validationFrom": "2014-01-01",
+        "validationThrough": "2015-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.0004822135516063,
+          0.6926965164917871,
+          0.0,
+          0.0,
+          0.0,
+          0.5835606095019725
+        ],
+        "augmentedCoefficients": [
+          0.9732617045926051,
+          0.7241171470026024,
+          -0.3594715087991009,
+          -0.005830330120431903,
+          0.07085271443802,
+          0.5841881804853639
+        ],
+        "eloRidge": 0.001,
+        "augmentedRidge": 0.001,
+        "trainingN": 15205,
+        "trainingCompleteCases": 15111,
+        "validation": {
+          "baseline": {
+            "n": 4868,
+            "brier": 0.20643595146843208,
+            "logLoss": 0.599720665478762,
+            "accuracy": 0.671733771569433
+          },
+          "elo": {
+            "n": 4868,
+            "brier": 0.202397334622743,
+            "logLoss": 0.5874835962912488,
+            "accuracy": 0.678923582580115
+          },
+          "selected": {
+            "n": 4868,
+            "brier": 0.2015168390750913,
+            "logLoss": 0.5853345145089792,
+            "accuracy": 0.682621199671323
+          },
+          "completeCases": 4842,
+          "augmentedCompleteCases": {
+            "n": 4842,
+            "brier": 0.2013295830582342,
+            "logLoss": 0.5849354013584833,
+            "accuracy": 0.6831887649731516
+          }
+        }
+      },
+      {
+        "year": 2017,
+        "availableFrom": "2017-01-01",
+        "trainFrom": "2009-01-01",
+        "trainThrough": "2014-12-10",
+        "validationFrom": "2015-01-01",
+        "validationThrough": "2016-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.9769069499968287,
+          0.7187405365351683,
+          0.0,
+          0.0,
+          0.0,
+          0.6017084604589964
+        ],
+        "augmentedCoefficients": [
+          0.9598826517839055,
+          0.7449814152711565,
+          -0.3401263208457134,
+          0.0008820967268933488,
+          0.05718102516291908,
+          0.6113068434125459
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 15156,
+        "trainingCompleteCases": 15072,
+        "validation": {
+          "baseline": {
+            "n": 4991,
+            "brier": 0.20590837935280557,
+            "logLoss": 0.5992334997773062,
+            "accuracy": 0.6734121418553396
+          },
+          "elo": {
+            "n": 4991,
+            "brier": 0.20182075110303369,
+            "logLoss": 0.5870431498737251,
+            "accuracy": 0.6820276497695853
+          },
+          "selected": {
+            "n": 4991,
+            "brier": 0.20057355202775415,
+            "logLoss": 0.5841932494492268,
+            "accuracy": 0.6852334201562813
+          },
+          "completeCases": 4976,
+          "augmentedCompleteCases": {
+            "n": 4976,
+            "brier": 0.20045742224499935,
+            "logLoss": 0.5839402234613091,
+            "accuracy": 0.6854903536977492
+          }
+        }
+      },
+      {
+        "year": 2018,
+        "availableFrom": "2018-01-01",
+        "trainFrom": "2010-01-01",
+        "trainThrough": "2015-12-10",
+        "validationFrom": "2016-01-01",
+        "validationThrough": "2017-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.9681229882392388,
+          0.7162880774696915,
+          0.0,
+          0.0,
+          0.0,
+          0.5009656192229611
+        ],
+        "augmentedCoefficients": [
+          0.9634031335651371,
+          0.7454742887708744,
+          -0.30612905814748903,
+          0.014478377908574286,
+          0.053016752399542906,
+          0.5080372561913381
+        ],
+        "eloRidge": 0.001,
+        "augmentedRidge": 0.001,
+        "trainingN": 15035,
+        "trainingCompleteCases": 14956,
+        "validation": {
+          "baseline": {
+            "n": 4892,
+            "brier": 0.21308243090927492,
+            "logLoss": 0.6191080653239778,
+            "accuracy": 0.6621013900245298
+          },
+          "elo": {
+            "n": 4892,
+            "brier": 0.207800191055066,
+            "logLoss": 0.6022039082474246,
+            "accuracy": 0.6723221586263287
+          },
+          "selected": {
+            "n": 4892,
+            "brier": 0.2064337464722814,
+            "logLoss": 0.599001130853561,
+            "accuracy": 0.6721177432542927
+          },
+          "completeCases": 4885,
+          "augmentedCompleteCases": {
+            "n": 4885,
+            "brier": 0.20625088483570678,
+            "logLoss": 0.5985620359835304,
+            "accuracy": 0.6722620266120778
+          }
+        }
+      },
+      {
+        "year": 2019,
+        "availableFrom": "2019-01-01",
+        "trainFrom": "2011-01-01",
+        "trainThrough": "2016-12-10",
+        "validationFrom": "2017-01-01",
+        "validationThrough": "2018-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.8721996079009732,
+          0.6995600029380852,
+          0.0,
+          0.0,
+          0.0,
+          0.39588293664488095
+        ],
+        "augmentedCoefficients": [
+          0.8740648039069187,
+          0.718674705676974,
+          -0.24021025212819555,
+          0.024939088938403357,
+          0.06100262349913419,
+          0.3981751061629329
+        ],
+        "eloRidge": 0.01,
+        "augmentedRidge": 0.01,
+        "trainingN": 15023,
+        "trainingCompleteCases": 14956,
+        "validation": {
+          "baseline": {
+            "n": 4835,
+            "brier": 0.2237085735903734,
+            "logLoss": 0.6452678894306026,
+            "accuracy": 0.6407445708376422
+          },
+          "elo": {
+            "n": 4835,
+            "brier": 0.2169364486479553,
+            "logLoss": 0.6230846193171972,
+            "accuracy": 0.6506721820062048
+          },
+          "selected": {
+            "n": 4835,
+            "brier": 0.21508956622764444,
+            "logLoss": 0.6189696960342163,
+            "accuracy": 0.6564632885211996
+          },
+          "completeCases": 4824,
+          "augmentedCompleteCases": {
+            "n": 4824,
+            "brier": 0.21508795481008214,
+            "logLoss": 0.6189369323853888,
+            "accuracy": 0.6560945273631841
+          }
+        }
+      },
+      {
+        "year": 2020,
+        "availableFrom": "2020-01-01",
+        "trainFrom": "2012-01-01",
+        "trainThrough": "2017-12-10",
+        "validationFrom": "2018-01-01",
+        "validationThrough": "2019-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.8543767272767948,
+          0.6692156081765315,
+          0.0,
+          0.0,
+          0.0,
+          0.41024609138348905
+        ],
+        "augmentedCoefficients": [
+          0.8580124013684093,
+          0.6906605055262972,
+          -0.22571264487777606,
+          -0.016964161840811436,
+          0.04382162008088151,
+          0.41184154311997223
+        ],
+        "eloRidge": 0.01,
+        "augmentedRidge": 0.01,
+        "trainingN": 14876,
+        "trainingCompleteCases": 14821,
+        "validation": {
+          "baseline": {
+            "n": 4841,
+            "brier": 0.2289455652678277,
+            "logLoss": 0.6562392897641864,
+            "accuracy": 0.6314810989464986
+          },
+          "elo": {
+            "n": 4841,
+            "brier": 0.22121391661990322,
+            "logLoss": 0.6322445297244773,
+            "accuracy": 0.6424292501549267
+          },
+          "selected": {
+            "n": 4841,
+            "brier": 0.2190043662821852,
+            "logLoss": 0.62745525950116,
+            "accuracy": 0.6492460235488535
+          },
+          "completeCases": 4834,
+          "augmentedCompleteCases": {
+            "n": 4834,
+            "brier": 0.21907603662923572,
+            "logLoss": 0.6276040720431094,
+            "accuracy": 0.6489449731071576
+          }
+        }
+      },
+      {
+        "year": 2021,
+        "availableFrom": "2021-01-01",
+        "trainFrom": "2013-01-01",
+        "trainThrough": "2018-12-10",
+        "validationFrom": "2019-01-01",
+        "validationThrough": "2020-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.9025730852035921,
+          0.6028928799342319,
+          0.0,
+          0.0,
+          0.0,
+          0.6574714520695127
+        ],
+        "augmentedCoefficients": [
+          0.9096572085065994,
+          0.6483532224144866,
+          -0.2817997548451935,
+          -0.022369942944062093,
+          0.04381345491087263,
+          0.7077037998675252
+        ],
+        "eloRidge": 0.001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 14658,
+        "trainingCompleteCases": 14608,
+        "validation": {
+          "baseline": {
+            "n": 3501,
+            "brier": 0.22754554723328493,
+            "logLoss": 0.6493927592664737,
+            "accuracy": 0.6349614395886889
+          },
+          "elo": {
+            "n": 3501,
+            "brier": 0.21946012473065724,
+            "logLoss": 0.6269387973290769,
+            "accuracy": 0.646386746643816
+          },
+          "selected": {
+            "n": 3501,
+            "brier": 0.21708530812531857,
+            "logLoss": 0.621886102412024,
+            "accuracy": 0.6441016852327907
+          },
+          "completeCases": 3499,
+          "augmentedCompleteCases": {
+            "n": 3499,
+            "brier": 0.217193816156639,
+            "logLoss": 0.6221443303693255,
+            "accuracy": 0.6438982566447556
+          }
+        }
+      },
+      {
+        "year": 2022,
+        "availableFrom": "2022-01-01",
+        "trainFrom": "2014-01-01",
+        "trainThrough": "2019-12-10",
+        "validationFrom": "2020-01-01",
+        "validationThrough": "2021-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.8848709944388592,
+          0.5972515255092129,
+          0.0,
+          0.0,
+          0.0,
+          0.642638583233444
+        ],
+        "augmentedCoefficients": [
+          0.9014669980502462,
+          0.6487417052589396,
+          -0.3121333837550464,
+          0.03474797468184147,
+          0.027757982042405652,
+          0.6956710456048395
+        ],
+        "eloRidge": 0.001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 14601,
+        "trainingCompleteCases": 14561,
+        "validation": {
+          "baseline": {
+            "n": 3383,
+            "brier": 0.22321837249568152,
+            "logLoss": 0.6372742580998104,
+            "accuracy": 0.6405557197753473
+          },
+          "elo": {
+            "n": 3383,
+            "brier": 0.21799119620330729,
+            "logLoss": 0.6229116765043435,
+            "accuracy": 0.6390777416494235
+          },
+          "selected": {
+            "n": 3383,
+            "brier": 0.21405735862395225,
+            "logLoss": 0.6143931959668684,
+            "accuracy": 0.6497191841560744
+          },
+          "completeCases": 3381,
+          "augmentedCompleteCases": {
+            "n": 3381,
+            "brier": 0.21416712465622006,
+            "logLoss": 0.6146533097937065,
+            "accuracy": 0.6495119787045253
+          }
+        }
+      },
+      {
+        "year": 2023,
+        "availableFrom": "2023-01-01",
+        "trainFrom": "2015-01-01",
+        "trainThrough": "2020-12-10",
+        "validationFrom": "2021-01-01",
+        "validationThrough": "2022-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.8677729238976681,
+          0.5931144240411337,
+          0.0,
+          0.0,
+          0.0,
+          0.7308038035064855
+        ],
+        "augmentedCoefficients": [
+          0.864498610452809,
+          0.6582880709387122,
+          -0.3055522733110011,
+          -0.00034543197972540583,
+          0.03619507263147546,
+          0.7323271854627457
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 13397,
+        "trainingCompleteCases": 13369,
+        "validation": {
+          "baseline": {
+            "n": 4675,
+            "brier": 0.2231910954698042,
+            "logLoss": 0.6387311666849519,
+            "accuracy": 0.6417112299465241
+          },
+          "elo": {
+            "n": 4675,
+            "brier": 0.21739566246584222,
+            "logLoss": 0.6226107793371992,
+            "accuracy": 0.6432085561497326
+          },
+          "selected": {
+            "n": 4675,
+            "brier": 0.2138064793604216,
+            "logLoss": 0.6145465197133603,
+            "accuracy": 0.653048128342246
+          },
+          "completeCases": 4673,
+          "augmentedCompleteCases": {
+            "n": 4673,
+            "brier": 0.21380246954664714,
+            "logLoss": 0.6145358754261311,
+            "accuracy": 0.6528996362080034
+          }
+        }
+      },
+      {
+        "year": 2024,
+        "availableFrom": "2024-01-01",
+        "trainFrom": "2016-01-01",
+        "trainThrough": "2021-12-10",
+        "validationFrom": "2022-01-01",
+        "validationThrough": "2023-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.8770774565610469,
+          0.5261576217504563,
+          0.0,
+          0.0,
+          0.0,
+          0.670260918291607
+        ],
+        "augmentedCoefficients": [
+          0.8597789224562438,
+          0.6001089115315148,
+          -0.3337342454554071,
+          -0.0072223559901317975,
+          0.04787651340626202,
+          0.6749275026521377
+        ],
+        "eloRidge": 0.001,
+        "augmentedRidge": 0.001,
+        "trainingN": 13116,
+        "trainingCompleteCases": 13100,
+        "validation": {
+          "baseline": {
+            "n": 4826,
+            "brier": 0.22776635010068985,
+            "logLoss": 0.6527190098481738,
+            "accuracy": 0.639867384997928
+          },
+          "elo": {
+            "n": 4826,
+            "brier": 0.21968829984435795,
+            "logLoss": 0.6286527582890656,
+            "accuracy": 0.6462909241607957
+          },
+          "selected": {
+            "n": 4826,
+            "brier": 0.21705976516387213,
+            "logLoss": 0.6225333528038131,
+            "accuracy": 0.6489846663903854
+          },
+          "completeCases": 4824,
+          "augmentedCompleteCases": {
+            "n": 4824,
+            "brier": 0.21705929831395882,
+            "logLoss": 0.6225304986782615,
+            "accuracy": 0.6488391376451078
+          }
+        }
+      },
+      {
+        "year": 2025,
+        "availableFrom": "2025-01-01",
+        "trainFrom": "2017-01-01",
+        "trainThrough": "2022-12-10",
+        "validationFrom": "2023-01-01",
+        "validationThrough": "2024-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.8423810482172902,
+          0.545367180719707,
+          0.0,
+          0.0,
+          0.0,
+          0.6594576203124368
+        ],
+        "augmentedCoefficients": [
+          0.8068793875299435,
+          0.6294346962597243,
+          -0.3530564017342821,
+          0.0031411936140818626,
+          0.04216396459389118,
+          0.6681533137652124
+        ],
+        "eloRidge": 0.001,
+        "augmentedRidge": 0.001,
+        "trainingN": 13081,
+        "trainingCompleteCases": 13066,
+        "validation": {
+          "baseline": {
+            "n": 4873,
+            "brier": 0.22718979821861984,
+            "logLoss": 0.6507497985811989,
+            "accuracy": 0.6351323619946645
+          },
+          "elo": {
+            "n": 4873,
+            "brier": 0.2200335487546863,
+            "logLoss": 0.6291049527495551,
+            "accuracy": 0.6384157603119228
+          },
+          "selected": {
+            "n": 4873,
+            "brier": 0.21777234862861983,
+            "logLoss": 0.6236514572173395,
+            "accuracy": 0.6410835214446953
+          },
+          "completeCases": 4873,
+          "augmentedCompleteCases": {
+            "n": 4873,
+            "brier": 0.21777234862861983,
+            "logLoss": 0.6236514572173395,
+            "accuracy": 0.6410835214446953
+          }
+        }
+      },
+      {
+        "year": 2026,
+        "availableFrom": "2026-01-01",
+        "trainFrom": "2018-01-01",
+        "trainThrough": "2023-12-10",
+        "validationFrom": "2024-01-01",
+        "validationThrough": "2025-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.8249080317482084,
+          0.5249578851676635,
+          0.0,
+          0.0,
+          0.0,
+          0.7145001753505918
+        ],
+        "augmentedCoefficients": [
+          0.7573539685791246,
+          0.6122423730612265,
+          -0.3788695681059905,
+          0.04896052430612155,
+          0.06878255893592328,
+          0.7321675565683847
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 13050,
+        "trainingCompleteCases": 13039,
+        "validation": {
+          "baseline": {
+            "n": 4920,
+            "brier": 0.2260625704970722,
+            "logLoss": 0.6472752643054799,
+            "accuracy": 0.633739837398374
+          },
+          "elo": {
+            "n": 4920,
+            "brier": 0.2192725624826785,
+            "logLoss": 0.6265469106080769,
+            "accuracy": 0.6363821138211382
+          },
+          "selected": {
+            "n": 4920,
+            "brier": 0.2167901085448108,
+            "logLoss": 0.6206655759054108,
+            "accuracy": 0.6420731707317073
+          },
+          "completeCases": 4918,
+          "augmentedCompleteCases": {
+            "n": 4918,
+            "brier": 0.216847179071164,
+            "logLoss": 0.6207872600757541,
+            "accuracy": 0.6419276128507524
+          }
+        }
+      }
+    ],
+    "WTA": [
+      {
+        "year": 2005,
+        "availableFrom": "2005-01-01",
+        "trainFrom": "1997-01-01",
+        "trainThrough": "2002-12-10",
+        "validationFrom": "2003-01-01",
+        "validationThrough": "2004-12-10",
+        "selected": "CALIBRATED_ELO",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.370175162524457,
+          0.3812727983589821,
+          0.0,
+          0.0,
+          0.0,
+          -0.353006393474157
+        ],
+        "augmentedCoefficients": [
+          1.2843699881147694,
+          0.441925785537053,
+          -0.0392723780528034,
+          0.4275601508338571,
+          0.048172355693474875,
+          -0.031602986480307474
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.001,
+        "trainingN": 7613,
+        "trainingCompleteCases": 7092,
+        "validation": {
+          "baseline": {
+            "n": 4303,
+            "brier": 0.2022294170362276,
+            "logLoss": 0.5890160545103506,
+            "accuracy": 0.6867301882407623
+          },
+          "elo": {
+            "n": 4303,
+            "brier": 0.20080909214422668,
+            "logLoss": 0.5846720227913141,
+            "accuracy": 0.6855682082268185
+          },
+          "selected": {
+            "n": 4303,
+            "brier": 0.20080909214422668,
+            "logLoss": 0.5846720227913141,
+            "accuracy": 0.6855682082268185
+          },
+          "completeCases": 4184,
+          "augmentedCompleteCases": {
+            "n": 4184,
+            "brier": 0.20122427943949908,
+            "logLoss": 0.5857683023273282,
+            "accuracy": 0.6849904397705545
+          }
+        }
+      },
+      {
+        "year": 2006,
+        "availableFrom": "2006-01-01",
+        "trainFrom": "1998-01-01",
+        "trainThrough": "2003-12-10",
+        "validationFrom": "2004-01-01",
+        "validationThrough": "2005-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.396258563887352,
+          0.4010531929266954,
+          0.0,
+          0.0,
+          0.0,
+          -0.014264165193707993
+        ],
+        "augmentedCoefficients": [
+          1.360306849520339,
+          0.43074679943969074,
+          -0.08758218452079705,
+          0.251924973001257,
+          0.04116588797569219,
+          -0.008761929415799586
+        ],
+        "eloRidge": 0.001,
+        "augmentedRidge": 0.001,
+        "trainingN": 9426,
+        "trainingCompleteCases": 8897,
+        "validation": {
+          "baseline": {
+            "n": 4442,
+            "brier": 0.2050130585578343,
+            "logLoss": 0.5977989952968993,
+            "accuracy": 0.6805493021161639
+          },
+          "elo": {
+            "n": 4442,
+            "brier": 0.20219195656293001,
+            "logLoss": 0.5885388453501653,
+            "accuracy": 0.6825754164790635
+          },
+          "selected": {
+            "n": 4442,
+            "brier": 0.2013801625468287,
+            "logLoss": 0.5867324253232745,
+            "accuracy": 0.6875281404772625
+          },
+          "completeCases": 4313,
+          "augmentedCompleteCases": {
+            "n": 4313,
+            "brier": 0.2009892135115459,
+            "logLoss": 0.5859907136943525,
+            "accuracy": 0.6893113841873406
+          }
+        }
+      },
+      {
+        "year": 2007,
+        "availableFrom": "2007-01-01",
+        "trainFrom": "1999-01-01",
+        "trainThrough": "2004-12-10",
+        "validationFrom": "2005-01-01",
+        "validationThrough": "2006-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.3912025018915912,
+          0.42779825211991745,
+          0.0,
+          0.0,
+          0.0,
+          -0.11779225249135525
+        ],
+        "augmentedCoefficients": [
+          1.3658371338588668,
+          0.4476700099745271,
+          -0.12645888067919342,
+          0.16220721677920358,
+          0.040527845683888924,
+          -0.07924326008312245
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 11172,
+        "trainingCompleteCases": 10658,
+        "validation": {
+          "baseline": {
+            "n": 4495,
+            "brier": 0.2051966809349624,
+            "logLoss": 0.5975541988664621,
+            "accuracy": 0.6816462736373748
+          },
+          "elo": {
+            "n": 4495,
+            "brier": 0.202460734242179,
+            "logLoss": 0.5885383271334217,
+            "accuracy": 0.6803114571746385
+          },
+          "selected": {
+            "n": 4495,
+            "brier": 0.20166325057434575,
+            "logLoss": 0.5863037468616947,
+            "accuracy": 0.6812013348164627
+          },
+          "completeCases": 4357,
+          "augmentedCompleteCases": {
+            "n": 4357,
+            "brier": 0.20162359464968024,
+            "logLoss": 0.5862220149690348,
+            "accuracy": 0.6809731466605462
+          }
+        }
+      },
+      {
+        "year": 2008,
+        "availableFrom": "2008-01-01",
+        "trainFrom": "2000-01-01",
+        "trainThrough": "2005-12-10",
+        "validationFrom": "2006-01-01",
+        "validationThrough": "2007-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.3900160663594394,
+          0.42376527002685493,
+          0.0,
+          0.0,
+          0.0,
+          -0.10305518946332445
+        ],
+        "augmentedCoefficients": [
+          1.3646130174566675,
+          0.4446280716560606,
+          -0.12304343763791861,
+          0.16348891871614374,
+          0.03376133772364496,
+          -0.06928295996528001
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 13033,
+        "trainingCompleteCases": 12506,
+        "validation": {
+          "baseline": {
+            "n": 4442,
+            "brier": 0.20096854716232182,
+            "logLoss": 0.5861890524218631,
+            "accuracy": 0.6861773975686628
+          },
+          "elo": {
+            "n": 4442,
+            "brier": 0.1984502434645187,
+            "logLoss": 0.578908551909347,
+            "accuracy": 0.6837010355695633
+          },
+          "selected": {
+            "n": 4442,
+            "brier": 0.1978547953402316,
+            "logLoss": 0.5771440516116816,
+            "accuracy": 0.6857271499324629
+          },
+          "completeCases": 4279,
+          "augmentedCompleteCases": {
+            "n": 4279,
+            "brier": 0.19784772672508408,
+            "logLoss": 0.5769497257814983,
+            "accuracy": 0.6849731245618135
+          }
+        }
+      },
+      {
+        "year": 2009,
+        "availableFrom": "2009-01-01",
+        "trainFrom": "2001-01-01",
+        "trainThrough": "2006-12-10",
+        "validationFrom": "2007-01-01",
+        "validationThrough": "2008-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.4029581385093277,
+          0.395004915927969,
+          0.0,
+          0.0,
+          0.0,
+          -0.020822993934326708
+        ],
+        "augmentedCoefficients": [
+          1.3760145303192655,
+          0.41166795230859377,
+          -0.15586042235967648,
+          0.11285139739034034,
+          0.03910359257739479,
+          -0.016482440968934527
+        ],
+        "eloRidge": 0.001,
+        "augmentedRidge": 0.001,
+        "trainingN": 13294,
+        "trainingCompleteCases": 12858,
+        "validation": {
+          "baseline": {
+            "n": 4462,
+            "brier": 0.2045206046163392,
+            "logLoss": 0.5941890465979054,
+            "accuracy": 0.6712236665172568
+          },
+          "elo": {
+            "n": 4462,
+            "brier": 0.20094974650673106,
+            "logLoss": 0.5844070844140682,
+            "accuracy": 0.6736889287315105
+          },
+          "selected": {
+            "n": 4462,
+            "brier": 0.2005654891713096,
+            "logLoss": 0.583414674392837,
+            "accuracy": 0.6768265351860152
+          },
+          "completeCases": 4287,
+          "augmentedCompleteCases": {
+            "n": 4287,
+            "brier": 0.20081101878118604,
+            "logLoss": 0.5838029600045588,
+            "accuracy": 0.6757639374854211
+          }
+        }
+      },
+      {
+        "year": 2010,
+        "availableFrom": "2010-01-01",
+        "trainFrom": "2002-01-01",
+        "trainThrough": "2007-12-10",
+        "validationFrom": "2008-01-01",
+        "validationThrough": "2009-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.1578456253218048,
+          0.5346613426822473,
+          0.0,
+          0.0,
+          0.0,
+          -0.002177583764398816
+        ],
+        "augmentedCoefficients": [
+          1.1314466402935404,
+          0.5477385336168096,
+          -0.1437318959635857,
+          0.07157992727972337,
+          0.05027506252519408,
+          -0.0022601588113776118
+        ],
+        "eloRidge": 0.01,
+        "augmentedRidge": 0.01,
+        "trainingN": 13289,
+        "trainingCompleteCases": 12865,
+        "validation": {
+          "baseline": {
+            "n": 4435,
+            "brier": 0.21299286272595747,
+            "logLoss": 0.6171353992420715,
+            "accuracy": 0.6622322435174747
+          },
+          "elo": {
+            "n": 4435,
+            "brier": 0.20884846852171884,
+            "logLoss": 0.6041437596724172,
+            "accuracy": 0.6642615558060879
+          },
+          "selected": {
+            "n": 4435,
+            "brier": 0.20850546888553018,
+            "logLoss": 0.6033036654557431,
+            "accuracy": 0.6647125140924465
+          },
+          "completeCases": 4327,
+          "augmentedCompleteCases": {
+            "n": 4327,
+            "brier": 0.20914308926171046,
+            "logLoss": 0.6046970155868284,
+            "accuracy": 0.6625837762884216
+          }
+        }
+      },
+      {
+        "year": 2011,
+        "availableFrom": "2011-01-01",
+        "trainFrom": "2003-01-01",
+        "trainThrough": "2008-12-10",
+        "validationFrom": "2009-01-01",
+        "validationThrough": "2010-12-10",
+        "selected": "CALIBRATED_ELO",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.1336964324515046,
+          0.5590599627914684,
+          0.0,
+          0.0,
+          0.0,
+          -0.003335434194637546
+        ],
+        "augmentedCoefficients": [
+          1.1026614558294867,
+          0.5747104269960635,
+          -0.14943379279906435,
+          0.03900455349600222,
+          0.04683288408997232,
+          -0.003400678214747092
+        ],
+        "eloRidge": 0.01,
+        "augmentedRidge": 0.01,
+        "trainingN": 13260,
+        "trainingCompleteCases": 12828,
+        "validation": {
+          "baseline": {
+            "n": 4544,
+            "brier": 0.213011701685531,
+            "logLoss": 0.6193514971025336,
+            "accuracy": 0.6756161971830986
+          },
+          "elo": {
+            "n": 4544,
+            "brier": 0.20956661178963357,
+            "logLoss": 0.6070352394206714,
+            "accuracy": 0.6740757042253521
+          },
+          "selected": {
+            "n": 4544,
+            "brier": 0.20956661178963357,
+            "logLoss": 0.6070352394206714,
+            "accuracy": 0.6740757042253521
+          },
+          "completeCases": 4438,
+          "augmentedCompleteCases": {
+            "n": 4438,
+            "brier": 0.21040562156180553,
+            "logLoss": 0.6088499989649265,
+            "accuracy": 0.6719242902208202
+          }
+        }
+      },
+      {
+        "year": 2012,
+        "availableFrom": "2012-01-01",
+        "trainFrom": "2004-01-01",
+        "trainThrough": "2009-12-10",
+        "validationFrom": "2010-01-01",
+        "validationThrough": "2011-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.088958794334163,
+          0.5465703419948106,
+          0.0,
+          0.0,
+          0.0,
+          -0.004615904987144974
+        ],
+        "augmentedCoefficients": [
+          1.298754374645938,
+          0.4708747660502392,
+          -0.20141819166749148,
+          0.008238907224646241,
+          0.038212511868377055,
+          -0.04758817538646227
+        ],
+        "eloRidge": 0.01,
+        "augmentedRidge": 0.001,
+        "trainingN": 13373,
+        "trainingCompleteCases": 12973,
+        "validation": {
+          "baseline": {
+            "n": 4578,
+            "brier": 0.21505103472014164,
+            "logLoss": 0.6231742965478532,
+            "accuracy": 0.6686325906509393
+          },
+          "elo": {
+            "n": 4578,
+            "brier": 0.21106910262182932,
+            "logLoss": 0.6097829517253576,
+            "accuracy": 0.6695063346439494
+          },
+          "selected": {
+            "n": 4578,
+            "brier": 0.21094311965323728,
+            "logLoss": 0.6094699750050169,
+            "accuracy": 0.6681957186544343
+          },
+          "completeCases": 4439,
+          "augmentedCompleteCases": {
+            "n": 4439,
+            "brier": 0.21183090018068565,
+            "logLoss": 0.6114977936014317,
+            "accuracy": 0.6661410227528722
+          }
+        }
+      },
+      {
+        "year": 2013,
+        "availableFrom": "2013-01-01",
+        "trainFrom": "2005-01-01",
+        "trainThrough": "2010-12-10",
+        "validationFrom": "2011-01-01",
+        "validationThrough": "2012-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.0760986836130244,
+          0.5381406162937538,
+          0.0,
+          0.0,
+          0.0,
+          -0.0097848642785049
+        ],
+        "augmentedCoefficients": [
+          1.0475612611243474,
+          0.5445718001219104,
+          -0.1375872734353822,
+          0.033746060918332176,
+          0.04982078047038355,
+          -0.010376000465977777
+        ],
+        "eloRidge": 0.01,
+        "augmentedRidge": 0.01,
+        "trainingN": 13501,
+        "trainingCompleteCases": 13082,
+        "validation": {
+          "baseline": {
+            "n": 4546,
+            "brier": 0.21723256135174251,
+            "logLoss": 0.6272099634361239,
+            "accuracy": 0.6542014958205016
+          },
+          "elo": {
+            "n": 4546,
+            "brier": 0.2128122775222234,
+            "logLoss": 0.6130078957027423,
+            "accuracy": 0.6559612846458425
+          },
+          "selected": {
+            "n": 4546,
+            "brier": 0.2122831014546028,
+            "logLoss": 0.6116727924807144,
+            "accuracy": 0.6559612846458425
+          },
+          "completeCases": 4464,
+          "augmentedCompleteCases": {
+            "n": 4464,
+            "brier": 0.21269878799143,
+            "logLoss": 0.6125638041412959,
+            "accuracy": 0.6545698924731183
+          }
+        }
+      },
+      {
+        "year": 2014,
+        "availableFrom": "2014-01-01",
+        "trainFrom": "2006-01-01",
+        "trainThrough": "2011-12-10",
+        "validationFrom": "2012-01-01",
+        "validationThrough": "2013-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.3454812466228159,
+          0.3965766599816702,
+          0.0,
+          0.0,
+          0.0,
+          -0.7736116843249822
+        ],
+        "augmentedCoefficients": [
+          1.303980748992795,
+          0.42189351966281646,
+          -0.22010035917871373,
+          -0.09883319891886189,
+          0.025994650978942907,
+          -0.8260223373500892
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 13509,
+        "trainingCompleteCases": 13099,
+        "validation": {
+          "baseline": {
+            "n": 4470,
+            "brier": 0.2137081417718673,
+            "logLoss": 0.6162383729638325,
+            "accuracy": 0.660178970917226
+          },
+          "elo": {
+            "n": 4470,
+            "brier": 0.20981262280793175,
+            "logLoss": 0.6051795888939508,
+            "accuracy": 0.6595078299776287
+          },
+          "selected": {
+            "n": 4470,
+            "brier": 0.20954671386133905,
+            "logLoss": 0.6044985428709805,
+            "accuracy": 0.6644295302013423
+          },
+          "completeCases": 4447,
+          "augmentedCompleteCases": {
+            "n": 4447,
+            "brier": 0.20982985763028275,
+            "logLoss": 0.605108857652886,
+            "accuracy": 0.663593433775579
+          }
+        }
+      },
+      {
+        "year": 2015,
+        "availableFrom": "2015-01-01",
+        "trainFrom": "2007-01-01",
+        "trainThrough": "2012-12-10",
+        "validationFrom": "2013-01-01",
+        "validationThrough": "2014-12-10",
+        "selected": "CALIBRATED_ELO",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.2646862014575089,
+          0.42987335216207523,
+          0.0,
+          0.0,
+          0.0,
+          -0.14657675790179223
+        ],
+        "augmentedCoefficients": [
+          1.2245989076505788,
+          0.45255150142889844,
+          -0.1995538850012578,
+          -0.13911976965156986,
+          0.03694918542086635,
+          -0.15692474572911985
+        ],
+        "eloRidge": 0.001,
+        "augmentedRidge": 0.001,
+        "trainingN": 13552,
+        "trainingCompleteCases": 13189,
+        "validation": {
+          "baseline": {
+            "n": 4384,
+            "brier": 0.2162027018575599,
+            "logLoss": 0.6241930046828584,
+            "accuracy": 0.656934306569343
+          },
+          "elo": {
+            "n": 4384,
+            "brier": 0.21221862803241653,
+            "logLoss": 0.6120445044246106,
+            "accuracy": 0.6587591240875912
+          },
+          "selected": {
+            "n": 4384,
+            "brier": 0.21221862803241653,
+            "logLoss": 0.6120445044246106,
+            "accuracy": 0.6587591240875912
+          },
+          "completeCases": 4363,
+          "augmentedCompleteCases": {
+            "n": 4363,
+            "brier": 0.21219497214646982,
+            "logLoss": 0.6119650627243787,
+            "accuracy": 0.656429062571625
+          }
+        }
+      },
+      {
+        "year": 2016,
+        "availableFrom": "2016-01-01",
+        "trainFrom": "2008-01-01",
+        "trainThrough": "2013-12-10",
+        "validationFrom": "2014-01-01",
+        "validationThrough": "2015-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.9918573086259926,
+          0.5422331856480408,
+          0.0,
+          0.0,
+          0.0,
+          -0.011490545091395665
+        ],
+        "augmentedCoefficients": [
+          1.2017441943797602,
+          0.4625801850731851,
+          -0.16721810073515328,
+          -0.09478567849352133,
+          0.026956004910307488,
+          -0.1234457333733522
+        ],
+        "eloRidge": 0.01,
+        "augmentedRidge": 0.001,
+        "trainingN": 13483,
+        "trainingCompleteCases": 13213,
+        "validation": {
+          "baseline": {
+            "n": 4461,
+            "brier": 0.2234942413831779,
+            "logLoss": 0.6417382770207883,
+            "accuracy": 0.6413360233131585
+          },
+          "elo": {
+            "n": 4461,
+            "brier": 0.21860463136067732,
+            "logLoss": 0.6264582427881259,
+            "accuracy": 0.6464918179780318
+          },
+          "selected": {
+            "n": 4461,
+            "brier": 0.21805630832174486,
+            "logLoss": 0.6252987438146234,
+            "accuracy": 0.643353508182022
+          },
+          "completeCases": 4407,
+          "augmentedCompleteCases": {
+            "n": 4407,
+            "brier": 0.21783666884721262,
+            "logLoss": 0.6248577414582516,
+            "accuracy": 0.6439754935330156
+          }
+        }
+      },
+      {
+        "year": 2017,
+        "availableFrom": "2017-01-01",
+        "trainFrom": "2009-01-01",
+        "trainThrough": "2014-12-10",
+        "validationFrom": "2015-01-01",
+        "validationThrough": "2016-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.2061890180385317,
+          0.44300115195198503,
+          0.0,
+          0.0,
+          0.0,
+          -0.10453987447251196
+        ],
+        "augmentedCoefficients": [
+          1.1993957888612612,
+          0.45112603042679594,
+          -0.1597741570558226,
+          -0.05609656848796667,
+          0.03346413270439393,
+          -0.11092857881151338
+        ],
+        "eloRidge": 0.001,
+        "augmentedRidge": 0.001,
+        "trainingN": 13551,
+        "trainingCompleteCases": 13341,
+        "validation": {
+          "baseline": {
+            "n": 4676,
+            "brier": 0.22661599531355678,
+            "logLoss": 0.6469980860963409,
+            "accuracy": 0.636869118905047
+          },
+          "elo": {
+            "n": 4676,
+            "brier": 0.2213346025752239,
+            "logLoss": 0.6318983298611732,
+            "accuracy": 0.6402908468776732
+          },
+          "selected": {
+            "n": 4676,
+            "brier": 0.22087486306311518,
+            "logLoss": 0.6310285828839269,
+            "accuracy": 0.6420017108639863
+          },
+          "completeCases": 4564,
+          "augmentedCompleteCases": {
+            "n": 4564,
+            "brier": 0.22040099037810681,
+            "logLoss": 0.6300536888399437,
+            "accuracy": 0.6430762489044698
+          }
+        }
+      },
+      {
+        "year": 2018,
+        "availableFrom": "2018-01-01",
+        "trainFrom": "2010-01-01",
+        "trainThrough": "2015-12-10",
+        "validationFrom": "2016-01-01",
+        "validationThrough": "2017-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.18847171401708,
+          0.4513892771760751,
+          0.0,
+          0.0,
+          0.0,
+          -0.11769022290407082
+        ],
+        "augmentedCoefficients": [
+          1.1851214590807129,
+          0.46788999135995923,
+          -0.15331138240244122,
+          -0.015581893385849959,
+          0.033829502692903704,
+          -0.12296685079054137
+        ],
+        "eloRidge": 0.001,
+        "augmentedRidge": 0.001,
+        "trainingN": 13581,
+        "trainingCompleteCases": 13365,
+        "validation": {
+          "baseline": {
+            "n": 4662,
+            "brier": 0.22925547394858667,
+            "logLoss": 0.6532406651286192,
+            "accuracy": 0.6304161304161304
+          },
+          "elo": {
+            "n": 4662,
+            "brier": 0.22415892365921702,
+            "logLoss": 0.6387645091628522,
+            "accuracy": 0.6347061347061347
+          },
+          "selected": {
+            "n": 4662,
+            "brier": 0.22366488337100324,
+            "logLoss": 0.6377609195141046,
+            "accuracy": 0.6368511368511368
+          },
+          "completeCases": 4498,
+          "augmentedCompleteCases": {
+            "n": 4498,
+            "brier": 0.2228801549278138,
+            "logLoss": 0.6361006538455372,
+            "accuracy": 0.638728323699422
+          }
+        }
+      },
+      {
+        "year": 2019,
+        "availableFrom": "2019-01-01",
+        "trainFrom": "2011-01-01",
+        "trainThrough": "2016-12-10",
+        "validationFrom": "2017-01-01",
+        "validationThrough": "2018-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.1882052939506147,
+          0.4362955665015884,
+          0.0,
+          0.0,
+          0.0,
+          -0.4847988177298666
+        ],
+        "augmentedCoefficients": [
+          1.1535776868449348,
+          0.4868210473626249,
+          -0.187449797426065,
+          -0.054948871198163274,
+          0.025074732909531522,
+          -0.06760314504406308
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.001,
+        "trainingN": 13683,
+        "trainingCompleteCases": 13467,
+        "validation": {
+          "baseline": {
+            "n": 4466,
+            "brier": 0.22855569072533558,
+            "logLoss": 0.6517695116407134,
+            "accuracy": 0.6330049261083743
+          },
+          "elo": {
+            "n": 4466,
+            "brier": 0.22404876199641258,
+            "logLoss": 0.6385558014066093,
+            "accuracy": 0.6309896999552171
+          },
+          "selected": {
+            "n": 4466,
+            "brier": 0.22321195166821,
+            "logLoss": 0.6368278305303819,
+            "accuracy": 0.6330049261083743
+          },
+          "completeCases": 4312,
+          "augmentedCompleteCases": {
+            "n": 4312,
+            "brier": 0.22297735852466508,
+            "logLoss": 0.6363595311881641,
+            "accuracy": 0.6342764378478665
+          }
+        }
+      },
+      {
+        "year": 2020,
+        "availableFrom": "2020-01-01",
+        "trainFrom": "2012-01-01",
+        "trainThrough": "2017-12-10",
+        "validationFrom": "2018-01-01",
+        "validationThrough": "2019-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.1869718535082188,
+          0.4377163279875415,
+          0.0,
+          0.0,
+          0.0,
+          -0.5333974891959765
+        ],
+        "augmentedCoefficients": [
+          1.1919550852567633,
+          0.47698635004350476,
+          -0.16792046612561853,
+          0.046902361821432925,
+          0.03704360568920411,
+          -0.5344040190264889
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 13665,
+        "trainingCompleteCases": 13424,
+        "validation": {
+          "baseline": {
+            "n": 4453,
+            "brier": 0.22740459227946658,
+            "logLoss": 0.650326910775162,
+            "accuracy": 0.6375477206377723
+          },
+          "elo": {
+            "n": 4453,
+            "brier": 0.22309186712402787,
+            "logLoss": 0.6367145607632418,
+            "accuracy": 0.6382214237592634
+          },
+          "selected": {
+            "n": 4453,
+            "brier": 0.2213556822039744,
+            "logLoss": 0.6328557766515253,
+            "accuracy": 0.6420390747810465
+          },
+          "completeCases": 4294,
+          "augmentedCompleteCases": {
+            "n": 4294,
+            "brier": 0.22144444263176621,
+            "logLoss": 0.6331629994328215,
+            "accuracy": 0.6425244527247321
+          }
+        }
+      },
+      {
+        "year": 2021,
+        "availableFrom": "2021-01-01",
+        "trainFrom": "2013-01-01",
+        "trainThrough": "2018-12-10",
+        "validationFrom": "2019-01-01",
+        "validationThrough": "2020-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.186272942165005,
+          0.4265869667314368,
+          0.0,
+          0.0,
+          0.0,
+          -0.03870751248772038
+        ],
+        "augmentedCoefficients": [
+          1.1917003259281074,
+          0.4726403772389007,
+          -0.18277655961073372,
+          0.06743508906844745,
+          0.030667812365760667,
+          -0.020549574494071354
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 13526,
+        "trainingCompleteCases": 13239,
+        "validation": {
+          "baseline": {
+            "n": 3227,
+            "brier": 0.226033426123477,
+            "logLoss": 0.6484620586060372,
+            "accuracy": 0.6420824295010846
+          },
+          "elo": {
+            "n": 3227,
+            "brier": 0.2213316662894384,
+            "logLoss": 0.6331530737194346,
+            "accuracy": 0.6470405949798574
+          },
+          "selected": {
+            "n": 3227,
+            "brier": 0.21914255624312476,
+            "logLoss": 0.628270005117288,
+            "accuracy": 0.6498295630616672
+          },
+          "completeCases": 3028,
+          "augmentedCompleteCases": {
+            "n": 3028,
+            "brier": 0.21880706007391051,
+            "logLoss": 0.6276310034017961,
+            "accuracy": 0.6512549537648613
+          }
+        }
+      },
+      {
+        "year": 2022,
+        "availableFrom": "2022-01-01",
+        "trainFrom": "2014-01-01",
+        "trainThrough": "2019-12-10",
+        "validationFrom": "2020-01-01",
+        "validationThrough": "2021-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.194006395644568,
+          0.353916856813027,
+          0.0,
+          0.0,
+          0.0,
+          -0.12797234515535613
+        ],
+        "augmentedCoefficients": [
+          1.1805146078407955,
+          0.4237885378360312,
+          -0.2441697976119025,
+          0.07659707927656882,
+          0.05467471562492128,
+          -0.1168986901026636
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 13576,
+        "trainingCompleteCases": 13199,
+        "validation": {
+          "baseline": {
+            "n": 3212,
+            "brier": 0.22133520403432755,
+            "logLoss": 0.6362568266298909,
+            "accuracy": 0.6457036114570361
+          },
+          "elo": {
+            "n": 3212,
+            "brier": 0.21699034788928645,
+            "logLoss": 0.6232171063694989,
+            "accuracy": 0.6500622665006227
+          },
+          "selected": {
+            "n": 3212,
+            "brier": 0.21521003440149247,
+            "logLoss": 0.6190129986293281,
+            "accuracy": 0.6550435865504358
+          },
+          "completeCases": 2884,
+          "augmentedCompleteCases": {
+            "n": 2884,
+            "brier": 0.2141404235904717,
+            "logLoss": 0.6166061630877063,
+            "accuracy": 0.6553398058252428
+          }
+        }
+      },
+      {
+        "year": 2023,
+        "availableFrom": "2023-01-01",
+        "trainFrom": "2015-01-01",
+        "trainThrough": "2020-12-10",
+        "validationFrom": "2021-01-01",
+        "validationThrough": "2022-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.1838585854433297,
+          0.36519648593279597,
+          0.0,
+          0.0,
+          0.0,
+          -0.13748454914555228
+        ],
+        "augmentedCoefficients": [
+          1.1580248954560732,
+          0.45109672847958243,
+          -0.276999338974758,
+          0.009854951629048547,
+          0.045927893229362284,
+          -0.12297311549083714
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 12450,
+        "trainingCompleteCases": 11981,
+        "validation": {
+          "baseline": {
+            "n": 4289,
+            "brier": 0.22452672861080641,
+            "logLoss": 0.6418568334560525,
+            "accuracy": 0.6341804616460713
+          },
+          "elo": {
+            "n": 4289,
+            "brier": 0.21957533765401963,
+            "logLoss": 0.6282134299712274,
+            "accuracy": 0.6404756353462345
+          },
+          "selected": {
+            "n": 4289,
+            "brier": 0.21863479866357852,
+            "logLoss": 0.6257868648659375,
+            "accuracy": 0.6418745628351598
+          },
+          "completeCases": 3698,
+          "augmentedCompleteCases": {
+            "n": 3698,
+            "brier": 0.21889733574123607,
+            "logLoss": 0.6262680606304685,
+            "accuracy": 0.6403461330448891
+          }
+        }
+      },
+      {
+        "year": 2024,
+        "availableFrom": "2024-01-01",
+        "trainFrom": "2016-01-01",
+        "trainThrough": "2021-12-10",
+        "validationFrom": "2022-01-01",
+        "validationThrough": "2023-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.186741920113816,
+          0.4036506657547361,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "augmentedCoefficients": [
+          1.1186500814031164,
+          0.5100695978091389,
+          -0.32655848721427905,
+          -0.07894804277615432,
+          0.041435375542212514,
+          0.0
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.001,
+        "trainingN": 12353,
+        "trainingCompleteCases": 11699,
+        "validation": {
+          "baseline": {
+            "n": 4341,
+            "brier": 0.2251838709391003,
+            "logLoss": 0.6430896008447224,
+            "accuracy": 0.6383321815249943
+          },
+          "elo": {
+            "n": 4341,
+            "brier": 0.2204032056873726,
+            "logLoss": 0.6299099649588278,
+            "accuracy": 0.6408661598709975
+          },
+          "selected": {
+            "n": 4341,
+            "brier": 0.21965101353082944,
+            "logLoss": 0.6279971763454617,
+            "accuracy": 0.645473393227367
+          },
+          "completeCases": 3346,
+          "augmentedCompleteCases": {
+            "n": 3346,
+            "brier": 0.21979580622709,
+            "logLoss": 0.6279348371238409,
+            "accuracy": 0.6446503287507471
+          }
+        }
+      },
+      {
+        "year": 2025,
+        "availableFrom": "2025-01-01",
+        "trainFrom": "2017-01-01",
+        "trainThrough": "2022-12-10",
+        "validationFrom": "2023-01-01",
+        "validationThrough": "2024-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.220833768146113,
+          0.3527041656069961,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "augmentedCoefficients": [
+          1.1646186294763998,
+          0.4276149082375987,
+          -0.3154256295071103,
+          -0.055612903540549284,
+          0.0644666681862127,
+          0.0
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 12063,
+        "trainingCompleteCases": 11115,
+        "validation": {
+          "baseline": {
+            "n": 4530,
+            "brier": 0.22172371777834954,
+            "logLoss": 0.6345515400916522,
+            "accuracy": 0.6452538631346578
+          },
+          "elo": {
+            "n": 4530,
+            "brier": 0.2177632961576377,
+            "logLoss": 0.6240059822329974,
+            "accuracy": 0.6450331125827815
+          },
+          "selected": {
+            "n": 4530,
+            "brier": 0.21659263780289736,
+            "logLoss": 0.6210795579304688,
+            "accuracy": 0.6527593818984547
+          },
+          "completeCases": 2993,
+          "augmentedCompleteCases": {
+            "n": 2993,
+            "brier": 0.2147397857205072,
+            "logLoss": 0.6164343647133562,
+            "accuracy": 0.6548613431339793
+          }
+        }
+      },
+      {
+        "year": 2026,
+        "availableFrom": "2026-01-01",
+        "trainFrom": "2018-01-01",
+        "trainThrough": "2023-12-10",
+        "validationFrom": "2024-01-01",
+        "validationThrough": "2025-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.2300998505048846,
+          0.37567651309031913,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "augmentedCoefficients": [
+          1.1850320308803404,
+          0.43331424836755356,
+          -0.3619894567752222,
+          -0.10519140697087785,
+          0.046378927929646645,
+          0.0
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 12032,
+        "trainingCompleteCases": 10547,
+        "validation": {
+          "baseline": {
+            "n": 4496,
+            "brier": 0.22295301095358663,
+            "logLoss": 0.6388621165950866,
+            "accuracy": 0.6410142348754448
+          },
+          "elo": {
+            "n": 4496,
+            "brier": 0.21867959067163445,
+            "logLoss": 0.6262822808346371,
+            "accuracy": 0.6401245551601423
+          },
+          "selected": {
+            "n": 4496,
+            "brier": 0.21817428788329016,
+            "logLoss": 0.6248714209509519,
+            "accuracy": 0.6436832740213523
+          },
+          "completeCases": 2435,
+          "augmentedCompleteCases": {
+            "n": 2435,
+            "brier": 0.21480693689390215,
+            "logLoss": 0.6178168300233576,
+            "accuracy": 0.6566735112936345
+          }
+        }
+      }
+    ]
+  },
+  "sourceYearMatches": {
+    "ATP": {
+      "1967": 14,
+      "1968": 4236,
+      "1969": 2956,
+      "1970": 3173,
+      "1971": 3597,
+      "1972": 3493,
+      "1973": 4297,
+      "1974": 4083,
+      "1975": 4137,
+      "1976": 3840,
+      "1977": 4101,
+      "1978": 3833,
+      "1979": 3972,
+      "1980": 3947,
+      "1981": 3893,
+      "1982": 4038,
+      "1983": 3478,
+      "1984": 3238,
+      "1985": 3380,
+      "1986": 3287,
+      "1987": 3566,
+      "1988": 3659,
+      "1989": 3567,
+      "1990": 3728,
+      "1991": 3712,
+      "1992": 3720,
+      "1993": 3873,
+      "1994": 3917,
+      "1995": 3776,
+      "1996": 3814,
+      "1997": 3534,
+      "1998": 3564,
+      "1999": 3311,
+      "2000": 3353,
+      "2001": 3385,
+      "2002": 3204,
+      "2003": 3108,
+      "2004": 3277,
+      "2005": 3251,
+      "2006": 3254,
+      "2007": 3270,
+      "2008": 3011,
+      "2009": 3069,
+      "2010": 3012,
+      "2011": 2999,
+      "2012": 3075,
+      "2013": 2920,
+      "2014": 2788,
+      "2015": 2933,
+      "2016": 2920,
+      "2017": 2872,
+      "2018": 2939,
+      "2019": 2675,
+      "2020": 1452,
+      "2021": 2708,
+      "2022": 2890,
+      "2023": 2943,
+      "2024": 3111,
+      "2025": 2819,
+      "2026": 1432
+    },
+    "WTA": {
+      "1968": 325,
+      "1969": 291,
+      "1970": 338,
+      "1971": 282,
+      "1972": 386,
+      "1973": 376,
+      "1974": 373,
+      "1975": 359,
+      "1976": 332,
+      "1977": 427,
+      "1978": 357,
+      "1979": 363,
+      "1980": 405,
+      "1981": 483,
+      "1982": 464,
+      "1983": 567,
+      "1984": 554,
+      "1985": 691,
+      "1986": 512,
+      "1987": 609,
+      "1988": 666,
+      "1989": 632,
+      "1990": 660,
+      "1991": 672,
+      "1992": 808,
+      "1993": 767,
+      "1994": 741,
+      "1995": 890,
+      "1996": 939,
+      "1997": 980,
+      "1998": 965,
+      "1999": 885,
+      "2000": 2825,
+      "2001": 2869,
+      "2002": 2915,
+      "2003": 2646,
+      "2004": 2779,
+      "2005": 2829,
+      "2006": 2773,
+      "2007": 2829,
+      "2008": 2713,
+      "2009": 2715,
+      "2010": 2772,
+      "2011": 2786,
+      "2012": 2923,
+      "2013": 2695,
+      "2014": 2676,
+      "2015": 2630,
+      "2016": 2903,
+      "2017": 2849,
+      "2018": 2833,
+      "2019": 2641,
+      "2020": 1268,
+      "2021": 2561,
+      "2022": 2567,
+      "2023": 2787,
+      "2024": 2742,
+      "2025": 2459,
+      "2026": 1286
+    }
+  },
+  "trainerSha256": "b968690e4b095c845aa6c0457d085c9e5a43d9bab10ea362f620c798383c7920",
+  "numpyVersion": "2.0.1"
+}

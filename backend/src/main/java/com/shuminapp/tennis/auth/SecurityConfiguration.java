@@ -20,7 +20,7 @@ public class SecurityConfiguration {
     @Bean SecurityFilterChain security(HttpSecurity http,AccountAuthenticationProvider provider,UserRepository users) throws Exception {
         http.authenticationProvider(provider).authorizeHttpRequests(a->a
                 .requestMatchers("/v1/admin/**").hasRole("ADMIN")
-                .requestMatchers("/v1/h2h","/v1/players/*/*/elo","/v1/visualizations/correlations").hasAnyRole("ADVANCED","ADMIN")
+                .requestMatchers("/v1/h2h","/v1/players/*/*/elo","/v1/visualizations/correlations","/v1/matchup-prediction","/v1/matchup-prediction/**").hasAnyRole("ADVANCED","ADMIN")
                 .requestMatchers("/v1/compare","/v1/favorites/**").hasAnyRole("MEMBER","ADVANCED","ADMIN")
                 .requestMatchers("/auth/**","/v1/**","/error").permitAll().anyRequest().denyAll())
             .formLogin(f->f.loginProcessingUrl("/auth/login").successHandler((req,res,auth)->json(res,200,"OK"))

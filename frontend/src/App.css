@@ -614,3 +614,13 @@ footer a {
 .player-picker-options button[aria-selected="true"], .player-picker-options button:hover { background:#e5e9da; }
 .player-picker-options small, .player-picker-options p { font-size:11px;color:var(--muted); }
 .player-picker-options p { padding:10px;white-space:normal; }
+
+.prediction-filters { margin-top:28px; }
+.prediction-scores { display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:28px 0;padding:24px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line); }
+.prediction-scores > div { display:grid;gap:12px;min-width:0; }
+.prediction-scores strong { font-size:clamp(36px,6vw,64px);font-weight:500;color:#244f3a; }
+.prediction-scores meter { width:100%;height:20px;accent-color:#244f3a; }
+.prediction-warnings { padding-left:20px;font-size:13px;line-height:1.9;color:var(--muted); }
+.prediction-result { margin-top:32px; }
+.prediction-result .table-scroll { margin:24px 0; }
+@media(max-width:600px) { .prediction-scores { gap:16px;padding:18px 0; }.prediction-scores strong { font-size:38px; } }

@@ -6,6 +6,8 @@
 
 功能入口 `/tennis/visualizations`、`/tennis/visualizations/research`；年齡／發球及選取觀測 CSV 為公開；進階相關性、箱型／Hexbin 與其匯出需 ADVANCED／ADMIN。逐階段實作、使用指南、資料字典與測量見 [研究工作台交付](21-visualization-research-delivery.md)。
 
+- [兩位球員相遇勝率](23-matchup-probability.md)：新增姓名選取、Elo／場地／年齡／身高模型、逐年時間驗證與缺值退回；研究與真實快照回測已完成，後端454／前端73／瀏覽器21案及模型契約3案通過；分支 feat/matchup-probability，本輪提交相遇勝率功能，尚未合併或部署。
+
 - [圖表與資料瀏覽修正](22-ui-refinements.md)：圖表比例、整數Elo、各表格排序、空白索引不查詢與姓名取代ID；後端446／前端68／瀏覽器20案通過，並補上姓名搜尋選取與舊後端辨識，本輪已依授權整理提交，未推送或部署。
 
 - [九階段交付追蹤](14-pre-release-roadmap.md)：後續交付階段 1～9 的範圍、規則與逐階段驗證。

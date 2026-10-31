@@ -1937,3 +1937,47 @@ python3 scripts/ops/budget_stack.py .local/backups/20261029T170402Z-6f9e68/manif
 ### 圖表與姓名選取修正提交
 
 使用者已要求 commit，兩輪修正與驗收文件一併提交。前述「未提交」為修正當時狀態；本次提交前核對前端68案、瀏覽器20案、lint/build及既有後端446案通過紀錄，保留.vscode/settings.json，不推送或合併main。
+
+
+## 相遇勝率研究與離線訓練（2026-10-31）
+
+使用者授權上網評估並增加兩位球員相遇勝率功能。本輪查閱 Kovalchik、
+Sackmann、Buhamra／Groll 的原始研究及作者說明，選用標準 Elo、校準 Elo、
+Elo 加年齡／身高三種比較；採年度向前訓練與驗證，不用任意身高加分。
+完整研究、公式、逐年範圍與結果見 [相遇勝率](23-matchup-probability.md)。
+
+工作目錄 `/home/shumin/tennis-analytics`。主要重現入口：
+
+```bash
+./backend/mvnw -f backend/pom.xml -DskipTests package
+mkdir -p .local/model-training/rebuild
+(
+  source .env
+  export DB_URL="jdbc:postgresql://127.0.0.1:${POSTGRES_PORT:-5433}/tennis_candidate"
+  export DB_USERNAME="$POSTGRES_USER"
+  export DB_PASSWORD="$POSTGRES_PASSWORD"
+  backend/export-matchup .local/model-training/rebuild/input.csv .local/model-training/rebuild/metadata.json
+)
+OPENBLAS_NUM_THREADS=1 python3 scripts/model/train_matchup.py \
+  .local/model-training/rebuild/input.csv \
+  .local/model-training/rebuild/metadata.json \
+  .local/model-training/rebuild/matchup-v1.json \
+  --report .local/model-training/rebuild/evaluation.json
+python3 scripts/model/test_matchup.py
+```
+
+NumPy 2.0.1 是離線工具依賴；環境準備及不覆寫舊輸出規則見專章。
+實際本輪匯出使用 `.local/model-training/matchup-v1/`，不是上述重建示例路徑。
+匯出在唯讀交易執行、停用 Flyway，未更動候選資料；286774 列的來源摘要與現有 Elo 一致。
+年齡與身高取先前比賽觀測，隔離目標日期前 21 日；缺值退回 Elo、資料不足不輸出機率。
+2024／2025 兩巡迴綜合策略測試 Brier 優於標準 Elo；2026 WTA 部分年度仍略遜於校準 Elo。
+完整 [回測證據](reports/2026-10-31-matchup-evaluation.json) 保留測試樣本、缺值覆蓋與校準分箱，
+不能把 Brier 或驗證準確率當成單場機率的保證。
+
+本輪驗收：後端 clean verify 454 案、前端 73 案、瀏覽器 21 案、模型 Python 3 案通過，
+lint／build 與真實候選庫唯讀互補機率檢查通過。瀏覽器初次缺 libgbm 未啟動，
+後依既有解壓函式庫加 LD_LIBRARY_PATH 重驗成功；詳見專章。本輪依使用者要求提交，未合併。
+
+提交前研究補充：本版未加入獨立 H2H；Kovalchik 的 Prize Probit 曾使用 H2H 勝敗，
+但不能據此推論本站加入後必然改善。年齡／身高目前僅整組驗證，
+個別消融及 H2H 增益尚未驗證，已明確記於 [相遇勝率文件](23-matchup-probability.md)。

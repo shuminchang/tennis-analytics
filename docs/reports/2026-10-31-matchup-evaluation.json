@@ -1,0 +1,5609 @@
+{
+  "schema": 1,
+  "version": "matchup-v1",
+  "featureVersion": "prior-date-embargo21-v1",
+  "embargoDays": 21,
+  "features": [
+    "overall_elo_delta_400",
+    "surface_elo_delta_400",
+    "age_delta_10",
+    "age_squared_delta_100",
+    "height_delta_10",
+    "best_of_five_elo_delta_400"
+  ],
+  "source": {
+    "playersAndRankings": {
+      "repositoryUrl": "https://github.com/Aneeshers/tennis-sackmann-archive",
+      "snapshotSha": "83733587353df8a41f2fd4f516147d5aa83f5a8d",
+      "playerRunId": 1,
+      "rankingRunId": 3,
+      "matchRunId": null,
+      "playerRules": {
+        "transformSha": "4f3e79d898885d88ff0e91b380e1e70c45db2815e8c52afbcf2b1fbf4a104311",
+        "qualitySha": "4f3e79d898885d88ff0e91b380e1e70c45db2815e8c52afbcf2b1fbf4a104311",
+        "scopeSha": "4f3e79d898885d88ff0e91b380e1e70c45db2815e8c52afbcf2b1fbf4a104311"
+      },
+      "rankingRules": {
+        "transformSha": "7fe8ca9d915dc90a2fdbcc358502cc8e99fb812a4caecae6ca7c7bad2af2b50d",
+        "qualitySha": "7fe8ca9d915dc90a2fdbcc358502cc8e99fb812a4caecae6ca7c7bad2af2b50d",
+        "scopeSha": "7fe8ca9d915dc90a2fdbcc358502cc8e99fb812a4caecae6ca7c7bad2af2b50d"
+      },
+      "qualityRevision": "deeced641062d1bb4785b0976de49110"
+    },
+    "matchRunId": 4,
+    "matchRules": {
+      "transformSha": "3ce10e075c1a94bb7f6b71dd510a0c490f389beb331b0da89736fffefd41e449",
+      "qualitySha": "3ce10e075c1a94bb7f6b71dd510a0c490f389beb331b0da89736fffefd41e449",
+      "scopeSha": "c7bc8d40a918b882dff1cf4f640f775f4485c73ca01202fda480a75c175b9d5d"
+    },
+    "qualityRevision": "8ce66f36196e981caf1192b7da461daa",
+    "readModel": "v_stat_matches-live"
+  },
+  "eloInputSha": "96b65961bb6a53d9c9e2e07a423b73f0104fdd72e51002344b7fd7264a56c954",
+  "eloRulesSha": "18bb0bf0ba712550cc60926c5a7de3553a099cd9ddedcee7d0633c1e5c209df4",
+  "datasetSha256": "825ab46f594089c4a77052d6741774493a98cd2c618973c914fd5a1469e59eaf",
+  "sourceLastDate": "2026-05-25",
+  "sourceMatches": {
+    "ATP": 197404,
+    "WTA": 89370
+  },
+  "eloReplayMaxError": 2.2737367544323206e-13,
+  "orientation": "smaller source player identity first, no intercept; swapping negates every feature",
+  "minPriorMatches": 10,
+  "maxInactiveDays": 365,
+  "maxPhysicalObservationDays": 365,
+  "minSurfaceMatches": 5,
+  "maxSurfaceInactiveDays": 730,
+  "minimumTrainingRows": 1000,
+  "minimumValidationRows": 200,
+  "models": {
+    "ATP": [
+      {
+        "year": 2005,
+        "availableFrom": "2005-01-01",
+        "trainFrom": "1997-01-01",
+        "trainThrough": "2002-12-10",
+        "validationFrom": "2003-01-01",
+        "validationThrough": "2004-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.866675345626878,
+          0.6867618566376616,
+          0.0,
+          0.0,
+          0.0,
+          0.44550421835920795
+        ],
+        "augmentedCoefficients": [
+          0.8472509676079083,
+          0.7267236079332944,
+          -0.38122206722502805,
+          0.06538870686537339,
+          0.03591316452590803,
+          0.4528912888605557
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 16867,
+        "trainingCompleteCases": 16754,
+        "validation": {
+          "baseline": {
+            "n": 5171,
+            "brier": 0.22364086894174365,
+            "logLoss": 0.6413865605698595,
+            "accuracy": 0.6426223167665829
+          },
+          "elo": {
+            "n": 5171,
+            "brier": 0.21606200272266116,
+            "logLoss": 0.620633841145101,
+            "accuracy": 0.6511313092245213
+          },
+          "selected": {
+            "n": 5171,
+            "brier": 0.2144394041239966,
+            "logLoss": 0.61677651621987,
+            "accuracy": 0.6575130535679753
+          },
+          "completeCases": 5137,
+          "augmentedCompleteCases": {
+            "n": 5137,
+            "brier": 0.21458865191850382,
+            "logLoss": 0.6170927489856695,
+            "accuracy": 0.6566089157095581
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2722,
+            "brier": 0.21615303818922982,
+            "logLoss": 0.6249050076235907,
+            "accuracy": 0.6565025716385011
+          },
+          "elo": {
+            "n": 2722,
+            "brier": 0.21014106150643602,
+            "logLoss": 0.6072242346455244,
+            "accuracy": 0.6671565025716385
+          },
+          "selected": {
+            "n": 2722,
+            "brier": 0.206846265851735,
+            "logLoss": 0.5995299270789971,
+            "accuracy": 0.668626010286554
+          },
+          "completeCases": 2699,
+          "augmentedCompleteCases": {
+            "n": 2699,
+            "brier": 0.20692602542991015,
+            "logLoss": 0.599747961290652,
+            "accuracy": 0.6691367173027047
+          }
+        }
+      },
+      {
+        "year": 2006,
+        "availableFrom": "2006-01-01",
+        "trainFrom": "1998-01-01",
+        "trainThrough": "2003-12-10",
+        "validationFrom": "2004-01-01",
+        "validationThrough": "2005-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.8373359118405489,
+          0.719537744764281,
+          0.0,
+          0.0,
+          0.0,
+          0.5209509490462632
+        ],
+        "augmentedCoefficients": [
+          0.8083448448004955,
+          0.7652247449281767,
+          -0.35596747659615374,
+          0.12453437622129529,
+          0.03143212649124672,
+          0.5293390793428775
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 16501,
+        "trainingCompleteCases": 16405,
+        "validation": {
+          "baseline": {
+            "n": 5382,
+            "brier": 0.21965574361594628,
+            "logLoss": 0.6327932650636456,
+            "accuracy": 0.6475287997027127
+          },
+          "elo": {
+            "n": 5382,
+            "brier": 0.21311678919731095,
+            "logLoss": 0.6139428799103845,
+            "accuracy": 0.6579338535860275
+          },
+          "selected": {
+            "n": 5382,
+            "brier": 0.21041240332037142,
+            "logLoss": 0.6075083679620628,
+            "accuracy": 0.6610925306577481
+          },
+          "completeCases": 5340,
+          "augmentedCompleteCases": {
+            "n": 5340,
+            "brier": 0.21053735410792884,
+            "logLoss": 0.6078125178839725,
+            "accuracy": 0.6608614232209737
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2619,
+            "brier": 0.2140557351762702,
+            "logLoss": 0.6164120559069716,
+            "accuracy": 0.6578846888125238
+          },
+          "elo": {
+            "n": 2619,
+            "brier": 0.2090787247529602,
+            "logLoss": 0.6036609347099312,
+            "accuracy": 0.6666666666666666
+          },
+          "selected": {
+            "n": 2619,
+            "brier": 0.20742690386086324,
+            "logLoss": 0.5995626087425054,
+            "accuracy": 0.6723940435280642
+          },
+          "completeCases": 2590,
+          "augmentedCompleteCases": {
+            "n": 2590,
+            "brier": 0.20795625470044782,
+            "logLoss": 0.6007563262113491,
+            "accuracy": 0.6706563706563706
+          }
+        }
+      },
+      {
+        "year": 2007,
+        "availableFrom": "2007-01-01",
+        "trainFrom": "1999-01-01",
+        "trainThrough": "2004-12-10",
+        "validationFrom": "2005-01-01",
+        "validationThrough": "2006-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.8178598558579735,
+          0.7128681756975341,
+          0.0,
+          0.0,
+          0.0,
+          0.5736315331317784
+        ],
+        "augmentedCoefficients": [
+          0.7758371400592031,
+          0.7702176265656538,
+          -0.3926623262819885,
+          0.13529145281978253,
+          0.0377296594175178,
+          0.5902446399843619
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 16216,
+        "trainingCompleteCases": 16119,
+        "validation": {
+          "baseline": {
+            "n": 5341,
+            "brier": 0.2151246096943897,
+            "logLoss": 0.6207404241100491,
+            "accuracy": 0.6571803033139861
+          },
+          "elo": {
+            "n": 5341,
+            "brier": 0.20967778531886774,
+            "logLoss": 0.6055749252583567,
+            "accuracy": 0.6657929226736566
+          },
+          "selected": {
+            "n": 5341,
+            "brier": 0.20713150594764512,
+            "logLoss": 0.5994536999977075,
+            "accuracy": 0.6678524620857518
+          },
+          "completeCases": 5289,
+          "augmentedCompleteCases": {
+            "n": 5289,
+            "brier": 0.20743155479483819,
+            "logLoss": 0.6001553124888538,
+            "accuracy": 0.667233881641142
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2704,
+            "brier": 0.21599677202298231,
+            "logLoss": 0.626028529108199,
+            "accuracy": 0.6642011834319527
+          },
+          "elo": {
+            "n": 2704,
+            "brier": 0.20879379058006836,
+            "logLoss": 0.6037952995055881,
+            "accuracy": 0.6712278106508875
+          },
+          "selected": {
+            "n": 2704,
+            "brier": 0.20693696720945726,
+            "logLoss": 0.5990280505141692,
+            "accuracy": 0.6734467455621301
+          },
+          "completeCases": 2673,
+          "augmentedCompleteCases": {
+            "n": 2673,
+            "brier": 0.20729403202026098,
+            "logLoss": 0.5998014028609341,
+            "accuracy": 0.6726524504302283
+          }
+        }
+      },
+      {
+        "year": 2008,
+        "availableFrom": "2008-01-01",
+        "trainFrom": "2000-01-01",
+        "trainThrough": "2005-12-10",
+        "validationFrom": "2006-01-01",
+        "validationThrough": "2007-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.8636522912545482,
+          0.7772537603074404,
+          0.0,
+          0.0,
+          0.0,
+          0.5107582743297754
+        ],
+        "augmentedCoefficients": [
+          0.8172649350665461,
+          0.826810158857551,
+          -0.395338110501271,
+          0.1915159766418721,
+          0.023160051327328384,
+          0.48861652323495114
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.001,
+        "trainingN": 16153,
+        "trainingCompleteCases": 16049,
+        "validation": {
+          "baseline": {
+            "n": 5249,
+            "brier": 0.21538314973915948,
+            "logLoss": 0.6220882380381171,
+            "accuracy": 0.6606972756715564
+          },
+          "elo": {
+            "n": 5249,
+            "brier": 0.20911537573305533,
+            "logLoss": 0.604063127189494,
+            "accuracy": 0.6671746999428463
+          },
+          "selected": {
+            "n": 5249,
+            "brier": 0.20742115732875974,
+            "logLoss": 0.5997840005556143,
+            "accuracy": 0.6692703372070871
+          },
+          "completeCases": 5189,
+          "augmentedCompleteCases": {
+            "n": 5189,
+            "brier": 0.20788566187623828,
+            "logLoss": 0.6008243517388155,
+            "accuracy": 0.6679514357294276
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2476,
+            "brier": 0.21205558630277546,
+            "logLoss": 0.614281727084086,
+            "accuracy": 0.6688206785137318
+          },
+          "elo": {
+            "n": 2476,
+            "brier": 0.20801718875490602,
+            "logLoss": 0.601212701087849,
+            "accuracy": 0.6789176090468497
+          },
+          "selected": {
+            "n": 2476,
+            "brier": 0.20461996726123968,
+            "logLoss": 0.5928611831470034,
+            "accuracy": 0.675686591276252
+          },
+          "completeCases": 2452,
+          "augmentedCompleteCases": {
+            "n": 2452,
+            "brier": 0.20443917991418564,
+            "logLoss": 0.5923898199361798,
+            "accuracy": 0.6757748776508973
+          }
+        }
+      },
+      {
+        "year": 2009,
+        "availableFrom": "2009-01-01",
+        "trainFrom": "2001-01-01",
+        "trainThrough": "2006-12-10",
+        "validationFrom": "2007-01-01",
+        "validationThrough": "2008-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.8921807655862762,
+          0.7749838992413498,
+          0.0,
+          0.0,
+          0.0,
+          0.47051549906101653
+        ],
+        "augmentedCoefficients": [
+          0.8393118678462971,
+          0.8333376346831173,
+          -0.4099758753142179,
+          0.16055878264961768,
+          0.016488194079668415,
+          0.48291958641759386
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 16028,
+        "trainingCompleteCases": 15911,
+        "validation": {
+          "baseline": {
+            "n": 5180,
+            "brier": 0.21411291568258997,
+            "logLoss": 0.620413648449569,
+            "accuracy": 0.6664092664092665
+          },
+          "elo": {
+            "n": 5180,
+            "brier": 0.20838327911324675,
+            "logLoss": 0.6025370996423638,
+            "accuracy": 0.6745173745173745
+          },
+          "selected": {
+            "n": 5180,
+            "brier": 0.20582625089229256,
+            "logLoss": 0.5960936751704536,
+            "accuracy": 0.6752895752895753
+          },
+          "completeCases": 5125,
+          "augmentedCompleteCases": {
+            "n": 5125,
+            "brier": 0.20592929649359515,
+            "logLoss": 0.59628230901939,
+            "accuracy": 0.6749268292682927
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2628,
+            "brier": 0.2026156655214745,
+            "logLoss": 0.5890237097723584,
+            "accuracy": 0.6883561643835616
+          },
+          "elo": {
+            "n": 2628,
+            "brier": 0.19841897495375188,
+            "logLoss": 0.5784316783035899,
+            "accuracy": 0.6811263318112634
+          },
+          "selected": {
+            "n": 2628,
+            "brier": 0.19763664872501505,
+            "logLoss": 0.5759517407533657,
+            "accuracy": 0.6788432267884322
+          },
+          "completeCases": 2611,
+          "augmentedCompleteCases": {
+            "n": 2611,
+            "brier": 0.1979255961016117,
+            "logLoss": 0.5766171133902136,
+            "accuracy": 0.67828418230563
+          }
+        }
+      },
+      {
+        "year": 2010,
+        "availableFrom": "2010-01-01",
+        "trainFrom": "2002-01-01",
+        "trainThrough": "2007-12-10",
+        "validationFrom": "2008-01-01",
+        "validationThrough": "2009-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.885113014260253,
+          0.7658773153397155,
+          0.0,
+          0.0,
+          0.0,
+          0.5176885075350365
+        ],
+        "augmentedCoefficients": [
+          0.8347143363485202,
+          0.8159261689347101,
+          -0.39454444905907665,
+          0.2223774154463625,
+          0.02043980249934415,
+          0.5267809257051974
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 15806,
+        "trainingCompleteCases": 15676,
+        "validation": {
+          "baseline": {
+            "n": 5104,
+            "brier": 0.20719506282839087,
+            "logLoss": 0.6012766194243643,
+            "accuracy": 0.6788793103448276
+          },
+          "elo": {
+            "n": 5104,
+            "brier": 0.20302340636198105,
+            "logLoss": 0.5893421704676036,
+            "accuracy": 0.6802507836990596
+          },
+          "selected": {
+            "n": 5104,
+            "brier": 0.20099118387369624,
+            "logLoss": 0.5840459743850992,
+            "accuracy": 0.6769200626959248
+          },
+          "completeCases": 5063,
+          "augmentedCompleteCases": {
+            "n": 5063,
+            "brier": 0.2010484932926373,
+            "logLoss": 0.5841500363652574,
+            "accuracy": 0.6766739087497531
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2496,
+            "brier": 0.21158231447577663,
+            "logLoss": 0.6169017130840271,
+            "accuracy": 0.672676282051282
+          },
+          "elo": {
+            "n": 2496,
+            "brier": 0.20683626442372846,
+            "logLoss": 0.6006435936215385,
+            "accuracy": 0.6814903846153846
+          },
+          "selected": {
+            "n": 2496,
+            "brier": 0.20564086197868597,
+            "logLoss": 0.5973056225568246,
+            "accuracy": 0.6818910256410257
+          },
+          "completeCases": 2481,
+          "augmentedCompleteCases": {
+            "n": 2481,
+            "brier": 0.20582625660771006,
+            "logLoss": 0.597704858836849,
+            "accuracy": 0.6811769447803305
+          }
+        }
+      },
+      {
+        "year": 2011,
+        "availableFrom": "2011-01-01",
+        "trainFrom": "2003-01-01",
+        "trainThrough": "2008-12-10",
+        "validationFrom": "2009-01-01",
+        "validationThrough": "2010-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.9125659155154675,
+          0.7468243840799954,
+          0.0,
+          0.0,
+          0.0,
+          0.5855142493143686
+        ],
+        "augmentedCoefficients": [
+          0.8598307140959288,
+          0.7892258219406124,
+          -0.41923879732635777,
+          0.1810260013801636,
+          0.025585777394666012,
+          0.5538519245071698
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.001,
+        "trainingN": 15692,
+        "trainingCompleteCases": 15551,
+        "validation": {
+          "baseline": {
+            "n": 5124,
+            "brier": 0.20698349452029147,
+            "logLoss": 0.6026036270764031,
+            "accuracy": 0.6807181889149102
+          },
+          "elo": {
+            "n": 5124,
+            "brier": 0.20243972807931443,
+            "logLoss": 0.5890120940737545,
+            "accuracy": 0.6816939890710383
+          },
+          "selected": {
+            "n": 5124,
+            "brier": 0.20143047834568645,
+            "logLoss": 0.5860673522856227,
+            "accuracy": 0.6814988290398126
+          },
+          "completeCases": 5092,
+          "augmentedCompleteCases": {
+            "n": 5092,
+            "brier": 0.2016827006210467,
+            "logLoss": 0.5866419613314139,
+            "accuracy": 0.6808719560094265
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2555,
+            "brier": 0.20558019455024146,
+            "logLoss": 0.5976313150629782,
+            "accuracy": 0.6821917808219178
+          },
+          "elo": {
+            "n": 2555,
+            "brier": 0.20059457400504457,
+            "logLoss": 0.5837286188083396,
+            "accuracy": 0.6876712328767123
+          },
+          "selected": {
+            "n": 2555,
+            "brier": 0.19946218042956607,
+            "logLoss": 0.5809722107316527,
+            "accuracy": 0.6880626223091977
+          },
+          "completeCases": 2539,
+          "augmentedCompleteCases": {
+            "n": 2539,
+            "brier": 0.19917956237609588,
+            "logLoss": 0.5803433583270683,
+            "accuracy": 0.6888538794801102
+          }
+        }
+      },
+      {
+        "year": 2012,
+        "availableFrom": "2012-01-01",
+        "trainFrom": "2004-01-01",
+        "trainThrough": "2009-12-10",
+        "validationFrom": "2010-01-01",
+        "validationThrough": "2011-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.9543285933660408,
+          0.7244853812425558,
+          0.0,
+          0.0,
+          0.0,
+          0.5751364427068141
+        ],
+        "augmentedCoefficients": [
+          0.9029979429923437,
+          0.7674558640753636,
+          -0.4324157467781048,
+          0.14437525936495044,
+          0.03233385309447066,
+          0.580749476083303
+        ],
+        "eloRidge": 0.001,
+        "augmentedRidge": 0.001,
+        "trainingN": 15809,
+        "trainingCompleteCases": 15666,
+        "validation": {
+          "baseline": {
+            "n": 5051,
+            "brier": 0.2085461995659088,
+            "logLoss": 0.6071539667083035,
+            "accuracy": 0.6774896060186102
+          },
+          "elo": {
+            "n": 5051,
+            "brier": 0.2036852223953665,
+            "logLoss": 0.5921742017025226,
+            "accuracy": 0.6850128687388636
+          },
+          "selected": {
+            "n": 5051,
+            "brier": 0.20241436215357372,
+            "logLoss": 0.5888311348885574,
+            "accuracy": 0.6840229657493566
+          },
+          "completeCases": 5020,
+          "augmentedCompleteCases": {
+            "n": 5020,
+            "brier": 0.20236890322236506,
+            "logLoss": 0.5887270759111395,
+            "accuracy": 0.6840637450199203
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2645,
+            "brier": 0.1978738725088485,
+            "logLoss": 0.5796229909527001,
+            "accuracy": 0.6994328922495274
+          },
+          "elo": {
+            "n": 2645,
+            "brier": 0.19452911117760655,
+            "logLoss": 0.5700052192102032,
+            "accuracy": 0.7058601134215501
+          },
+          "selected": {
+            "n": 2645,
+            "brier": 0.19296701119524676,
+            "logLoss": 0.5660386833885284,
+            "accuracy": 0.7024574669187146
+          },
+          "completeCases": 2633,
+          "augmentedCompleteCases": {
+            "n": 2633,
+            "brier": 0.1929222915230405,
+            "logLoss": 0.5659330802213903,
+            "accuracy": 0.7026205848841626
+          }
+        }
+      },
+      {
+        "year": 2013,
+        "availableFrom": "2013-01-01",
+        "trainFrom": "2005-01-01",
+        "trainThrough": "2010-12-10",
+        "validationFrom": "2011-01-01",
+        "validationThrough": "2012-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.9783887495904279,
+          0.7121067330789072,
+          0.0,
+          0.0,
+          0.0,
+          0.5829390684293588
+        ],
+        "augmentedCoefficients": [
+          0.9214212557600556,
+          0.7558459500618395,
+          -0.44578455425907143,
+          0.09367783432057256,
+          0.03746835395473035,
+          0.5900080078166339
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 15645,
+        "trainingCompleteCases": 15506,
+        "validation": {
+          "baseline": {
+            "n": 5123,
+            "brier": 0.20136029570229827,
+            "logLoss": 0.5874545229923779,
+            "accuracy": 0.6913917626390786
+          },
+          "elo": {
+            "n": 5123,
+            "brier": 0.19727277050833875,
+            "logLoss": 0.5760454129176922,
+            "accuracy": 0.6968573101698223
+          },
+          "selected": {
+            "n": 5123,
+            "brier": 0.1958929530686362,
+            "logLoss": 0.5725734205974014,
+            "accuracy": 0.6964669139176264
+          },
+          "completeCases": 5095,
+          "augmentedCompleteCases": {
+            "n": 5095,
+            "brier": 0.19572197619048978,
+            "logLoss": 0.5721885708348734,
+            "accuracy": 0.6969578017664377
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2471,
+            "brier": 0.21063292484886026,
+            "logLoss": 0.6111974239763479,
+            "accuracy": 0.6657223796033994
+          },
+          "elo": {
+            "n": 2471,
+            "brier": 0.20463819738837466,
+            "logLoss": 0.5933384478860074,
+            "accuracy": 0.6677458518818292
+          },
+          "selected": {
+            "n": 2471,
+            "brier": 0.20520938198556954,
+            "logLoss": 0.5942222235542073,
+            "accuracy": 0.6645082962363416
+          },
+          "completeCases": 2461,
+          "augmentedCompleteCases": {
+            "n": 2461,
+            "brier": 0.20513409608716293,
+            "logLoss": 0.59406230861872,
+            "accuracy": 0.6651767574156847
+          }
+        }
+      },
+      {
+        "year": 2014,
+        "availableFrom": "2014-01-01",
+        "trainFrom": "2006-01-01",
+        "trainThrough": "2011-12-10",
+        "validationFrom": "2012-01-01",
+        "validationThrough": "2013-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.9967521113296053,
+          0.6945374615409752,
+          0.0,
+          0.0,
+          0.0,
+          0.5779411481566351
+        ],
+        "augmentedCoefficients": [
+          0.9457932581610362,
+          0.7320112033053957,
+          -0.4122530310708337,
+          -0.005418248105040082,
+          0.05707045808531121,
+          0.5841412396517859
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 15478,
+        "trainingCompleteCases": 15346,
+        "validation": {
+          "baseline": {
+            "n": 5050,
+            "brier": 0.20367940859103517,
+            "logLoss": 0.5939417654775518,
+            "accuracy": 0.6835643564356436
+          },
+          "elo": {
+            "n": 5050,
+            "brier": 0.19908659875516316,
+            "logLoss": 0.5804826513509405,
+            "accuracy": 0.6877227722772277
+          },
+          "selected": {
+            "n": 5050,
+            "brier": 0.19841853831359826,
+            "logLoss": 0.5785181969478862,
+            "accuracy": 0.6857425742574258
+          },
+          "completeCases": 5028,
+          "augmentedCompleteCases": {
+            "n": 5028,
+            "brier": 0.19835661926004988,
+            "logLoss": 0.5783808201458656,
+            "accuracy": 0.6861575178997613
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2361,
+            "brier": 0.2091892149501097,
+            "logLoss": 0.6083162859739966,
+            "accuracy": 0.6709021601016518
+          },
+          "elo": {
+            "n": 2361,
+            "brier": 0.2047732106196198,
+            "logLoss": 0.5933269706828977,
+            "accuracy": 0.6776789495976281
+          },
+          "selected": {
+            "n": 2361,
+            "brier": 0.20340281571314214,
+            "logLoss": 0.589477306341686,
+            "accuracy": 0.675137653536637
+          },
+          "completeCases": 2347,
+          "augmentedCompleteCases": {
+            "n": 2347,
+            "brier": 0.2030357010005837,
+            "logLoss": 0.5886737701881399,
+            "accuracy": 0.6761823604601619
+          }
+        }
+      },
+      {
+        "year": 2015,
+        "availableFrom": "2015-01-01",
+        "trainFrom": "2007-01-01",
+        "trainThrough": "2012-12-10",
+        "validationFrom": "2013-01-01",
+        "validationThrough": "2014-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.8898413840906282,
+          0.7029879143452121,
+          0.0,
+          0.0,
+          0.0,
+          0.3920126137846781
+        ],
+        "augmentedCoefficients": [
+          0.9511058006264741,
+          0.7568258455449864,
+          -0.40457377213536816,
+          0.01619243113894501,
+          0.06037397178477571,
+          0.584527430557005
+        ],
+        "eloRidge": 0.01,
+        "augmentedRidge": 0.001,
+        "trainingN": 15427,
+        "trainingCompleteCases": 15312,
+        "validation": {
+          "baseline": {
+            "n": 4832,
+            "brier": 0.20992750285570005,
+            "logLoss": 0.6097896493853812,
+            "accuracy": 0.6682533112582781
+          },
+          "elo": {
+            "n": 4832,
+            "brier": 0.20470168219329063,
+            "logLoss": 0.5934078320011552,
+            "accuracy": 0.6730132450331126
+          },
+          "selected": {
+            "n": 4832,
+            "brier": 0.20422434702888098,
+            "logLoss": 0.5916911011672114,
+            "accuracy": 0.6738410596026491
+          },
+          "completeCases": 4808,
+          "augmentedCompleteCases": {
+            "n": 4808,
+            "brier": 0.20402849299071119,
+            "logLoss": 0.5912657374250087,
+            "accuracy": 0.6747088186356073
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2507,
+            "brier": 0.2038430296175183,
+            "logLoss": 0.5916256275891535,
+            "accuracy": 0.6725169525329079
+          },
+          "elo": {
+            "n": 2507,
+            "brier": 0.20033510700540297,
+            "logLoss": 0.5828907968568052,
+            "accuracy": 0.6796968488232947
+          },
+          "selected": {
+            "n": 2507,
+            "brier": 0.19978928588945793,
+            "logLoss": 0.5815547985384174,
+            "accuracy": 0.6860789788591942
+          },
+          "completeCases": 2495,
+          "augmentedCompleteCases": {
+            "n": 2495,
+            "brier": 0.1997580449969008,
+            "logLoss": 0.5814904952376602,
+            "accuracy": 0.6861723446893787
+          }
+        }
+      },
+      {
+        "year": 2016,
+        "availableFrom": "2016-01-01",
+        "trainFrom": "2008-01-01",
+        "trainThrough": "2013-12-10",
+        "validationFrom": "2014-01-01",
+        "validationThrough": "2015-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.0004822135516063,
+          0.6926965164917871,
+          0.0,
+          0.0,
+          0.0,
+          0.5835606095019725
+        ],
+        "augmentedCoefficients": [
+          0.9732617045926051,
+          0.7241171470026024,
+          -0.3594715087991009,
+          -0.005830330120431903,
+          0.07085271443802,
+          0.5841881804853639
+        ],
+        "eloRidge": 0.001,
+        "augmentedRidge": 0.001,
+        "trainingN": 15205,
+        "trainingCompleteCases": 15111,
+        "validation": {
+          "baseline": {
+            "n": 4868,
+            "brier": 0.20643595146843208,
+            "logLoss": 0.599720665478762,
+            "accuracy": 0.671733771569433
+          },
+          "elo": {
+            "n": 4868,
+            "brier": 0.202397334622743,
+            "logLoss": 0.5874835962912488,
+            "accuracy": 0.678923582580115
+          },
+          "selected": {
+            "n": 4868,
+            "brier": 0.2015168390750913,
+            "logLoss": 0.5853345145089792,
+            "accuracy": 0.682621199671323
+          },
+          "completeCases": 4842,
+          "augmentedCompleteCases": {
+            "n": 4842,
+            "brier": 0.2013295830582342,
+            "logLoss": 0.5849354013584833,
+            "accuracy": 0.6831887649731516
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2484,
+            "brier": 0.20799285269675286,
+            "logLoss": 0.6069118152264602,
+            "accuracy": 0.6743156199677939
+          },
+          "elo": {
+            "n": 2484,
+            "brier": 0.20348121732024246,
+            "logLoss": 0.59211388810085,
+            "accuracy": 0.6839774557165862
+          },
+          "selected": {
+            "n": 2484,
+            "brier": 0.20167937044186857,
+            "logLoss": 0.5876364143021546,
+            "accuracy": 0.6815619967793881
+          },
+          "completeCases": 2481,
+          "augmentedCompleteCases": {
+            "n": 2481,
+            "brier": 0.20146160228424564,
+            "logLoss": 0.5871379268646464,
+            "accuracy": 0.6819830713422007
+          }
+        }
+      },
+      {
+        "year": 2017,
+        "availableFrom": "2017-01-01",
+        "trainFrom": "2009-01-01",
+        "trainThrough": "2014-12-10",
+        "validationFrom": "2015-01-01",
+        "validationThrough": "2016-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.9769069499968287,
+          0.7187405365351683,
+          0.0,
+          0.0,
+          0.0,
+          0.6017084604589964
+        ],
+        "augmentedCoefficients": [
+          0.9598826517839055,
+          0.7449814152711565,
+          -0.3401263208457134,
+          0.0008820967268933488,
+          0.05718102516291908,
+          0.6113068434125459
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 15156,
+        "trainingCompleteCases": 15072,
+        "validation": {
+          "baseline": {
+            "n": 4991,
+            "brier": 0.20590837935280557,
+            "logLoss": 0.5992334997773062,
+            "accuracy": 0.6734121418553396
+          },
+          "elo": {
+            "n": 4991,
+            "brier": 0.20182075110303369,
+            "logLoss": 0.5870431498737251,
+            "accuracy": 0.6820276497695853
+          },
+          "selected": {
+            "n": 4991,
+            "brier": 0.20057355202775415,
+            "logLoss": 0.5841932494492268,
+            "accuracy": 0.6852334201562813
+          },
+          "completeCases": 4976,
+          "augmentedCompleteCases": {
+            "n": 4976,
+            "brier": 0.20045742224499935,
+            "logLoss": 0.5839402234613091,
+            "accuracy": 0.6854903536977492
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2408,
+            "brier": 0.2183326436500991,
+            "logLoss": 0.6316892469029783,
+            "accuracy": 0.6495016611295681
+          },
+          "elo": {
+            "n": 2408,
+            "brier": 0.21217440819573818,
+            "logLoss": 0.6126212302828942,
+            "accuracy": 0.6598837209302325
+          },
+          "selected": {
+            "n": 2408,
+            "brier": 0.2113424919024453,
+            "logLoss": 0.6108459693861713,
+            "accuracy": 0.6623754152823921
+          },
+          "completeCases": 2404,
+          "augmentedCompleteCases": {
+            "n": 2404,
+            "brier": 0.21118266777739841,
+            "logLoss": 0.610418839111796,
+            "accuracy": 0.6622296173044925
+          }
+        }
+      },
+      {
+        "year": 2018,
+        "availableFrom": "2018-01-01",
+        "trainFrom": "2010-01-01",
+        "trainThrough": "2015-12-10",
+        "validationFrom": "2016-01-01",
+        "validationThrough": "2017-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.9681229882392388,
+          0.7162880774696915,
+          0.0,
+          0.0,
+          0.0,
+          0.5009656192229611
+        ],
+        "augmentedCoefficients": [
+          0.9634031335651371,
+          0.7454742887708744,
+          -0.30612905814748903,
+          0.014478377908574286,
+          0.053016752399542906,
+          0.5080372561913381
+        ],
+        "eloRidge": 0.001,
+        "augmentedRidge": 0.001,
+        "trainingN": 15035,
+        "trainingCompleteCases": 14956,
+        "validation": {
+          "baseline": {
+            "n": 4892,
+            "brier": 0.21308243090927492,
+            "logLoss": 0.6191080653239778,
+            "accuracy": 0.6621013900245298
+          },
+          "elo": {
+            "n": 4892,
+            "brier": 0.207800191055066,
+            "logLoss": 0.6022039082474246,
+            "accuracy": 0.6723221586263287
+          },
+          "selected": {
+            "n": 4892,
+            "brier": 0.2064337464722814,
+            "logLoss": 0.599001130853561,
+            "accuracy": 0.6721177432542927
+          },
+          "completeCases": 4885,
+          "augmentedCompleteCases": {
+            "n": 4885,
+            "brier": 0.20625088483570678,
+            "logLoss": 0.5985620359835304,
+            "accuracy": 0.6722620266120778
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2497,
+            "brier": 0.2277666900816007,
+            "logLoss": 0.6556696463647069,
+            "accuracy": 0.6355626752102523
+          },
+          "elo": {
+            "n": 2497,
+            "brier": 0.22141545114281472,
+            "logLoss": 0.6340555698729904,
+            "accuracy": 0.6419703644373248
+          },
+          "selected": {
+            "n": 2497,
+            "brier": 0.21835999764952377,
+            "logLoss": 0.6272217517447924,
+            "accuracy": 0.657989587505006
+          },
+          "completeCases": 2490,
+          "augmentedCompleteCases": {
+            "n": 2490,
+            "brier": 0.21851511924071557,
+            "logLoss": 0.6275522019786528,
+            "accuracy": 0.6574297188755021
+          }
+        }
+      },
+      {
+        "year": 2019,
+        "availableFrom": "2019-01-01",
+        "trainFrom": "2011-01-01",
+        "trainThrough": "2016-12-10",
+        "validationFrom": "2017-01-01",
+        "validationThrough": "2018-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.8721996079009732,
+          0.6995600029380852,
+          0.0,
+          0.0,
+          0.0,
+          0.39588293664488095
+        ],
+        "augmentedCoefficients": [
+          0.8740648039069187,
+          0.718674705676974,
+          -0.24021025212819555,
+          0.024939088938403357,
+          0.06100262349913419,
+          0.3981751061629329
+        ],
+        "eloRidge": 0.01,
+        "augmentedRidge": 0.01,
+        "trainingN": 15023,
+        "trainingCompleteCases": 14956,
+        "validation": {
+          "baseline": {
+            "n": 4835,
+            "brier": 0.2237085735903734,
+            "logLoss": 0.6452678894306026,
+            "accuracy": 0.6407445708376422
+          },
+          "elo": {
+            "n": 4835,
+            "brier": 0.2169364486479553,
+            "logLoss": 0.6230846193171972,
+            "accuracy": 0.6506721820062048
+          },
+          "selected": {
+            "n": 4835,
+            "brier": 0.21508956622764444,
+            "logLoss": 0.6189696960342163,
+            "accuracy": 0.6564632885211996
+          },
+          "completeCases": 4824,
+          "augmentedCompleteCases": {
+            "n": 4824,
+            "brier": 0.21508795481008214,
+            "logLoss": 0.6189369323853888,
+            "accuracy": 0.6560945273631841
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2344,
+            "brier": 0.23020138921834346,
+            "logLoss": 0.6568461155186661,
+            "accuracy": 0.6271331058020477
+          },
+          "elo": {
+            "n": 2344,
+            "brier": 0.22180763604839906,
+            "logLoss": 0.6330989083117905,
+            "accuracy": 0.6420648464163823
+          },
+          "selected": {
+            "n": 2344,
+            "brier": 0.21998612945339968,
+            "logLoss": 0.6292416793243626,
+            "accuracy": 0.6454778156996587
+          },
+          "completeCases": 2344,
+          "augmentedCompleteCases": {
+            "n": 2344,
+            "brier": 0.21998612945339968,
+            "logLoss": 0.6292416793243626,
+            "accuracy": 0.6454778156996587
+          }
+        }
+      },
+      {
+        "year": 2020,
+        "availableFrom": "2020-01-01",
+        "trainFrom": "2012-01-01",
+        "trainThrough": "2017-12-10",
+        "validationFrom": "2018-01-01",
+        "validationThrough": "2019-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.8543767272767948,
+          0.6692156081765315,
+          0.0,
+          0.0,
+          0.0,
+          0.41024609138348905
+        ],
+        "augmentedCoefficients": [
+          0.8580124013684093,
+          0.6906605055262972,
+          -0.22571264487777606,
+          -0.016964161840811436,
+          0.04382162008088151,
+          0.41184154311997223
+        ],
+        "eloRidge": 0.01,
+        "augmentedRidge": 0.01,
+        "trainingN": 14876,
+        "trainingCompleteCases": 14821,
+        "validation": {
+          "baseline": {
+            "n": 4841,
+            "brier": 0.2289455652678277,
+            "logLoss": 0.6562392897641864,
+            "accuracy": 0.6314810989464986
+          },
+          "elo": {
+            "n": 4841,
+            "brier": 0.22121391661990322,
+            "logLoss": 0.6322445297244773,
+            "accuracy": 0.6424292501549267
+          },
+          "selected": {
+            "n": 4841,
+            "brier": 0.2190043662821852,
+            "logLoss": 0.62745525950116,
+            "accuracy": 0.6492460235488535
+          },
+          "completeCases": 4834,
+          "augmentedCompleteCases": {
+            "n": 4834,
+            "brier": 0.21907603662923572,
+            "logLoss": 0.6276040720431094,
+            "accuracy": 0.6489449731071576
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 1157,
+            "brier": 0.2221649995989053,
+            "logLoss": 0.6342927877408566,
+            "accuracy": 0.6508210890233362
+          },
+          "elo": {
+            "n": 1157,
+            "brier": 0.21523282320612888,
+            "logLoss": 0.6164619934833369,
+            "accuracy": 0.658599827139153
+          },
+          "selected": {
+            "n": 1157,
+            "brier": 0.21216506378640784,
+            "logLoss": 0.6097277182539597,
+            "accuracy": 0.6551426101987899
+          },
+          "completeCases": 1155,
+          "augmentedCompleteCases": {
+            "n": 1155,
+            "brier": 0.21248066203396893,
+            "logLoss": 0.6104752687054715,
+            "accuracy": 0.6545454545454545
+          }
+        }
+      },
+      {
+        "year": 2021,
+        "availableFrom": "2021-01-01",
+        "trainFrom": "2013-01-01",
+        "trainThrough": "2018-12-10",
+        "validationFrom": "2019-01-01",
+        "validationThrough": "2020-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.9025730852035921,
+          0.6028928799342319,
+          0.0,
+          0.0,
+          0.0,
+          0.6574714520695127
+        ],
+        "augmentedCoefficients": [
+          0.9096572085065994,
+          0.6483532224144866,
+          -0.2817997548451935,
+          -0.022369942944062093,
+          0.04381345491087263,
+          0.7077037998675252
+        ],
+        "eloRidge": 0.001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 14658,
+        "trainingCompleteCases": 14608,
+        "validation": {
+          "baseline": {
+            "n": 3501,
+            "brier": 0.22754554723328493,
+            "logLoss": 0.6493927592664737,
+            "accuracy": 0.6349614395886889
+          },
+          "elo": {
+            "n": 3501,
+            "brier": 0.21946012473065724,
+            "logLoss": 0.6269387973290769,
+            "accuracy": 0.646386746643816
+          },
+          "selected": {
+            "n": 3501,
+            "brier": 0.21708530812531857,
+            "logLoss": 0.621886102412024,
+            "accuracy": 0.6441016852327907
+          },
+          "completeCases": 3499,
+          "augmentedCompleteCases": {
+            "n": 3499,
+            "brier": 0.217193816156639,
+            "logLoss": 0.6221443303693255,
+            "accuracy": 0.6438982566447556
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2226,
+            "brier": 0.2237658803310679,
+            "logLoss": 0.6388239262064184,
+            "accuracy": 0.6352201257861635
+          },
+          "elo": {
+            "n": 2226,
+            "brier": 0.21955166731032127,
+            "logLoss": 0.6267385638430147,
+            "accuracy": 0.6289308176100629
+          },
+          "selected": {
+            "n": 2226,
+            "brier": 0.2154121537140642,
+            "logLoss": 0.6178406685714013,
+            "accuracy": 0.6442048517520216
+          },
+          "completeCases": 2226,
+          "augmentedCompleteCases": {
+            "n": 2226,
+            "brier": 0.2154121537140642,
+            "logLoss": 0.6178406685714013,
+            "accuracy": 0.6442048517520216
+          }
+        }
+      },
+      {
+        "year": 2022,
+        "availableFrom": "2022-01-01",
+        "trainFrom": "2014-01-01",
+        "trainThrough": "2019-12-10",
+        "validationFrom": "2020-01-01",
+        "validationThrough": "2021-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.8848709944388592,
+          0.5972515255092129,
+          0.0,
+          0.0,
+          0.0,
+          0.642638583233444
+        ],
+        "augmentedCoefficients": [
+          0.9014669980502462,
+          0.6487417052589396,
+          -0.3121333837550464,
+          0.03474797468184147,
+          0.027757982042405652,
+          0.6956710456048395
+        ],
+        "eloRidge": 0.001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 14601,
+        "trainingCompleteCases": 14561,
+        "validation": {
+          "baseline": {
+            "n": 3383,
+            "brier": 0.22321837249568152,
+            "logLoss": 0.6372742580998104,
+            "accuracy": 0.6405557197753473
+          },
+          "elo": {
+            "n": 3383,
+            "brier": 0.21799119620330729,
+            "logLoss": 0.6229116765043435,
+            "accuracy": 0.6390777416494235
+          },
+          "selected": {
+            "n": 3383,
+            "brier": 0.21405735862395225,
+            "logLoss": 0.6143931959668684,
+            "accuracy": 0.6497191841560744
+          },
+          "completeCases": 3381,
+          "augmentedCompleteCases": {
+            "n": 3381,
+            "brier": 0.21416712465622006,
+            "logLoss": 0.6146533097937065,
+            "accuracy": 0.6495119787045253
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2449,
+            "brier": 0.2226686491238781,
+            "logLoss": 0.6386468536205238,
+            "accuracy": 0.6476112699060841
+          },
+          "elo": {
+            "n": 2449,
+            "brier": 0.21544767842315507,
+            "logLoss": 0.6188321175499175,
+            "accuracy": 0.6561861984483462
+          },
+          "selected": {
+            "n": 2449,
+            "brier": 0.21239427142847328,
+            "logLoss": 0.6115657641799948,
+            "accuracy": 0.6586361780318497
+          },
+          "completeCases": 2447,
+          "augmentedCompleteCases": {
+            "n": 2447,
+            "brier": 0.21238627604829238,
+            "logLoss": 0.6115446382154107,
+            "accuracy": 0.658357172047405
+          }
+        }
+      },
+      {
+        "year": 2023,
+        "availableFrom": "2023-01-01",
+        "trainFrom": "2015-01-01",
+        "trainThrough": "2020-12-10",
+        "validationFrom": "2021-01-01",
+        "validationThrough": "2022-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.8677729238976681,
+          0.5931144240411337,
+          0.0,
+          0.0,
+          0.0,
+          0.7308038035064855
+        ],
+        "augmentedCoefficients": [
+          0.864498610452809,
+          0.6582880709387122,
+          -0.3055522733110011,
+          -0.00034543197972540583,
+          0.03619507263147546,
+          0.7323271854627457
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 13397,
+        "trainingCompleteCases": 13369,
+        "validation": {
+          "baseline": {
+            "n": 4675,
+            "brier": 0.2231910954698042,
+            "logLoss": 0.6387311666849519,
+            "accuracy": 0.6417112299465241
+          },
+          "elo": {
+            "n": 4675,
+            "brier": 0.21739566246584222,
+            "logLoss": 0.6226107793371992,
+            "accuracy": 0.6432085561497326
+          },
+          "selected": {
+            "n": 4675,
+            "brier": 0.2138064793604216,
+            "logLoss": 0.6145465197133603,
+            "accuracy": 0.653048128342246
+          },
+          "completeCases": 4673,
+          "augmentedCompleteCases": {
+            "n": 4673,
+            "brier": 0.21380246954664714,
+            "logLoss": 0.6145358754261311,
+            "accuracy": 0.6528996362080034
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2377,
+            "brier": 0.2330184618769675,
+            "logLoss": 0.6672174156544486,
+            "accuracy": 0.6318889356331511
+          },
+          "elo": {
+            "n": 2377,
+            "brier": 0.22406222631939776,
+            "logLoss": 0.6389704194206098,
+            "accuracy": 0.633992427429533
+          },
+          "selected": {
+            "n": 2377,
+            "brier": 0.22218447819747222,
+            "logLoss": 0.6347347145116413,
+            "accuracy": 0.6377787126630207
+          },
+          "completeCases": 2377,
+          "augmentedCompleteCases": {
+            "n": 2377,
+            "brier": 0.22218447819747222,
+            "logLoss": 0.6347347145116413,
+            "accuracy": 0.6377787126630207
+          }
+        }
+      },
+      {
+        "year": 2024,
+        "availableFrom": "2024-01-01",
+        "trainFrom": "2016-01-01",
+        "trainThrough": "2021-12-10",
+        "validationFrom": "2022-01-01",
+        "validationThrough": "2023-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.8770774565610469,
+          0.5261576217504563,
+          0.0,
+          0.0,
+          0.0,
+          0.670260918291607
+        ],
+        "augmentedCoefficients": [
+          0.8597789224562438,
+          0.6001089115315148,
+          -0.3337342454554071,
+          -0.0072223559901317975,
+          0.04787651340626202,
+          0.6749275026521377
+        ],
+        "eloRidge": 0.001,
+        "augmentedRidge": 0.001,
+        "trainingN": 13116,
+        "trainingCompleteCases": 13100,
+        "validation": {
+          "baseline": {
+            "n": 4826,
+            "brier": 0.22776635010068985,
+            "logLoss": 0.6527190098481738,
+            "accuracy": 0.639867384997928
+          },
+          "elo": {
+            "n": 4826,
+            "brier": 0.21968829984435795,
+            "logLoss": 0.6286527582890656,
+            "accuracy": 0.6462909241607957
+          },
+          "selected": {
+            "n": 4826,
+            "brier": 0.21705976516387213,
+            "logLoss": 0.6225333528038131,
+            "accuracy": 0.6489846663903854
+          },
+          "completeCases": 4824,
+          "augmentedCompleteCases": {
+            "n": 4824,
+            "brier": 0.21705929831395882,
+            "logLoss": 0.6225304986782615,
+            "accuracy": 0.6488391376451078
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2573,
+            "brier": 0.22172713333263888,
+            "logLoss": 0.6353709787298019,
+            "accuracy": 0.6373882627283327,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "n": 66,
+                "predicted": 0.061854490425323316,
+                "observed": 0.06060606060606061
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "n": 219,
+                "predicted": 0.15176499369074742,
+                "observed": 0.1872146118721461
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "n": 261,
+                "predicted": 0.2507944803100231,
+                "observed": 0.30268199233716475
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "n": 337,
+                "predicted": 0.3495487936641231,
+                "observed": 0.4124629080118694
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "n": 353,
+                "predicted": 0.45161758380993916,
+                "observed": 0.45325779036827196
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 325,
+                "predicted": 0.550852821912467,
+                "observed": 0.5107692307692308
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 338,
+                "predicted": 0.6482975936953828,
+                "observed": 0.514792899408284
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "n": 324,
+                "predicted": 0.7524183820594945,
+                "observed": 0.6481481481481481
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 229,
+                "predicted": 0.8495531503342287,
+                "observed": 0.7685589519650655
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "n": 121,
+                "predicted": 0.9360486760922286,
+                "observed": 0.8347107438016529
+              }
+            ]
+          },
+          "elo": {
+            "n": 2573,
+            "brier": 0.21660170005201654,
+            "logLoss": 0.6208449585733085,
+            "accuracy": 0.6424407306645938,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "n": 18,
+                "predicted": 0.06894118884764598,
+                "observed": 0.05555555555555555
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "n": 71,
+                "predicted": 0.1557572498431804,
+                "observed": 0.056338028169014086
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "n": 221,
+                "predicted": 0.2559590795412098,
+                "observed": 0.2081447963800905
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "n": 368,
+                "predicted": 0.3574494999965672,
+                "observed": 0.3070652173913043
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "n": 509,
+                "predicted": 0.4512323170018603,
+                "observed": 0.44793713163064836
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 584,
+                "predicted": 0.5507886866774426,
+                "observed": 0.5171232876712328
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 409,
+                "predicted": 0.6474318025656226,
+                "observed": 0.6136919315403423
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "n": 252,
+                "predicted": 0.742242387158766,
+                "observed": 0.7341269841269841
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 110,
+                "predicted": 0.8457852771518825,
+                "observed": 0.8272727272727273
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "n": 31,
+                "predicted": 0.9332622202368229,
+                "observed": 0.9354838709677419
+              }
+            ]
+          },
+          "selected": {
+            "n": 2573,
+            "brier": 0.21431945370331187,
+            "logLoss": 0.6150079074151856,
+            "accuracy": 0.6443839875631558,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "n": 30,
+                "predicted": 0.06861931060951815,
+                "observed": 0.06666666666666667
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "n": 125,
+                "predicted": 0.1596713987749904,
+                "observed": 0.088
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "n": 286,
+                "predicted": 0.25296788663186326,
+                "observed": 0.22377622377622378
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "n": 468,
+                "predicted": 0.3524211265555297,
+                "observed": 0.41239316239316237
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "n": 471,
+                "predicted": 0.45036062486968365,
+                "observed": 0.4585987261146497
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 506,
+                "predicted": 0.5498310878971484,
+                "observed": 0.5296442687747036
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 347,
+                "predicted": 0.6491568257402456,
+                "observed": 0.6311239193083573
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "n": 201,
+                "predicted": 0.7407726266135206,
+                "observed": 0.7761194029850746
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 110,
+                "predicted": 0.843832950310372,
+                "observed": 0.8636363636363636
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "n": 29,
+                "predicted": 0.9276812816700165,
+                "observed": 0.896551724137931
+              }
+            ]
+          },
+          "completeCases": 2573,
+          "augmentedCompleteCases": {
+            "n": 2573,
+            "brier": 0.21431945370331187,
+            "logLoss": 0.6150079074151856,
+            "accuracy": 0.6443839875631558,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "n": 30,
+                "predicted": 0.06861931060951815,
+                "observed": 0.06666666666666667
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "n": 125,
+                "predicted": 0.1596713987749904,
+                "observed": 0.088
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "n": 286,
+                "predicted": 0.25296788663186326,
+                "observed": 0.22377622377622378
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "n": 468,
+                "predicted": 0.3524211265555297,
+                "observed": 0.41239316239316237
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "n": 471,
+                "predicted": 0.45036062486968365,
+                "observed": 0.4585987261146497
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 506,
+                "predicted": 0.5498310878971484,
+                "observed": 0.5296442687747036
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 347,
+                "predicted": 0.6491568257402456,
+                "observed": 0.6311239193083573
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "n": 201,
+                "predicted": 0.7407726266135206,
+                "observed": 0.7761194029850746
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 110,
+                "predicted": 0.843832950310372,
+                "observed": 0.8636363636363636
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "n": 29,
+                "predicted": 0.9276812816700165,
+                "observed": 0.896551724137931
+              }
+            ]
+          }
+        }
+      },
+      {
+        "year": 2025,
+        "availableFrom": "2025-01-01",
+        "trainFrom": "2017-01-01",
+        "trainThrough": "2022-12-10",
+        "validationFrom": "2023-01-01",
+        "validationThrough": "2024-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.8423810482172902,
+          0.545367180719707,
+          0.0,
+          0.0,
+          0.0,
+          0.6594576203124368
+        ],
+        "augmentedCoefficients": [
+          0.8068793875299435,
+          0.6294346962597243,
+          -0.3530564017342821,
+          0.0031411936140818626,
+          0.04216396459389118,
+          0.6681533137652124
+        ],
+        "eloRidge": 0.001,
+        "augmentedRidge": 0.001,
+        "trainingN": 13081,
+        "trainingCompleteCases": 13066,
+        "validation": {
+          "baseline": {
+            "n": 4873,
+            "brier": 0.22718979821861984,
+            "logLoss": 0.6507497985811989,
+            "accuracy": 0.6351323619946645
+          },
+          "elo": {
+            "n": 4873,
+            "brier": 0.2200335487546863,
+            "logLoss": 0.6291049527495551,
+            "accuracy": 0.6384157603119228
+          },
+          "selected": {
+            "n": 4873,
+            "brier": 0.21777234862861983,
+            "logLoss": 0.6236514572173395,
+            "accuracy": 0.6410835214446953
+          },
+          "completeCases": 4873,
+          "augmentedCompleteCases": {
+            "n": 4873,
+            "brier": 0.21777234862861983,
+            "logLoss": 0.6236514572173395,
+            "accuracy": 0.6410835214446953
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2347,
+            "brier": 0.23081548052011733,
+            "logLoss": 0.660325850920827,
+            "accuracy": 0.6297400937366852,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "n": 84,
+                "predicted": 0.0584453567202278,
+                "observed": 0.09523809523809523
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "n": 192,
+                "predicted": 0.15521160466511577,
+                "observed": 0.22916666666666666
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "n": 271,
+                "predicted": 0.25233942796161696,
+                "observed": 0.2952029520295203
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "n": 300,
+                "predicted": 0.3499599745670923,
+                "observed": 0.38666666666666666
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "n": 295,
+                "predicted": 0.45042186174857635,
+                "observed": 0.45084745762711864
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 291,
+                "predicted": 0.5477994630541392,
+                "observed": 0.5120274914089347
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 309,
+                "predicted": 0.6492307030110082,
+                "observed": 0.4886731391585761
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "n": 263,
+                "predicted": 0.7485741998316082,
+                "observed": 0.6349809885931559
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 225,
+                "predicted": 0.8483692412226426,
+                "observed": 0.7022222222222222
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "n": 117,
+                "predicted": 0.9370191679349752,
+                "observed": 0.7863247863247863
+              }
+            ]
+          },
+          "elo": {
+            "n": 2347,
+            "brier": 0.22219237667845204,
+            "logLoss": 0.6327821193792773,
+            "accuracy": 0.6284618662121858,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "n": 26,
+                "predicted": 0.06324724949971129,
+                "observed": 0.0
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "n": 61,
+                "predicted": 0.15608648132662595,
+                "observed": 0.18032786885245902
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "n": 206,
+                "predicted": 0.25854954915841655,
+                "observed": 0.21359223300970873
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "n": 341,
+                "predicted": 0.35518351058903636,
+                "observed": 0.3225806451612903
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "n": 491,
+                "predicted": 0.4515271452980338,
+                "observed": 0.4256619144602851
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 490,
+                "predicted": 0.5485391063926927,
+                "observed": 0.49795918367346936
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 381,
+                "predicted": 0.6464729186850356,
+                "observed": 0.5695538057742782
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "n": 225,
+                "predicted": 0.7435649727222231,
+                "observed": 0.7066666666666667
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 99,
+                "predicted": 0.8440489841726752,
+                "observed": 0.8080808080808081
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "n": 27,
+                "predicted": 0.9248165720633765,
+                "observed": 0.8888888888888888
+              }
+            ]
+          },
+          "selected": {
+            "n": 2347,
+            "brier": 0.21959882162206143,
+            "logLoss": 0.6270522418686388,
+            "accuracy": 0.6378355347251811,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "n": 41,
+                "predicted": 0.06422363720442231,
+                "observed": 0.0
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "n": 104,
+                "predicted": 0.1631995531647257,
+                "observed": 0.19230769230769232
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "n": 263,
+                "predicted": 0.2541851434129754,
+                "observed": 0.24714828897338403
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "n": 427,
+                "predicted": 0.35266672406074645,
+                "observed": 0.38173302107728335
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "n": 470,
+                "predicted": 0.45112818516389575,
+                "observed": 0.43617021276595747
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 417,
+                "predicted": 0.5471346458631333,
+                "observed": 0.5347721822541966
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 318,
+                "predicted": 0.6469103184620176,
+                "observed": 0.5754716981132075
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "n": 193,
+                "predicted": 0.7448657531970214,
+                "observed": 0.7409326424870466
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 92,
+                "predicted": 0.8447862680782106,
+                "observed": 0.8152173913043478
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "n": 22,
+                "predicted": 0.9275908987052344,
+                "observed": 0.9545454545454546
+              }
+            ]
+          },
+          "completeCases": 2345,
+          "augmentedCompleteCases": {
+            "n": 2345,
+            "brier": 0.2197232068964134,
+            "logLoss": 0.6273187677647961,
+            "accuracy": 0.6375266524520256,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "n": 41,
+                "predicted": 0.06422363720442231,
+                "observed": 0.0
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "n": 104,
+                "predicted": 0.1631995531647257,
+                "observed": 0.19230769230769232
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "n": 262,
+                "predicted": 0.25427475660764076,
+                "observed": 0.2480916030534351
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "n": 427,
+                "predicted": 0.35266672406074645,
+                "observed": 0.38173302107728335
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "n": 470,
+                "predicted": 0.45112818516389575,
+                "observed": 0.43617021276595747
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 417,
+                "predicted": 0.5471346458631333,
+                "observed": 0.5347721822541966
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 317,
+                "predicted": 0.6467651290507742,
+                "observed": 0.5741324921135647
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "n": 193,
+                "predicted": 0.7448657531970214,
+                "observed": 0.7409326424870466
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 92,
+                "predicted": 0.8447862680782106,
+                "observed": 0.8152173913043478
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "n": 22,
+                "predicted": 0.9275908987052344,
+                "observed": 0.9545454545454546
+              }
+            ]
+          }
+        }
+      },
+      {
+        "year": 2026,
+        "availableFrom": "2026-01-01",
+        "trainFrom": "2018-01-01",
+        "trainThrough": "2023-12-10",
+        "validationFrom": "2024-01-01",
+        "validationThrough": "2025-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.8249080317482084,
+          0.5249578851676635,
+          0.0,
+          0.0,
+          0.0,
+          0.7145001753505918
+        ],
+        "augmentedCoefficients": [
+          0.7573539685791246,
+          0.6122423730612265,
+          -0.3788695681059905,
+          0.04896052430612155,
+          0.06878255893592328,
+          0.7321675565683847
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 13050,
+        "trainingCompleteCases": 13039,
+        "validation": {
+          "baseline": {
+            "n": 4920,
+            "brier": 0.2260625704970722,
+            "logLoss": 0.6472752643054799,
+            "accuracy": 0.633739837398374
+          },
+          "elo": {
+            "n": 4920,
+            "brier": 0.2192725624826785,
+            "logLoss": 0.6265469106080769,
+            "accuracy": 0.6363821138211382
+          },
+          "selected": {
+            "n": 4920,
+            "brier": 0.2167901085448108,
+            "logLoss": 0.6206655759054108,
+            "accuracy": 0.6420731707317073
+          },
+          "completeCases": 4918,
+          "augmentedCompleteCases": {
+            "n": 4918,
+            "brier": 0.216847179071164,
+            "logLoss": 0.6207872600757541,
+            "accuracy": 0.6419276128507524
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 1198,
+            "brier": 0.22651168920853426,
+            "logLoss": 0.6542011916249899,
+            "accuracy": 0.6469115191986644,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "n": 41,
+                "predicted": 0.05693250593114854,
+                "observed": 0.07317073170731707
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "n": 78,
+                "predicted": 0.15441860935516116,
+                "observed": 0.19230769230769232
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "n": 141,
+                "predicted": 0.2516916107524095,
+                "observed": 0.2553191489361702
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "n": 123,
+                "predicted": 0.35213846410789307,
+                "observed": 0.2926829268292683
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "n": 155,
+                "predicted": 0.4529746140414866,
+                "observed": 0.43870967741935485
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 150,
+                "predicted": 0.5498688016455675,
+                "observed": 0.5133333333333333
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 154,
+                "predicted": 0.6488430038170008,
+                "observed": 0.5324675324675324
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "n": 184,
+                "predicted": 0.7489736441677262,
+                "observed": 0.6358695652173914
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 113,
+                "predicted": 0.8484140963277763,
+                "observed": 0.6814159292035398
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "n": 59,
+                "predicted": 0.9404226706431216,
+                "observed": 0.711864406779661
+              }
+            ]
+          },
+          "elo": {
+            "n": 1198,
+            "brier": 0.21904635068507666,
+            "logLoss": 0.6275862022058291,
+            "accuracy": 0.6469115191986644,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "n": 10,
+                "predicted": 0.06474113327784134,
+                "observed": 0.0
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "n": 26,
+                "predicted": 0.1580952763896422,
+                "observed": 0.038461538461538464
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "n": 88,
+                "predicted": 0.25420489541038543,
+                "observed": 0.18181818181818182
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "n": 172,
+                "predicted": 0.3560443401025358,
+                "observed": 0.27906976744186046
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "n": 232,
+                "predicted": 0.45239791316753963,
+                "observed": 0.3793103448275862
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 247,
+                "predicted": 0.5482815336953873,
+                "observed": 0.5020242914979757
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 240,
+                "predicted": 0.6466347146402505,
+                "observed": 0.6083333333333333
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "n": 120,
+                "predicted": 0.741459230506652,
+                "observed": 0.6666666666666666
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 49,
+                "predicted": 0.8347328936747447,
+                "observed": 0.7551020408163265
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "n": 14,
+                "predicted": 0.9319493995760084,
+                "observed": 0.9285714285714286
+              }
+            ]
+          },
+          "selected": {
+            "n": 1198,
+            "brier": 0.21332755717336624,
+            "logLoss": 0.6144576720711011,
+            "accuracy": 0.657762938230384,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "n": 13,
+                "predicted": 0.06401046869458989,
+                "observed": 0.0
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "n": 52,
+                "predicted": 0.16320856500754383,
+                "observed": 0.09615384615384616
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "n": 118,
+                "predicted": 0.252889247044402,
+                "observed": 0.2288135593220339
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "n": 207,
+                "predicted": 0.352037923090435,
+                "observed": 0.30434782608695654
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "n": 227,
+                "predicted": 0.45255862869205576,
+                "observed": 0.42290748898678415
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 234,
+                "predicted": 0.54926857248795,
+                "observed": 0.5128205128205128
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 198,
+                "predicted": 0.6484845411660802,
+                "observed": 0.6414141414141414
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "n": 95,
+                "predicted": 0.7375491737066596,
+                "observed": 0.7368421052631579
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 41,
+                "predicted": 0.8364803733845704,
+                "observed": 0.8048780487804879
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "n": 13,
+                "predicted": 0.9299407259002777,
+                "observed": 0.9230769230769231
+              }
+            ]
+          },
+          "completeCases": 1178,
+          "augmentedCompleteCases": {
+            "n": 1178,
+            "brier": 0.21414369176677622,
+            "logLoss": 0.616363533255996,
+            "accuracy": 0.6561969439728353,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "n": 11,
+                "predicted": 0.06119487521260863,
+                "observed": 0.0
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "n": 52,
+                "predicted": 0.16320856500754383,
+                "observed": 0.09615384615384616
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "n": 116,
+                "predicted": 0.25336478728503375,
+                "observed": 0.23275862068965517
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "n": 201,
+                "predicted": 0.35176725533193764,
+                "observed": 0.30845771144278605
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "n": 226,
+                "predicted": 0.4523492436292483,
+                "observed": 0.4247787610619469
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 231,
+                "predicted": 0.5493102004656241,
+                "observed": 0.5151515151515151
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 193,
+                "predicted": 0.6487508336006538,
+                "observed": 0.6424870466321243
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "n": 95,
+                "predicted": 0.7375491737066596,
+                "observed": 0.7368421052631579
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 40,
+                "predicted": 0.8370830270557292,
+                "observed": 0.8
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "n": 13,
+                "predicted": 0.9299407259002777,
+                "observed": 0.9230769230769231
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "WTA": [
+      {
+        "year": 2005,
+        "availableFrom": "2005-01-01",
+        "trainFrom": "1997-01-01",
+        "trainThrough": "2002-12-10",
+        "validationFrom": "2003-01-01",
+        "validationThrough": "2004-12-10",
+        "selected": "CALIBRATED_ELO",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.370175162524457,
+          0.3812727983589821,
+          0.0,
+          0.0,
+          0.0,
+          -0.353006393474157
+        ],
+        "augmentedCoefficients": [
+          1.2843699881147694,
+          0.441925785537053,
+          -0.0392723780528034,
+          0.4275601508338571,
+          0.048172355693474875,
+          -0.031602986480307474
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.001,
+        "trainingN": 7613,
+        "trainingCompleteCases": 7092,
+        "validation": {
+          "baseline": {
+            "n": 4303,
+            "brier": 0.2022294170362276,
+            "logLoss": 0.5890160545103506,
+            "accuracy": 0.6867301882407623
+          },
+          "elo": {
+            "n": 4303,
+            "brier": 0.20080909214422668,
+            "logLoss": 0.5846720227913141,
+            "accuracy": 0.6855682082268185
+          },
+          "selected": {
+            "n": 4303,
+            "brier": 0.20080909214422668,
+            "logLoss": 0.5846720227913141,
+            "accuracy": 0.6855682082268185
+          },
+          "completeCases": 4184,
+          "augmentedCompleteCases": {
+            "n": 4184,
+            "brier": 0.20122427943949908,
+            "logLoss": 0.5857683023273282,
+            "accuracy": 0.6849904397705545
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2278,
+            "brier": 0.20535228554586768,
+            "logLoss": 0.5995280586933885,
+            "accuracy": 0.6795434591747147
+          },
+          "elo": {
+            "n": 2278,
+            "brier": 0.20247868475066225,
+            "logLoss": 0.5891841678806786,
+            "accuracy": 0.6834942932396839
+          },
+          "selected": {
+            "n": 2278,
+            "brier": 0.20247868475066225,
+            "logLoss": 0.5891841678806786,
+            "accuracy": 0.6834942932396839
+          },
+          "completeCases": 2203,
+          "augmentedCompleteCases": {
+            "n": 2203,
+            "brier": 0.20110286298956953,
+            "logLoss": 0.5862232282053715,
+            "accuracy": 0.6849750340444848
+          }
+        }
+      },
+      {
+        "year": 2006,
+        "availableFrom": "2006-01-01",
+        "trainFrom": "1998-01-01",
+        "trainThrough": "2003-12-10",
+        "validationFrom": "2004-01-01",
+        "validationThrough": "2005-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.396258563887352,
+          0.4010531929266954,
+          0.0,
+          0.0,
+          0.0,
+          -0.014264165193707993
+        ],
+        "augmentedCoefficients": [
+          1.360306849520339,
+          0.43074679943969074,
+          -0.08758218452079705,
+          0.251924973001257,
+          0.04116588797569219,
+          -0.008761929415799586
+        ],
+        "eloRidge": 0.001,
+        "augmentedRidge": 0.001,
+        "trainingN": 9426,
+        "trainingCompleteCases": 8897,
+        "validation": {
+          "baseline": {
+            "n": 4442,
+            "brier": 0.2050130585578343,
+            "logLoss": 0.5977989952968993,
+            "accuracy": 0.6805493021161639
+          },
+          "elo": {
+            "n": 4442,
+            "brier": 0.20219195656293001,
+            "logLoss": 0.5885388453501653,
+            "accuracy": 0.6825754164790635
+          },
+          "selected": {
+            "n": 4442,
+            "brier": 0.2013801625468287,
+            "logLoss": 0.5867324253232745,
+            "accuracy": 0.6875281404772625
+          },
+          "completeCases": 4313,
+          "augmentedCompleteCases": {
+            "n": 4313,
+            "brier": 0.2009892135115459,
+            "logLoss": 0.5859907136943525,
+            "accuracy": 0.6893113841873406
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2217,
+            "brier": 0.20503679491617924,
+            "logLoss": 0.5955260289585964,
+            "accuracy": 0.6838069463238611
+          },
+          "elo": {
+            "n": 2217,
+            "brier": 0.20243633710552403,
+            "logLoss": 0.5878409191876548,
+            "accuracy": 0.6788452864230943
+          },
+          "selected": {
+            "n": 2217,
+            "brier": 0.201913707230033,
+            "logLoss": 0.5859589900093385,
+            "accuracy": 0.6756878664862427
+          },
+          "completeCases": 2154,
+          "augmentedCompleteCases": {
+            "n": 2154,
+            "brier": 0.20231698296578127,
+            "logLoss": 0.5868464044331639,
+            "accuracy": 0.6736304549675023
+          }
+        }
+      },
+      {
+        "year": 2007,
+        "availableFrom": "2007-01-01",
+        "trainFrom": "1999-01-01",
+        "trainThrough": "2004-12-10",
+        "validationFrom": "2005-01-01",
+        "validationThrough": "2006-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.3912025018915912,
+          0.42779825211991745,
+          0.0,
+          0.0,
+          0.0,
+          -0.11779225249135525
+        ],
+        "augmentedCoefficients": [
+          1.3658371338588668,
+          0.4476700099745271,
+          -0.12645888067919342,
+          0.16220721677920358,
+          0.040527845683888924,
+          -0.07924326008312245
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 11172,
+        "trainingCompleteCases": 10658,
+        "validation": {
+          "baseline": {
+            "n": 4495,
+            "brier": 0.2051966809349624,
+            "logLoss": 0.5975541988664621,
+            "accuracy": 0.6816462736373748
+          },
+          "elo": {
+            "n": 4495,
+            "brier": 0.202460734242179,
+            "logLoss": 0.5885383271334217,
+            "accuracy": 0.6803114571746385
+          },
+          "selected": {
+            "n": 4495,
+            "brier": 0.20166325057434575,
+            "logLoss": 0.5863037468616947,
+            "accuracy": 0.6812013348164627
+          },
+          "completeCases": 4357,
+          "augmentedCompleteCases": {
+            "n": 4357,
+            "brier": 0.20162359464968024,
+            "logLoss": 0.5862220149690348,
+            "accuracy": 0.6809731466605462
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2279,
+            "brier": 0.1972688627668421,
+            "logLoss": 0.5778073049806207,
+            "accuracy": 0.6871434839842036
+          },
+          "elo": {
+            "n": 2279,
+            "brier": 0.19478667476870556,
+            "logLoss": 0.5707505647780589,
+            "accuracy": 0.686704695041685
+          },
+          "selected": {
+            "n": 2279,
+            "brier": 0.1942039867345977,
+            "logLoss": 0.56921510871385,
+            "accuracy": 0.6937253181219833
+          },
+          "completeCases": 2179,
+          "augmentedCompleteCases": {
+            "n": 2179,
+            "brier": 0.1937371390872718,
+            "logLoss": 0.5678357366883897,
+            "accuracy": 0.6943552088113814
+          }
+        }
+      },
+      {
+        "year": 2008,
+        "availableFrom": "2008-01-01",
+        "trainFrom": "2000-01-01",
+        "trainThrough": "2005-12-10",
+        "validationFrom": "2006-01-01",
+        "validationThrough": "2007-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.3900160663594394,
+          0.42376527002685493,
+          0.0,
+          0.0,
+          0.0,
+          -0.10305518946332445
+        ],
+        "augmentedCoefficients": [
+          1.3646130174566675,
+          0.4446280716560606,
+          -0.12304343763791861,
+          0.16348891871614374,
+          0.03376133772364496,
+          -0.06928295996528001
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 13033,
+        "trainingCompleteCases": 12506,
+        "validation": {
+          "baseline": {
+            "n": 4442,
+            "brier": 0.20096854716232182,
+            "logLoss": 0.5861890524218631,
+            "accuracy": 0.6861773975686628
+          },
+          "elo": {
+            "n": 4442,
+            "brier": 0.1984502434645187,
+            "logLoss": 0.578908551909347,
+            "accuracy": 0.6837010355695633
+          },
+          "selected": {
+            "n": 4442,
+            "brier": 0.1978547953402316,
+            "logLoss": 0.5771440516116816,
+            "accuracy": 0.6857271499324629
+          },
+          "completeCases": 4279,
+          "augmentedCompleteCases": {
+            "n": 4279,
+            "brier": 0.19784772672508408,
+            "logLoss": 0.5769497257814983,
+            "accuracy": 0.6849731245618135
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2183,
+            "brier": 0.21209125036760074,
+            "logLoss": 0.6112911946262114,
+            "accuracy": 0.6546037562986715
+          },
+          "elo": {
+            "n": 2183,
+            "brier": 0.20734937733299638,
+            "logLoss": 0.5985386548429437,
+            "accuracy": 0.6596426935409986
+          },
+          "selected": {
+            "n": 2183,
+            "brier": 0.2072407986298042,
+            "logLoss": 0.5983390405336348,
+            "accuracy": 0.6601007787448465
+          },
+          "completeCases": 2108,
+          "augmentedCompleteCases": {
+            "n": 2108,
+            "brier": 0.20814035332090852,
+            "logLoss": 0.6003587017259083,
+            "accuracy": 0.6574952561669829
+          }
+        }
+      },
+      {
+        "year": 2009,
+        "availableFrom": "2009-01-01",
+        "trainFrom": "2001-01-01",
+        "trainThrough": "2006-12-10",
+        "validationFrom": "2007-01-01",
+        "validationThrough": "2008-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.4029581385093277,
+          0.395004915927969,
+          0.0,
+          0.0,
+          0.0,
+          -0.020822993934326708
+        ],
+        "augmentedCoefficients": [
+          1.3760145303192655,
+          0.41166795230859377,
+          -0.15586042235967648,
+          0.11285139739034034,
+          0.03910359257739479,
+          -0.016482440968934527
+        ],
+        "eloRidge": 0.001,
+        "augmentedRidge": 0.001,
+        "trainingN": 13294,
+        "trainingCompleteCases": 12858,
+        "validation": {
+          "baseline": {
+            "n": 4462,
+            "brier": 0.2045206046163392,
+            "logLoss": 0.5941890465979054,
+            "accuracy": 0.6712236665172568
+          },
+          "elo": {
+            "n": 4462,
+            "brier": 0.20094974650673106,
+            "logLoss": 0.5844070844140682,
+            "accuracy": 0.6736889287315105
+          },
+          "selected": {
+            "n": 4462,
+            "brier": 0.2005654891713096,
+            "logLoss": 0.583414674392837,
+            "accuracy": 0.6768265351860152
+          },
+          "completeCases": 4287,
+          "augmentedCompleteCases": {
+            "n": 4287,
+            "brier": 0.20081101878118604,
+            "logLoss": 0.5838029600045588,
+            "accuracy": 0.6757639374854211
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2252,
+            "brier": 0.2138668501941159,
+            "logLoss": 0.6228005407502522,
+            "accuracy": 0.6696269982238011
+          },
+          "elo": {
+            "n": 2252,
+            "brier": 0.21041829293549716,
+            "logLoss": 0.6097673653679232,
+            "accuracy": 0.6678507992895204
+          },
+          "selected": {
+            "n": 2252,
+            "brier": 0.210045844177371,
+            "logLoss": 0.6088734217356376,
+            "accuracy": 0.6682948490230906
+          },
+          "completeCases": 2219,
+          "augmentedCompleteCases": {
+            "n": 2219,
+            "brier": 0.21054871834685213,
+            "logLoss": 0.6099005761502586,
+            "accuracy": 0.6660657954033349
+          }
+        }
+      },
+      {
+        "year": 2010,
+        "availableFrom": "2010-01-01",
+        "trainFrom": "2002-01-01",
+        "trainThrough": "2007-12-10",
+        "validationFrom": "2008-01-01",
+        "validationThrough": "2009-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.1578456253218048,
+          0.5346613426822473,
+          0.0,
+          0.0,
+          0.0,
+          -0.002177583764398816
+        ],
+        "augmentedCoefficients": [
+          1.1314466402935404,
+          0.5477385336168096,
+          -0.1437318959635857,
+          0.07157992727972337,
+          0.05027506252519408,
+          -0.0022601588113776118
+        ],
+        "eloRidge": 0.01,
+        "augmentedRidge": 0.01,
+        "trainingN": 13289,
+        "trainingCompleteCases": 12865,
+        "validation": {
+          "baseline": {
+            "n": 4435,
+            "brier": 0.21299286272595747,
+            "logLoss": 0.6171353992420715,
+            "accuracy": 0.6622322435174747
+          },
+          "elo": {
+            "n": 4435,
+            "brier": 0.20884846852171884,
+            "logLoss": 0.6041437596724172,
+            "accuracy": 0.6642615558060879
+          },
+          "selected": {
+            "n": 4435,
+            "brier": 0.20850546888553018,
+            "logLoss": 0.6033036654557431,
+            "accuracy": 0.6647125140924465
+          },
+          "completeCases": 4327,
+          "augmentedCompleteCases": {
+            "n": 4327,
+            "brier": 0.20914308926171046,
+            "logLoss": 0.6046970155868284,
+            "accuracy": 0.6625837762884216
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2292,
+            "brier": 0.2121714772346875,
+            "logLoss": 0.615962646188632,
+            "accuracy": 0.6815008726003491
+          },
+          "elo": {
+            "n": 2292,
+            "brier": 0.20854054531423438,
+            "logLoss": 0.6041835076400014,
+            "accuracy": 0.6788830715532286
+          },
+          "selected": {
+            "n": 2292,
+            "brier": 0.20907873058556836,
+            "logLoss": 0.6052187242310275,
+            "accuracy": 0.681064572425829
+          },
+          "completeCases": 2219,
+          "augmentedCompleteCases": {
+            "n": 2219,
+            "brier": 0.2102294641861838,
+            "logLoss": 0.607944624069504,
+            "accuracy": 0.6791347453808022
+          }
+        }
+      },
+      {
+        "year": 2011,
+        "availableFrom": "2011-01-01",
+        "trainFrom": "2003-01-01",
+        "trainThrough": "2008-12-10",
+        "validationFrom": "2009-01-01",
+        "validationThrough": "2010-12-10",
+        "selected": "CALIBRATED_ELO",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.1336964324515046,
+          0.5590599627914684,
+          0.0,
+          0.0,
+          0.0,
+          -0.003335434194637546
+        ],
+        "augmentedCoefficients": [
+          1.1026614558294867,
+          0.5747104269960635,
+          -0.14943379279906435,
+          0.03900455349600222,
+          0.04683288408997232,
+          -0.003400678214747092
+        ],
+        "eloRidge": 0.01,
+        "augmentedRidge": 0.01,
+        "trainingN": 13260,
+        "trainingCompleteCases": 12828,
+        "validation": {
+          "baseline": {
+            "n": 4544,
+            "brier": 0.213011701685531,
+            "logLoss": 0.6193514971025336,
+            "accuracy": 0.6756161971830986
+          },
+          "elo": {
+            "n": 4544,
+            "brier": 0.20956661178963357,
+            "logLoss": 0.6070352394206714,
+            "accuracy": 0.6740757042253521
+          },
+          "selected": {
+            "n": 4544,
+            "brier": 0.20956661178963357,
+            "logLoss": 0.6070352394206714,
+            "accuracy": 0.6740757042253521
+          },
+          "completeCases": 4438,
+          "augmentedCompleteCases": {
+            "n": 4438,
+            "brier": 0.21040562156180553,
+            "logLoss": 0.6088499989649265,
+            "accuracy": 0.6719242902208202
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2286,
+            "brier": 0.21793815009925843,
+            "logLoss": 0.6304048751232405,
+            "accuracy": 0.6557305336832896
+          },
+          "elo": {
+            "n": 2286,
+            "brier": 0.21353551071217763,
+            "logLoss": 0.6151994215531795,
+            "accuracy": 0.6596675415573053
+          },
+          "selected": {
+            "n": 2286,
+            "brier": 0.21353551071217763,
+            "logLoss": 0.6151994215531795,
+            "accuracy": 0.6596675415573053
+          },
+          "completeCases": 2220,
+          "augmentedCompleteCases": {
+            "n": 2220,
+            "brier": 0.21343465031849243,
+            "logLoss": 0.6149043296211276,
+            "accuracy": 0.6549549549549549
+          }
+        }
+      },
+      {
+        "year": 2012,
+        "availableFrom": "2012-01-01",
+        "trainFrom": "2004-01-01",
+        "trainThrough": "2009-12-10",
+        "validationFrom": "2010-01-01",
+        "validationThrough": "2011-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.088958794334163,
+          0.5465703419948106,
+          0.0,
+          0.0,
+          0.0,
+          -0.004615904987144974
+        ],
+        "augmentedCoefficients": [
+          1.298754374645938,
+          0.4708747660502392,
+          -0.20141819166749148,
+          0.008238907224646241,
+          0.038212511868377055,
+          -0.04758817538646227
+        ],
+        "eloRidge": 0.01,
+        "augmentedRidge": 0.001,
+        "trainingN": 13373,
+        "trainingCompleteCases": 12973,
+        "validation": {
+          "baseline": {
+            "n": 4578,
+            "brier": 0.21505103472014164,
+            "logLoss": 0.6231742965478532,
+            "accuracy": 0.6686325906509393
+          },
+          "elo": {
+            "n": 4578,
+            "brier": 0.21106910262182932,
+            "logLoss": 0.6097829517253576,
+            "accuracy": 0.6695063346439494
+          },
+          "selected": {
+            "n": 4578,
+            "brier": 0.21094311965323728,
+            "logLoss": 0.6094699750050169,
+            "accuracy": 0.6681957186544343
+          },
+          "completeCases": 4439,
+          "augmentedCompleteCases": {
+            "n": 4439,
+            "brier": 0.21183090018068565,
+            "logLoss": 0.6114977936014317,
+            "accuracy": 0.6661410227528722
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2337,
+            "brier": 0.2160213854576849,
+            "logLoss": 0.6225106298512258,
+            "accuracy": 0.6529738981600343
+          },
+          "elo": {
+            "n": 2337,
+            "brier": 0.2117320747564172,
+            "logLoss": 0.6098275846262727,
+            "accuracy": 0.6529738981600343
+          },
+          "selected": {
+            "n": 2337,
+            "brier": 0.21142307703627972,
+            "logLoss": 0.60853225497975,
+            "accuracy": 0.6615318784766795
+          },
+          "completeCases": 2320,
+          "augmentedCompleteCases": {
+            "n": 2320,
+            "brier": 0.21168034030429086,
+            "logLoss": 0.6090736288004013,
+            "accuracy": 0.6607758620689655
+          }
+        }
+      },
+      {
+        "year": 2013,
+        "availableFrom": "2013-01-01",
+        "trainFrom": "2005-01-01",
+        "trainThrough": "2010-12-10",
+        "validationFrom": "2011-01-01",
+        "validationThrough": "2012-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.0760986836130244,
+          0.5381406162937538,
+          0.0,
+          0.0,
+          0.0,
+          -0.0097848642785049
+        ],
+        "augmentedCoefficients": [
+          1.0475612611243474,
+          0.5445718001219104,
+          -0.1375872734353822,
+          0.033746060918332176,
+          0.04982078047038355,
+          -0.010376000465977777
+        ],
+        "eloRidge": 0.01,
+        "augmentedRidge": 0.01,
+        "trainingN": 13501,
+        "trainingCompleteCases": 13082,
+        "validation": {
+          "baseline": {
+            "n": 4546,
+            "brier": 0.21723256135174251,
+            "logLoss": 0.6272099634361239,
+            "accuracy": 0.6542014958205016
+          },
+          "elo": {
+            "n": 4546,
+            "brier": 0.2128122775222234,
+            "logLoss": 0.6130078957027423,
+            "accuracy": 0.6559612846458425
+          },
+          "selected": {
+            "n": 4546,
+            "brier": 0.2122831014546028,
+            "logLoss": 0.6116727924807144,
+            "accuracy": 0.6559612846458425
+          },
+          "completeCases": 4464,
+          "augmentedCompleteCases": {
+            "n": 4464,
+            "brier": 0.21269878799143,
+            "logLoss": 0.6125638041412959,
+            "accuracy": 0.6545698924731183
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2205,
+            "brier": 0.2098446853466409,
+            "logLoss": 0.6058983474597697,
+            "accuracy": 0.6698412698412698
+          },
+          "elo": {
+            "n": 2205,
+            "brier": 0.20680397362535088,
+            "logLoss": 0.5985932948693723,
+            "accuracy": 0.6680272108843538
+          },
+          "selected": {
+            "n": 2205,
+            "brier": 0.20696949268824807,
+            "logLoss": 0.5991321294820952,
+            "accuracy": 0.6662131519274377
+          },
+          "completeCases": 2199,
+          "augmentedCompleteCases": {
+            "n": 2199,
+            "brier": 0.20720652006811566,
+            "logLoss": 0.5996247899938342,
+            "accuracy": 0.6653024101864484
+          }
+        }
+      },
+      {
+        "year": 2014,
+        "availableFrom": "2014-01-01",
+        "trainFrom": "2006-01-01",
+        "trainThrough": "2011-12-10",
+        "validationFrom": "2012-01-01",
+        "validationThrough": "2013-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.3454812466228159,
+          0.3965766599816702,
+          0.0,
+          0.0,
+          0.0,
+          -0.7736116843249822
+        ],
+        "augmentedCoefficients": [
+          1.303980748992795,
+          0.42189351966281646,
+          -0.22010035917871373,
+          -0.09883319891886189,
+          0.025994650978942907,
+          -0.8260223373500892
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 13509,
+        "trainingCompleteCases": 13099,
+        "validation": {
+          "baseline": {
+            "n": 4470,
+            "brier": 0.2137081417718673,
+            "logLoss": 0.6162383729638325,
+            "accuracy": 0.660178970917226
+          },
+          "elo": {
+            "n": 4470,
+            "brier": 0.20981262280793175,
+            "logLoss": 0.6051795888939508,
+            "accuracy": 0.6595078299776287
+          },
+          "selected": {
+            "n": 4470,
+            "brier": 0.20954671386133905,
+            "logLoss": 0.6044985428709805,
+            "accuracy": 0.6644295302013423
+          },
+          "completeCases": 4447,
+          "augmentedCompleteCases": {
+            "n": 4447,
+            "brier": 0.20982985763028275,
+            "logLoss": 0.605108857652886,
+            "accuracy": 0.663593433775579
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2179,
+            "brier": 0.2226365827233591,
+            "logLoss": 0.6427059552000269,
+            "accuracy": 0.6438733363928407
+          },
+          "elo": {
+            "n": 2179,
+            "brier": 0.21803963204119187,
+            "logLoss": 0.6269670935944361,
+            "accuracy": 0.6475447452960074
+          },
+          "selected": {
+            "n": 2179,
+            "brier": 0.21754499546145625,
+            "logLoss": 0.6253135974858843,
+            "accuracy": 0.6429554841670491
+          },
+          "completeCases": 2164,
+          "augmentedCompleteCases": {
+            "n": 2164,
+            "brier": 0.21724755588375247,
+            "logLoss": 0.624669820829128,
+            "accuracy": 0.6432532347504621
+          }
+        }
+      },
+      {
+        "year": 2015,
+        "availableFrom": "2015-01-01",
+        "trainFrom": "2007-01-01",
+        "trainThrough": "2012-12-10",
+        "validationFrom": "2013-01-01",
+        "validationThrough": "2014-12-10",
+        "selected": "CALIBRATED_ELO",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.2646862014575089,
+          0.42987335216207523,
+          0.0,
+          0.0,
+          0.0,
+          -0.14657675790179223
+        ],
+        "augmentedCoefficients": [
+          1.2245989076505788,
+          0.45255150142889844,
+          -0.1995538850012578,
+          -0.13911976965156986,
+          0.03694918542086635,
+          -0.15692474572911985
+        ],
+        "eloRidge": 0.001,
+        "augmentedRidge": 0.001,
+        "trainingN": 13552,
+        "trainingCompleteCases": 13189,
+        "validation": {
+          "baseline": {
+            "n": 4384,
+            "brier": 0.2162027018575599,
+            "logLoss": 0.6241930046828584,
+            "accuracy": 0.656934306569343
+          },
+          "elo": {
+            "n": 4384,
+            "brier": 0.21221862803241653,
+            "logLoss": 0.6120445044246106,
+            "accuracy": 0.6587591240875912
+          },
+          "selected": {
+            "n": 4384,
+            "brier": 0.21221862803241653,
+            "logLoss": 0.6120445044246106,
+            "accuracy": 0.6587591240875912
+          },
+          "completeCases": 4363,
+          "augmentedCompleteCases": {
+            "n": 4363,
+            "brier": 0.21219497214646982,
+            "logLoss": 0.6119650627243787,
+            "accuracy": 0.656429062571625
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2282,
+            "brier": 0.22431318889402152,
+            "logLoss": 0.6408142758145828,
+            "accuracy": 0.6389132340052586
+          },
+          "elo": {
+            "n": 2282,
+            "brier": 0.21932102944055978,
+            "logLoss": 0.6266887959489763,
+            "accuracy": 0.6406660823838738
+          },
+          "selected": {
+            "n": 2282,
+            "brier": 0.21932102944055978,
+            "logLoss": 0.6266887959489763,
+            "accuracy": 0.6406660823838738
+          },
+          "completeCases": 2243,
+          "augmentedCompleteCases": {
+            "n": 2243,
+            "brier": 0.21857199034730027,
+            "logLoss": 0.6255780502231584,
+            "accuracy": 0.645118145341061
+          }
+        }
+      },
+      {
+        "year": 2016,
+        "availableFrom": "2016-01-01",
+        "trainFrom": "2008-01-01",
+        "trainThrough": "2013-12-10",
+        "validationFrom": "2014-01-01",
+        "validationThrough": "2015-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          0.9918573086259926,
+          0.5422331856480408,
+          0.0,
+          0.0,
+          0.0,
+          -0.011490545091395665
+        ],
+        "augmentedCoefficients": [
+          1.2017441943797602,
+          0.4625801850731851,
+          -0.16721810073515328,
+          -0.09478567849352133,
+          0.026956004910307488,
+          -0.1234457333733522
+        ],
+        "eloRidge": 0.01,
+        "augmentedRidge": 0.001,
+        "trainingN": 13483,
+        "trainingCompleteCases": 13213,
+        "validation": {
+          "baseline": {
+            "n": 4461,
+            "brier": 0.2234942413831779,
+            "logLoss": 0.6417382770207883,
+            "accuracy": 0.6413360233131585
+          },
+          "elo": {
+            "n": 4461,
+            "brier": 0.21860463136067732,
+            "logLoss": 0.6264582427881259,
+            "accuracy": 0.6464918179780318
+          },
+          "selected": {
+            "n": 4461,
+            "brier": 0.21805630832174486,
+            "logLoss": 0.6252987438146234,
+            "accuracy": 0.643353508182022
+          },
+          "completeCases": 4407,
+          "augmentedCompleteCases": {
+            "n": 4407,
+            "brier": 0.21783666884721262,
+            "logLoss": 0.6248577414582516,
+            "accuracy": 0.6439754935330156
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2394,
+            "brier": 0.22881106809942955,
+            "logLoss": 0.6528925953122859,
+            "accuracy": 0.6349206349206349
+          },
+          "elo": {
+            "n": 2394,
+            "brier": 0.2231790354680846,
+            "logLoss": 0.6366531066415598,
+            "accuracy": 0.6441102756892231
+          },
+          "selected": {
+            "n": 2394,
+            "brier": 0.22285466585227207,
+            "logLoss": 0.6359369576239498,
+            "accuracy": 0.641186299081036
+          },
+          "completeCases": 2321,
+          "augmentedCompleteCases": {
+            "n": 2321,
+            "brier": 0.22219684398349349,
+            "logLoss": 0.6345917338831999,
+            "accuracy": 0.6423955191727704
+          }
+        }
+      },
+      {
+        "year": 2017,
+        "availableFrom": "2017-01-01",
+        "trainFrom": "2009-01-01",
+        "trainThrough": "2014-12-10",
+        "validationFrom": "2015-01-01",
+        "validationThrough": "2016-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.2061890180385317,
+          0.44300115195198503,
+          0.0,
+          0.0,
+          0.0,
+          -0.10453987447251196
+        ],
+        "augmentedCoefficients": [
+          1.1993957888612612,
+          0.45112603042679594,
+          -0.1597741570558226,
+          -0.05609656848796667,
+          0.03346413270439393,
+          -0.11092857881151338
+        ],
+        "eloRidge": 0.001,
+        "augmentedRidge": 0.001,
+        "trainingN": 13551,
+        "trainingCompleteCases": 13341,
+        "validation": {
+          "baseline": {
+            "n": 4676,
+            "brier": 0.22661599531355678,
+            "logLoss": 0.6469980860963409,
+            "accuracy": 0.636869118905047
+          },
+          "elo": {
+            "n": 4676,
+            "brier": 0.2213346025752239,
+            "logLoss": 0.6318983298611732,
+            "accuracy": 0.6402908468776732
+          },
+          "selected": {
+            "n": 4676,
+            "brier": 0.22087486306311518,
+            "logLoss": 0.6310285828839269,
+            "accuracy": 0.6420017108639863
+          },
+          "completeCases": 4564,
+          "augmentedCompleteCases": {
+            "n": 4564,
+            "brier": 0.22040099037810681,
+            "logLoss": 0.6300536888399437,
+            "accuracy": 0.6430762489044698
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2268,
+            "brier": 0.22972456901158578,
+            "logLoss": 0.6536080721569709,
+            "accuracy": 0.6256613756613757
+          },
+          "elo": {
+            "n": 2268,
+            "brier": 0.2250552357227983,
+            "logLoss": 0.6406684991349803,
+            "accuracy": 0.626984126984127
+          },
+          "selected": {
+            "n": 2268,
+            "brier": 0.22438155960002093,
+            "logLoss": 0.6393521558639144,
+            "accuracy": 0.6327160493827161
+          },
+          "completeCases": 2177,
+          "augmentedCompleteCases": {
+            "n": 2177,
+            "brier": 0.22354327346821812,
+            "logLoss": 0.6375515239222543,
+            "accuracy": 0.6352779053743683
+          }
+        }
+      },
+      {
+        "year": 2018,
+        "availableFrom": "2018-01-01",
+        "trainFrom": "2010-01-01",
+        "trainThrough": "2015-12-10",
+        "validationFrom": "2016-01-01",
+        "validationThrough": "2017-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.18847171401708,
+          0.4513892771760751,
+          0.0,
+          0.0,
+          0.0,
+          -0.11769022290407082
+        ],
+        "augmentedCoefficients": [
+          1.1851214590807129,
+          0.46788999135995923,
+          -0.15331138240244122,
+          -0.015581893385849959,
+          0.033829502692903704,
+          -0.12296685079054137
+        ],
+        "eloRidge": 0.001,
+        "augmentedRidge": 0.001,
+        "trainingN": 13581,
+        "trainingCompleteCases": 13365,
+        "validation": {
+          "baseline": {
+            "n": 4662,
+            "brier": 0.22925547394858667,
+            "logLoss": 0.6532406651286192,
+            "accuracy": 0.6304161304161304
+          },
+          "elo": {
+            "n": 4662,
+            "brier": 0.22415892365921702,
+            "logLoss": 0.6387645091628522,
+            "accuracy": 0.6347061347061347
+          },
+          "selected": {
+            "n": 4662,
+            "brier": 0.22366488337100324,
+            "logLoss": 0.6377609195141046,
+            "accuracy": 0.6368511368511368
+          },
+          "completeCases": 4498,
+          "augmentedCompleteCases": {
+            "n": 4498,
+            "brier": 0.2228801549278138,
+            "logLoss": 0.6361006538455372,
+            "accuracy": 0.638728323699422
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2279,
+            "brier": 0.2281805142348839,
+            "logLoss": 0.6518826088807707,
+            "accuracy": 0.636682755594559
+          },
+          "elo": {
+            "n": 2279,
+            "brier": 0.22364107070232084,
+            "logLoss": 0.6377807475265403,
+            "accuracy": 0.6318560772268539
+          },
+          "selected": {
+            "n": 2279,
+            "brier": 0.2225853484633251,
+            "logLoss": 0.6354588063814508,
+            "accuracy": 0.6336112329969285
+          },
+          "completeCases": 2212,
+          "augmentedCompleteCases": {
+            "n": 2212,
+            "brier": 0.22286153412063545,
+            "logLoss": 0.6361355364950814,
+            "accuracy": 0.6338155515370705
+          }
+        }
+      },
+      {
+        "year": 2019,
+        "availableFrom": "2019-01-01",
+        "trainFrom": "2011-01-01",
+        "trainThrough": "2016-12-10",
+        "validationFrom": "2017-01-01",
+        "validationThrough": "2018-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.1882052939506147,
+          0.4362955665015884,
+          0.0,
+          0.0,
+          0.0,
+          -0.4847988177298666
+        ],
+        "augmentedCoefficients": [
+          1.1535776868449348,
+          0.4868210473626249,
+          -0.187449797426065,
+          -0.054948871198163274,
+          0.025074732909531522,
+          -0.06760314504406308
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.001,
+        "trainingN": 13683,
+        "trainingCompleteCases": 13467,
+        "validation": {
+          "baseline": {
+            "n": 4466,
+            "brier": 0.22855569072533558,
+            "logLoss": 0.6517695116407134,
+            "accuracy": 0.6330049261083743
+          },
+          "elo": {
+            "n": 4466,
+            "brier": 0.22404876199641258,
+            "logLoss": 0.6385558014066093,
+            "accuracy": 0.6309896999552171
+          },
+          "selected": {
+            "n": 4466,
+            "brier": 0.22321195166821,
+            "logLoss": 0.6368278305303819,
+            "accuracy": 0.6330049261083743
+          },
+          "completeCases": 4312,
+          "augmentedCompleteCases": {
+            "n": 4312,
+            "brier": 0.22297735852466508,
+            "logLoss": 0.6363595311881641,
+            "accuracy": 0.6342764378478665
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2200,
+            "brier": 0.2268920494448974,
+            "logLoss": 0.6492965029404174,
+            "accuracy": 0.6381818181818182
+          },
+          "elo": {
+            "n": 2200,
+            "brier": 0.22272428291576143,
+            "logLoss": 0.6360264981960617,
+            "accuracy": 0.645
+          },
+          "selected": {
+            "n": 2200,
+            "brier": 0.22037534066043923,
+            "logLoss": 0.6308645553880473,
+            "accuracy": 0.6513636363636364
+          },
+          "completeCases": 2105,
+          "augmentedCompleteCases": {
+            "n": 2105,
+            "brier": 0.22028286734302432,
+            "logLoss": 0.6308155851801849,
+            "accuracy": 0.6517814726840855
+          }
+        }
+      },
+      {
+        "year": 2020,
+        "availableFrom": "2020-01-01",
+        "trainFrom": "2012-01-01",
+        "trainThrough": "2017-12-10",
+        "validationFrom": "2018-01-01",
+        "validationThrough": "2019-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.1869718535082188,
+          0.4377163279875415,
+          0.0,
+          0.0,
+          0.0,
+          -0.5333974891959765
+        ],
+        "augmentedCoefficients": [
+          1.1919550852567633,
+          0.47698635004350476,
+          -0.16792046612561853,
+          0.046902361821432925,
+          0.03704360568920411,
+          -0.5344040190264889
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 13665,
+        "trainingCompleteCases": 13424,
+        "validation": {
+          "baseline": {
+            "n": 4453,
+            "brier": 0.22740459227946658,
+            "logLoss": 0.650326910775162,
+            "accuracy": 0.6375477206377723
+          },
+          "elo": {
+            "n": 4453,
+            "brier": 0.22309186712402787,
+            "logLoss": 0.6367145607632418,
+            "accuracy": 0.6382214237592634
+          },
+          "selected": {
+            "n": 4453,
+            "brier": 0.2213556822039744,
+            "logLoss": 0.6328557766515253,
+            "accuracy": 0.6420390747810465
+          },
+          "completeCases": 4294,
+          "augmentedCompleteCases": {
+            "n": 4294,
+            "brier": 0.22144444263176621,
+            "logLoss": 0.6331629994328215,
+            "accuracy": 0.6425244527247321
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 1027,
+            "brier": 0.22419411618469898,
+            "logLoss": 0.6466745439656905,
+            "accuracy": 0.6504381694255112
+          },
+          "elo": {
+            "n": 1027,
+            "brier": 0.21839998567702723,
+            "logLoss": 0.6271651931706829,
+            "accuracy": 0.6504381694255112
+          },
+          "selected": {
+            "n": 1027,
+            "brier": 0.21715944166471557,
+            "logLoss": 0.6243693598632687,
+            "accuracy": 0.6494644595910418
+          },
+          "completeCases": 923,
+          "augmentedCompleteCases": {
+            "n": 923,
+            "brier": 0.21615216497408773,
+            "logLoss": 0.6221689423591874,
+            "accuracy": 0.6533044420368364
+          }
+        }
+      },
+      {
+        "year": 2021,
+        "availableFrom": "2021-01-01",
+        "trainFrom": "2013-01-01",
+        "trainThrough": "2018-12-10",
+        "validationFrom": "2019-01-01",
+        "validationThrough": "2020-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.186272942165005,
+          0.4265869667314368,
+          0.0,
+          0.0,
+          0.0,
+          -0.03870751248772038
+        ],
+        "augmentedCoefficients": [
+          1.1917003259281074,
+          0.4726403772389007,
+          -0.18277655961073372,
+          0.06743508906844745,
+          0.030667812365760667,
+          -0.020549574494071354
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 13526,
+        "trainingCompleteCases": 13239,
+        "validation": {
+          "baseline": {
+            "n": 3227,
+            "brier": 0.226033426123477,
+            "logLoss": 0.6484620586060372,
+            "accuracy": 0.6420824295010846
+          },
+          "elo": {
+            "n": 3227,
+            "brier": 0.2213316662894384,
+            "logLoss": 0.6331530737194346,
+            "accuracy": 0.6470405949798574
+          },
+          "selected": {
+            "n": 3227,
+            "brier": 0.21914255624312476,
+            "logLoss": 0.628270005117288,
+            "accuracy": 0.6498295630616672
+          },
+          "completeCases": 3028,
+          "augmentedCompleteCases": {
+            "n": 3028,
+            "brier": 0.21880706007391051,
+            "logLoss": 0.6276310034017961,
+            "accuracy": 0.6512549537648613
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2185,
+            "brier": 0.21999144990232236,
+            "logLoss": 0.631360261090364,
+            "accuracy": 0.6434782608695652
+          },
+          "elo": {
+            "n": 2185,
+            "brier": 0.21610670080298144,
+            "logLoss": 0.6208627763683872,
+            "accuracy": 0.6503432494279177
+          },
+          "selected": {
+            "n": 2185,
+            "brier": 0.21457443476650231,
+            "logLoss": 0.6171915146441899,
+            "accuracy": 0.6576659038901602
+          },
+          "completeCases": 1961,
+          "augmentedCompleteCases": {
+            "n": 1961,
+            "brier": 0.21346977455664026,
+            "logLoss": 0.6146725570466401,
+            "accuracy": 0.6562978072412035
+          }
+        }
+      },
+      {
+        "year": 2022,
+        "availableFrom": "2022-01-01",
+        "trainFrom": "2014-01-01",
+        "trainThrough": "2019-12-10",
+        "validationFrom": "2020-01-01",
+        "validationThrough": "2021-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.194006395644568,
+          0.353916856813027,
+          0.0,
+          0.0,
+          0.0,
+          -0.12797234515535613
+        ],
+        "augmentedCoefficients": [
+          1.1805146078407955,
+          0.4237885378360312,
+          -0.2441697976119025,
+          0.07659707927656882,
+          0.05467471562492128,
+          -0.1168986901026636
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 13576,
+        "trainingCompleteCases": 13199,
+        "validation": {
+          "baseline": {
+            "n": 3212,
+            "brier": 0.22133520403432755,
+            "logLoss": 0.6362568266298909,
+            "accuracy": 0.6457036114570361
+          },
+          "elo": {
+            "n": 3212,
+            "brier": 0.21699034788928645,
+            "logLoss": 0.6232171063694989,
+            "accuracy": 0.6500622665006227
+          },
+          "selected": {
+            "n": 3212,
+            "brier": 0.21521003440149247,
+            "logLoss": 0.6190129986293281,
+            "accuracy": 0.6550435865504358
+          },
+          "completeCases": 2884,
+          "augmentedCompleteCases": {
+            "n": 2884,
+            "brier": 0.2141404235904717,
+            "logLoss": 0.6166061630877063,
+            "accuracy": 0.6553398058252428
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2104,
+            "brier": 0.22923660692736425,
+            "logLoss": 0.652757503902359,
+            "accuracy": 0.6245247148288974
+          },
+          "elo": {
+            "n": 2104,
+            "brier": 0.22299558864524294,
+            "logLoss": 0.635363597780887,
+            "accuracy": 0.629277566539924
+          },
+          "selected": {
+            "n": 2104,
+            "brier": 0.22341811028140787,
+            "logLoss": 0.636012677529426,
+            "accuracy": 0.6254752851711026
+          },
+          "completeCases": 1737,
+          "augmentedCompleteCases": {
+            "n": 1737,
+            "brier": 0.22570337134352542,
+            "logLoss": 0.6409146180393621,
+            "accuracy": 0.6223373632700058
+          }
+        }
+      },
+      {
+        "year": 2023,
+        "availableFrom": "2023-01-01",
+        "trainFrom": "2015-01-01",
+        "trainThrough": "2020-12-10",
+        "validationFrom": "2021-01-01",
+        "validationThrough": "2022-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.1838585854433297,
+          0.36519648593279597,
+          0.0,
+          0.0,
+          0.0,
+          -0.13748454914555228
+        ],
+        "augmentedCoefficients": [
+          1.1580248954560732,
+          0.45109672847958243,
+          -0.276999338974758,
+          0.009854951629048547,
+          0.045927893229362284,
+          -0.12297311549083714
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 12450,
+        "trainingCompleteCases": 11981,
+        "validation": {
+          "baseline": {
+            "n": 4289,
+            "brier": 0.22452672861080641,
+            "logLoss": 0.6418568334560525,
+            "accuracy": 0.6341804616460713
+          },
+          "elo": {
+            "n": 4289,
+            "brier": 0.21957533765401963,
+            "logLoss": 0.6282134299712274,
+            "accuracy": 0.6404756353462345
+          },
+          "selected": {
+            "n": 4289,
+            "brier": 0.21863479866357852,
+            "logLoss": 0.6257868648659375,
+            "accuracy": 0.6418745628351598
+          },
+          "completeCases": 3698,
+          "augmentedCompleteCases": {
+            "n": 3698,
+            "brier": 0.21889733574123607,
+            "logLoss": 0.6262680606304685,
+            "accuracy": 0.6403461330448891
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2237,
+            "brier": 0.2213720888562629,
+            "logLoss": 0.6339964993546611,
+            "accuracy": 0.651318730442557
+          },
+          "elo": {
+            "n": 2237,
+            "brier": 0.21799652648184784,
+            "logLoss": 0.624937103509348,
+            "accuracy": 0.6495306213679034
+          },
+          "selected": {
+            "n": 2237,
+            "brier": 0.21610353416944914,
+            "logLoss": 0.6204376250379842,
+            "accuracy": 0.659365221278498
+          },
+          "completeCases": 1609,
+          "augmentedCompleteCases": {
+            "n": 1609,
+            "brier": 0.21335132708689572,
+            "logLoss": 0.6137815575152918,
+            "accuracy": 0.6619018023617154
+          }
+        }
+      },
+      {
+        "year": 2024,
+        "availableFrom": "2024-01-01",
+        "trainFrom": "2016-01-01",
+        "trainThrough": "2021-12-10",
+        "validationFrom": "2022-01-01",
+        "validationThrough": "2023-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.186741920113816,
+          0.4036506657547361,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "augmentedCoefficients": [
+          1.1186500814031164,
+          0.5100695978091389,
+          -0.32655848721427905,
+          -0.07894804277615432,
+          0.041435375542212514,
+          0.0
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.001,
+        "trainingN": 12353,
+        "trainingCompleteCases": 11699,
+        "validation": {
+          "baseline": {
+            "n": 4341,
+            "brier": 0.2251838709391003,
+            "logLoss": 0.6430896008447224,
+            "accuracy": 0.6383321815249943
+          },
+          "elo": {
+            "n": 4341,
+            "brier": 0.2204032056873726,
+            "logLoss": 0.6299099649588278,
+            "accuracy": 0.6408661598709975
+          },
+          "selected": {
+            "n": 4341,
+            "brier": 0.21965101353082944,
+            "logLoss": 0.6279971763454617,
+            "accuracy": 0.645473393227367
+          },
+          "completeCases": 3346,
+          "augmentedCompleteCases": {
+            "n": 3346,
+            "brier": 0.21979580622709,
+            "logLoss": 0.6279348371238409,
+            "accuracy": 0.6446503287507471
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2386,
+            "brier": 0.222490028927931,
+            "logLoss": 0.6357457394871172,
+            "accuracy": 0.6387259010896899,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "n": 103,
+                "predicted": 0.06882936594499506,
+                "observed": 0.05825242718446602
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "n": 217,
+                "predicted": 0.1526116678703429,
+                "observed": 0.19815668202764977
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "n": 244,
+                "predicted": 0.25103392964550697,
+                "observed": 0.27459016393442626
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "n": 308,
+                "predicted": 0.34887802090932635,
+                "observed": 0.44805194805194803
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "n": 319,
+                "predicted": 0.4508641064841966,
+                "observed": 0.42946708463949845
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 310,
+                "predicted": 0.5475589187053193,
+                "observed": 0.4967741935483871
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 326,
+                "predicted": 0.651117442674671,
+                "observed": 0.5674846625766872
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "n": 284,
+                "predicted": 0.7482273103302626,
+                "observed": 0.6232394366197183
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 206,
+                "predicted": 0.846458956684177,
+                "observed": 0.7330097087378641
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "n": 69,
+                "predicted": 0.9296264568257919,
+                "observed": 0.8260869565217391
+              }
+            ]
+          },
+          "elo": {
+            "n": 2386,
+            "brier": 0.21780722261736854,
+            "logLoss": 0.6234721803327533,
+            "accuracy": 0.6391450125733446,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "n": 10,
+                "predicted": 0.07889706247526337,
+                "observed": 0.0
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "n": 113,
+                "predicted": 0.16065665475434346,
+                "observed": 0.07964601769911504
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "n": 232,
+                "predicted": 0.2553068065204145,
+                "observed": 0.21120689655172414
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "n": 363,
+                "predicted": 0.35334961233711554,
+                "observed": 0.3581267217630854
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "n": 460,
+                "predicted": 0.45316190182346056,
+                "observed": 0.4260869565217391
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 469,
+                "predicted": 0.5504258690259228,
+                "observed": 0.4946695095948827
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 412,
+                "predicted": 0.6456623466472292,
+                "observed": 0.6237864077669902
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "n": 251,
+                "predicted": 0.7427381115196015,
+                "observed": 0.7211155378486056
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 68,
+                "predicted": 0.8373227029693188,
+                "observed": 0.7941176470588235
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "n": 8,
+                "predicted": 0.9150395568948126,
+                "observed": 0.875
+              }
+            ]
+          },
+          "selected": {
+            "n": 2386,
+            "brier": 0.21723011547705265,
+            "logLoss": 0.6217478767953889,
+            "accuracy": 0.643336127409891,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "n": 21,
+                "predicted": 0.08207574628642214,
+                "observed": 0.0
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "n": 135,
+                "predicted": 0.15540975966752626,
+                "observed": 0.1037037037037037
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "n": 279,
+                "predicted": 0.2520750712106848,
+                "observed": 0.24014336917562723
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "n": 372,
+                "predicted": 0.3522109769701252,
+                "observed": 0.3790322580645161
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "n": 453,
+                "predicted": 0.45032959712374343,
+                "observed": 0.4370860927152318
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 463,
+                "predicted": 0.5501584368706189,
+                "observed": 0.5269978401727862
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 366,
+                "predicted": 0.6454325043801847,
+                "observed": 0.6147540983606558
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "n": 228,
+                "predicted": 0.7439194777150642,
+                "observed": 0.7543859649122807
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 61,
+                "predicted": 0.8369407004206494,
+                "observed": 0.7704918032786885
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "n": 8,
+                "predicted": 0.9155373144227335,
+                "observed": 0.875
+              }
+            ]
+          },
+          "completeCases": 1428,
+          "augmentedCompleteCases": {
+            "n": 1428,
+            "brier": 0.21584435803493576,
+            "logLoss": 0.6182054594870922,
+            "accuracy": 0.646358543417367,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "n": 14,
+                "predicted": 0.08512654790889387,
+                "observed": 0.0
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "n": 103,
+                "predicted": 0.15549814241845883,
+                "observed": 0.11650485436893204
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "n": 190,
+                "predicted": 0.25280113437816165,
+                "observed": 0.24736842105263157
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "n": 251,
+                "predicted": 0.35143686558998194,
+                "observed": 0.4063745019920319
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "n": 276,
+                "predicted": 0.449480582388992,
+                "observed": 0.4384057971014493
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 273,
+                "predicted": 0.5492303259059963,
+                "observed": 0.5457875457875457
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 197,
+                "predicted": 0.645528000256842,
+                "observed": 0.6294416243654822
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "n": 93,
+                "predicted": 0.7392020062100498,
+                "observed": 0.7741935483870968
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 29,
+                "predicted": 0.8317821944651849,
+                "observed": 0.8275862068965517
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "n": 2,
+                "predicted": 0.9189331253317249,
+                "observed": 1.0
+              }
+            ]
+          }
+        }
+      },
+      {
+        "year": 2025,
+        "availableFrom": "2025-01-01",
+        "trainFrom": "2017-01-01",
+        "trainThrough": "2022-12-10",
+        "validationFrom": "2023-01-01",
+        "validationThrough": "2024-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.220833768146113,
+          0.3527041656069961,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "augmentedCoefficients": [
+          1.1646186294763998,
+          0.4276149082375987,
+          -0.3154256295071103,
+          -0.055612903540549284,
+          0.0644666681862127,
+          0.0
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 12063,
+        "trainingCompleteCases": 11115,
+        "validation": {
+          "baseline": {
+            "n": 4530,
+            "brier": 0.22172371777834954,
+            "logLoss": 0.6345515400916522,
+            "accuracy": 0.6452538631346578
+          },
+          "elo": {
+            "n": 4530,
+            "brier": 0.2177632961576377,
+            "logLoss": 0.6240059822329974,
+            "accuracy": 0.6450331125827815
+          },
+          "selected": {
+            "n": 4530,
+            "brier": 0.21659263780289736,
+            "logLoss": 0.6210795579304688,
+            "accuracy": 0.6527593818984547
+          },
+          "completeCases": 2993,
+          "augmentedCompleteCases": {
+            "n": 2993,
+            "brier": 0.2147397857205072,
+            "logLoss": 0.6164343647133562,
+            "accuracy": 0.6548613431339793
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 2110,
+            "brier": 0.2234765536612712,
+            "logLoss": 0.6423861335522503,
+            "accuracy": 0.6436018957345971,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "n": 69,
+                "predicted": 0.06911508254113415,
+                "observed": 0.10144927536231885
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "n": 167,
+                "predicted": 0.15239233806148467,
+                "observed": 0.20958083832335328
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "n": 229,
+                "predicted": 0.2508267319747843,
+                "observed": 0.26200873362445415
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "n": 280,
+                "predicted": 0.3504298333327897,
+                "observed": 0.4107142857142857
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "n": 275,
+                "predicted": 0.45077956999371926,
+                "observed": 0.44727272727272727
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 250,
+                "predicted": 0.5528588182343365,
+                "observed": 0.508
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 303,
+                "predicted": 0.6513858053398269,
+                "observed": 0.5610561056105611
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "n": 285,
+                "predicted": 0.7491645901882928,
+                "observed": 0.6842105263157895
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 194,
+                "predicted": 0.8433904899509408,
+                "observed": 0.7268041237113402
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "n": 58,
+                "predicted": 0.9343483830088293,
+                "observed": 0.7758620689655172
+              }
+            ]
+          },
+          "elo": {
+            "n": 2110,
+            "brier": 0.21966934583496775,
+            "logLoss": 0.6295080964352402,
+            "accuracy": 0.6426540284360189,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "n": 2,
+                "predicted": 0.06360633065021026,
+                "observed": 0.0
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "n": 82,
+                "predicted": 0.1592333724364207,
+                "observed": 0.12195121951219512
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "n": 193,
+                "predicted": 0.25931920064962705,
+                "observed": 0.20207253886010362
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "n": 317,
+                "predicted": 0.3539820828210046,
+                "observed": 0.3280757097791798
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "n": 402,
+                "predicted": 0.4493009081494736,
+                "observed": 0.43781094527363185
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 413,
+                "predicted": 0.5520036167198487,
+                "observed": 0.5230024213075061
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 398,
+                "predicted": 0.6482201867613828,
+                "observed": 0.635678391959799
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "n": 231,
+                "predicted": 0.7417001475358317,
+                "observed": 0.6926406926406926
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 66,
+                "predicted": 0.837090020798595,
+                "observed": 0.8484848484848485
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "n": 6,
+                "predicted": 0.9289690997369675,
+                "observed": 0.6666666666666666
+              }
+            ]
+          },
+          "selected": {
+            "n": 2110,
+            "brier": 0.2191237732284555,
+            "logLoss": 0.6281980109896307,
+            "accuracy": 0.6436018957345971,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "n": 6,
+                "predicted": 0.07971939977405595,
+                "observed": 0.16666666666666666
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "n": 104,
+                "predicted": 0.15742563981984203,
+                "observed": 0.1346153846153846
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "n": 213,
+                "predicted": 0.2550330711401505,
+                "observed": 0.20657276995305165
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "n": 333,
+                "predicted": 0.3520620534382737,
+                "observed": 0.3483483483483483
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "n": 396,
+                "predicted": 0.44999788909115657,
+                "observed": 0.45707070707070707
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 402,
+                "predicted": 0.5519954235897551,
+                "observed": 0.5348258706467661
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 377,
+                "predicted": 0.6481296394074324,
+                "observed": 0.6419098143236074
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "n": 207,
+                "predicted": 0.7413947946813498,
+                "observed": 0.7004830917874396
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 66,
+                "predicted": 0.837280133130711,
+                "observed": 0.8484848484848485
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "n": 6,
+                "predicted": 0.9233096229206653,
+                "observed": 0.6666666666666666
+              }
+            ]
+          },
+          "completeCases": 1007,
+          "augmentedCompleteCases": {
+            "n": 1007,
+            "brier": 0.21326376166305336,
+            "logLoss": 0.6171498157646607,
+            "accuracy": 0.6703078450844091,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "n": 6,
+                "predicted": 0.07971939977405595,
+                "observed": 0.16666666666666666
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "n": 66,
+                "predicted": 0.15639411411160012,
+                "observed": 0.18181818181818182
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "n": 132,
+                "predicted": 0.2483965977576197,
+                "observed": 0.16666666666666666
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "n": 181,
+                "predicted": 0.3506451049990898,
+                "observed": 0.3259668508287293
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "n": 184,
+                "predicted": 0.4504456362493242,
+                "observed": 0.4673913043478261
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 168,
+                "predicted": 0.5522920244919641,
+                "observed": 0.6130952380952381
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 155,
+                "predicted": 0.6481676561305432,
+                "observed": 0.632258064516129
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "n": 84,
+                "predicted": 0.7427264261481463,
+                "observed": 0.7261904761904762
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 26,
+                "predicted": 0.8396450174590793,
+                "observed": 0.8076923076923077
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "n": 5,
+                "predicted": 0.9268198920324199,
+                "observed": 0.6
+              }
+            ]
+          }
+        }
+      },
+      {
+        "year": 2026,
+        "availableFrom": "2026-01-01",
+        "trainFrom": "2018-01-01",
+        "trainThrough": "2023-12-10",
+        "validationFrom": "2024-01-01",
+        "validationThrough": "2025-12-10",
+        "selected": "ELO_AGE_HEIGHT",
+        "fallback": "CALIBRATED_ELO",
+        "eloCoefficients": [
+          1.2300998505048846,
+          0.37567651309031913,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "augmentedCoefficients": [
+          1.1850320308803404,
+          0.43331424836755356,
+          -0.3619894567752222,
+          -0.10519140697087785,
+          0.046378927929646645,
+          0.0
+        ],
+        "eloRidge": 0.0001,
+        "augmentedRidge": 0.0001,
+        "trainingN": 12032,
+        "trainingCompleteCases": 10547,
+        "validation": {
+          "baseline": {
+            "n": 4496,
+            "brier": 0.22295301095358663,
+            "logLoss": 0.6388621165950866,
+            "accuracy": 0.6410142348754448
+          },
+          "elo": {
+            "n": 4496,
+            "brier": 0.21867959067163445,
+            "logLoss": 0.6262822808346371,
+            "accuracy": 0.6401245551601423
+          },
+          "selected": {
+            "n": 4496,
+            "brier": 0.21817428788329016,
+            "logLoss": 0.6248714209509519,
+            "accuracy": 0.6436832740213523
+          },
+          "completeCases": 2435,
+          "augmentedCompleteCases": {
+            "n": 2435,
+            "brier": 0.21480693689390215,
+            "logLoss": 0.6178168300233576,
+            "accuracy": 0.6566735112936345
+          }
+        },
+        "heldOut": {
+          "baseline": {
+            "n": 1108,
+            "brier": 0.21928249600153896,
+            "logLoss": 0.6303207512508782,
+            "accuracy": 0.6462093862815884,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "n": 45,
+                "predicted": 0.07149792697186505,
+                "observed": 0.08888888888888889
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "n": 90,
+                "predicted": 0.14968548498250725,
+                "observed": 0.18888888888888888
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "n": 112,
+                "predicted": 0.2515278054904738,
+                "observed": 0.3125
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "n": 129,
+                "predicted": 0.35360926893266326,
+                "observed": 0.40310077519379844
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "n": 174,
+                "predicted": 0.45283058814744803,
+                "observed": 0.46551724137931033
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 129,
+                "predicted": 0.5502836796728956,
+                "observed": 0.5426356589147286
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 133,
+                "predicted": 0.6467905790892904,
+                "observed": 0.5263157894736842
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "n": 124,
+                "predicted": 0.750086368878439,
+                "observed": 0.6612903225806451
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 111,
+                "predicted": 0.847515421447867,
+                "observed": 0.7567567567567568
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "n": 61,
+                "predicted": 0.9333132216419429,
+                "observed": 0.8032786885245902
+              }
+            ]
+          },
+          "elo": {
+            "n": 1108,
+            "brier": 0.21436720338182202,
+            "logLoss": 0.6162805742676415,
+            "accuracy": 0.6552346570397112,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "n": 4,
+                "predicted": 0.07563046882225455,
+                "observed": 0.0
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "n": 52,
+                "predicted": 0.16204573237786607,
+                "observed": 0.09615384615384616
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "n": 101,
+                "predicted": 0.25519084586906043,
+                "observed": 0.1782178217821782
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "n": 165,
+                "predicted": 0.3539508328403436,
+                "observed": 0.36363636363636365
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "n": 222,
+                "predicted": 0.4544369191495242,
+                "observed": 0.44144144144144143
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 197,
+                "predicted": 0.5499019816739638,
+                "observed": 0.5482233502538071
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 168,
+                "predicted": 0.6466894460760427,
+                "observed": 0.6130952380952381
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "n": 131,
+                "predicted": 0.7472405463126156,
+                "observed": 0.7404580152671756
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 59,
+                "predicted": 0.8423552604934272,
+                "observed": 0.7796610169491526
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "n": 9,
+                "predicted": 0.9209169722670753,
+                "observed": 1.0
+              }
+            ]
+          },
+          "selected": {
+            "n": 1108,
+            "brier": 0.2147179760430081,
+            "logLoss": 0.6166041534296253,
+            "accuracy": 0.6507220216606499,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "n": 7,
+                "predicted": 0.07953952258640211,
+                "observed": 0.0
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "n": 60,
+                "predicted": 0.15584383777987532,
+                "observed": 0.11666666666666667
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "n": 113,
+                "predicted": 0.2529350114407071,
+                "observed": 0.20353982300884957
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "n": 184,
+                "predicted": 0.3494058436883694,
+                "observed": 0.40217391304347827
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "n": 201,
+                "predicted": 0.4499417822842891,
+                "observed": 0.44776119402985076
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 189,
+                "predicted": 0.5473597650943381,
+                "observed": 0.5396825396825397
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 168,
+                "predicted": 0.6472665243960989,
+                "observed": 0.6428571428571429
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "n": 118,
+                "predicted": 0.7455485076039969,
+                "observed": 0.7203389830508474
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 59,
+                "predicted": 0.8421826161082219,
+                "observed": 0.7796610169491526
+              },
+              {
+                "lower": 0.9,
+                "upper": 1.0,
+                "n": 9,
+                "predicted": 0.9209169722670753,
+                "observed": 1.0
+              }
+            ]
+          },
+          "completeCases": 431,
+          "augmentedCompleteCases": {
+            "n": 431,
+            "brier": 0.2083651324624616,
+            "logLoss": 0.6020319909105876,
+            "accuracy": 0.654292343387471,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "upper": 0.1,
+                "n": 5,
+                "predicted": 0.07863974882439871,
+                "observed": 0.0
+              },
+              {
+                "lower": 0.1,
+                "upper": 0.2,
+                "n": 34,
+                "predicted": 0.15125718385866466,
+                "observed": 0.14705882352941177
+              },
+              {
+                "lower": 0.2,
+                "upper": 0.3,
+                "n": 55,
+                "predicted": 0.24937748669486634,
+                "observed": 0.2
+              },
+              {
+                "lower": 0.3,
+                "upper": 0.4,
+                "n": 90,
+                "predicted": 0.3473527466182974,
+                "observed": 0.4777777777777778
+              },
+              {
+                "lower": 0.4,
+                "upper": 0.5,
+                "n": 81,
+                "predicted": 0.4449961334377681,
+                "observed": 0.49382716049382713
+              },
+              {
+                "lower": 0.5,
+                "upper": 0.6,
+                "n": 71,
+                "predicted": 0.5479384577168966,
+                "observed": 0.5352112676056338
+              },
+              {
+                "lower": 0.6,
+                "upper": 0.7,
+                "n": 44,
+                "predicted": 0.6464109102678972,
+                "observed": 0.7954545454545454
+              },
+              {
+                "lower": 0.7,
+                "upper": 0.8,
+                "n": 33,
+                "predicted": 0.7418906872309972,
+                "observed": 0.8484848484848485
+              },
+              {
+                "lower": 0.8,
+                "upper": 0.9,
+                "n": 18,
+                "predicted": 0.8348743266952755,
+                "observed": 0.8333333333333334
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "sourceYearMatches": {
+    "ATP": {
+      "1967": 14,
+      "1968": 4236,
+      "1969": 2956,
+      "1970": 3173,
+      "1971": 3597,
+      "1972": 3493,
+      "1973": 4297,
+      "1974": 4083,
+      "1975": 4137,
+      "1976": 3840,
+      "1977": 4101,
+      "1978": 3833,
+      "1979": 3972,
+      "1980": 3947,
+      "1981": 3893,
+      "1982": 4038,
+      "1983": 3478,
+      "1984": 3238,
+      "1985": 3380,
+      "1986": 3287,
+      "1987": 3566,
+      "1988": 3659,
+      "1989": 3567,
+      "1990": 3728,
+      "1991": 3712,
+      "1992": 3720,
+      "1993": 3873,
+      "1994": 3917,
+      "1995": 3776,
+      "1996": 3814,
+      "1997": 3534,
+      "1998": 3564,
+      "1999": 3311,
+      "2000": 3353,
+      "2001": 3385,
+      "2002": 3204,
+      "2003": 3108,
+      "2004": 3277,
+      "2005": 3251,
+      "2006": 3254,
+      "2007": 3270,
+      "2008": 3011,
+      "2009": 3069,
+      "2010": 3012,
+      "2011": 2999,
+      "2012": 3075,
+      "2013": 2920,
+      "2014": 2788,
+      "2015": 2933,
+      "2016": 2920,
+      "2017": 2872,
+      "2018": 2939,
+      "2019": 2675,
+      "2020": 1452,
+      "2021": 2708,
+      "2022": 2890,
+      "2023": 2943,
+      "2024": 3111,
+      "2025": 2819,
+      "2026": 1432
+    },
+    "WTA": {
+      "1968": 325,
+      "1969": 291,
+      "1970": 338,
+      "1971": 282,
+      "1972": 386,
+      "1973": 376,
+      "1974": 373,
+      "1975": 359,
+      "1976": 332,
+      "1977": 427,
+      "1978": 357,
+      "1979": 363,
+      "1980": 405,
+      "1981": 483,
+      "1982": 464,
+      "1983": 567,
+      "1984": 554,
+      "1985": 691,
+      "1986": 512,
+      "1987": 609,
+      "1988": 666,
+      "1989": 632,
+      "1990": 660,
+      "1991": 672,
+      "1992": 808,
+      "1993": 767,
+      "1994": 741,
+      "1995": 890,
+      "1996": 939,
+      "1997": 980,
+      "1998": 965,
+      "1999": 885,
+      "2000": 2825,
+      "2001": 2869,
+      "2002": 2915,
+      "2003": 2646,
+      "2004": 2779,
+      "2005": 2829,
+      "2006": 2773,
+      "2007": 2829,
+      "2008": 2713,
+      "2009": 2715,
+      "2010": 2772,
+      "2011": 2786,
+      "2012": 2923,
+      "2013": 2695,
+      "2014": 2676,
+      "2015": 2630,
+      "2016": 2903,
+      "2017": 2849,
+      "2018": 2833,
+      "2019": 2641,
+      "2020": 1268,
+      "2021": 2561,
+      "2022": 2567,
+      "2023": 2787,
+      "2024": 2742,
+      "2025": 2459,
+      "2026": 1286
+    }
+  },
+  "trainerSha256": "b968690e4b095c845aa6c0457d085c9e5a43d9bab10ea362f620c798383c7920",
+  "numpyVersion": "2.0.1"
+}

@@ -13,6 +13,7 @@ import About from "./features/About";
 import Favorites from "./features/Favorites";
 import "./App.css";
 
+const MatchupPrediction = lazy(() => import("./features/MatchupPrediction"));
 const ResearchPage = lazy(() => import("./features/visualizations/ResearchPage"));
 const ExplorerPage = lazy(() => import("./features/visualizations/ExplorerPage"));
 
@@ -52,6 +53,7 @@ export default function App() {
           <Link to="/rankings">{i18n.language === "en" ? "Rankings" : "排名"}</Link>
           <NavLink to="/visualizations" className={({ isActive }) => isActive ? "nav-active" : undefined}>{i18n.language === "en" ? "Explorer" : "資料探索"}</NavLink>
           <Link to="/h2h">H2H</Link>
+          <Link to="/matchup">{i18n.language === "en" ? "Matchup" : "相遇勝率"}</Link>
           <Link to="/compare">{i18n.language === "en" ? "Compare" : "比較"}</Link>
           <Link to="/favorites">{i18n.language === "en" ? "Saved" : "收藏"}</Link>
           <Link to="/account">{i18n.language === "en" ? "Account" : "帳號"}</Link>
@@ -71,6 +73,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/h2h" element={<H2H />} />
+          <Route path="/matchup" element={<Suspense fallback={<p role="status">Loading…</p>}><MatchupPrediction /></Suspense>} />
           <Route path="/compare" element={<Compare />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/account" element={<Account />} />
