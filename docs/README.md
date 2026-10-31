@@ -6,6 +6,8 @@
 
 功能入口 `/tennis/visualizations`、`/tennis/visualizations/research`；年齡／發球及選取觀測 CSV 為公開；進階相關性、箱型／Hexbin 與其匯出需 ADVANCED／ADMIN。逐階段實作、使用指南、資料字典與測量見 [研究工作台交付](21-visualization-research-delivery.md)。
 
+- [圖表與資料瀏覽修正](22-ui-refinements.md)：圖表比例、整數Elo、各表格排序、空白索引不查詢與姓名取代ID；後端446／前端68／瀏覽器20案通過，並補上姓名搜尋選取與舊後端辨識，本輪已依授權整理提交，未推送或部署。
+
 - [九階段交付追蹤](14-pre-release-roadmap.md)：後續交付階段 1～9 的範圍、規則與逐階段驗證。
 - [發布前工程驗收](15-local-release-readiness.md)：後續交付 Phase 10 的正式部署前置、效能、CI、本機備份／還原與更新程序；**正式部署尚未驗收**。
 - [網球數據視覺化研究與資料可行性](16-visualization-research.md)：使用者指定的 8 個網站、額外參考來源、真實資料完整性、圖表與統計方法評估（2026-10-30）。

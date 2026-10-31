@@ -6,6 +6,7 @@ test("explorer renders real Canvas, tooltip, point navigation and shared filters
   await page.goto(path);
   const plot = page.getByRole("img", { name: /散布圖/ });await expect(plot).toBeVisible();
   await expect(page.locator("canvas")).toHaveCount(2);
+  const observations=(await page.locator(".explorer-observation-plot .explorer-canvas").boundingBox())!;expect(observations.height).toBeGreaterThanOrEqual(420);
   await page.evaluate(() => document.fonts.ready);await plot.scrollIntoViewIfNeeded();await expect(plot).toHaveAttribute("aria-busy", "false");
   // Locate the one synthetic green point in the plot area, without assuming the
   // chart library places a degenerate numeric domain at the visual midpoint.
@@ -31,7 +32,7 @@ test("explorer renders real Canvas, tooltip, point navigation and shared filters
   await page.getByRole("button", { name: "套用條件 ↗" }).click();await expect(page).toHaveURL(/x=rank&y=height_cm/);
   await page.getByRole("button", { name: "複製此快照連結 ↗" }).click();const shared = await page.getByLabel("可分享的快照網址").inputValue();
   await page.goto(shared);await expect(page.getByLabel("X 軸")).toHaveValue("rank");await expect(plot).toBeVisible();
-  await page.getByText(/檢視資料表/).click();const player = page.getByRole("link", { name: /Roger Federer.*#1/ });await player.focus();await page.keyboard.press("Enter");
+  await page.getByText(/檢視資料表/).click();const player = page.getByRole("link", { name: /Roger Federer/ });await player.focus();await page.keyboard.press("Enter");
   await expect(page).toHaveURL(/players\/ATP\/1/);expect(errors).toEqual([]);
 });
 test("mobile filters, empty dates and bilingual table remain usable", async ({ page }) => {

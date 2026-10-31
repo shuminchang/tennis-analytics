@@ -20,7 +20,7 @@ public class TournamentRepository {
     }
     public EventDetail detail(String tour,String id,int page,int size) {
         if(jdbc.queryForObject("SELECT count(*) FROM analytics_matches WHERE tour=? AND tourney_id=?",Long.class,tour,id)==0) throw new NoSuchElementException();
-        var rows=jdbc.queryForList("SELECT id,tourney_name,tourney_date,round,match_num,winner_id,loser_id,score FROM analytics_matches WHERE tour=? AND tourney_id=? ORDER BY round,match_num,id LIMIT ? OFFSET ?",tour,id,size,(long)page*size);
+        var rows=jdbc.queryForList("SELECT m.id,m.tourney_name,m.tourney_date,m.round,m.match_num,m.winner_id,m.loser_id,m.score,concat_ws(' ',w.name_first,w.name_last) AS winner_name,concat_ws(' ',l.name_first,l.name_last) AS loser_name FROM analytics_matches m JOIN players w ON w.tour=m.tour AND w.player_id=m.winner_id JOIN players l ON l.tour=m.tour AND l.player_id=m.loser_id WHERE m.tour=? AND m.tourney_id=? ORDER BY m.round,m.match_num,m.id LIMIT ? OFFSET ?",tour,id,size,(long)page*size);
         long total=jdbc.queryForObject("SELECT count(*) FROM analytics_matches WHERE tour=? AND tourney_id=?",Long.class,tour,id);
         return new EventDetail(rows,total,page,size);
     }

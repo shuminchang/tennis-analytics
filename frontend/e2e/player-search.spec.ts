@@ -6,9 +6,17 @@ test.beforeEach(async ({ page }) => {
 test("search, tour, pagination, language, refresh and mobile layout", async ({
   page,
 }) => {
-  await page.goto("/tennis/players");
+  await page.goto("/tennis/players?size=10");
+  await expect(page.getByText("請輸入球員姓名後搜尋。")).toBeVisible();
+  await expect(page.getByRole("table")).toHaveCount(0);
+  await page.getByLabel("球員姓名").fill("Player");
+  await page.getByRole("button", { name: /搜尋球員/ }).click();
   await expect(page.getByRole("table")).toBeVisible();
-  await expect(page.getByRole("row")).toHaveCount(21);
+  await expect(page.getByRole("row")).toHaveCount(11);
+  const nameSort = page.getByRole("button", { name: /^球員.*本頁排序/ });
+  await nameSort.click();await nameSort.click();
+  await expect(nameSort.locator("..")).toHaveAttribute("aria-sort", "descending");
+  await expect(page.getByRole("table")).not.toContainText("#");
   await page.getByRole("link", { name: "下一頁" }).click();
   await expect(page).toHaveURL(/page=1/);
   await expect(page.getByRole("table")).toBeVisible();
@@ -62,7 +70,7 @@ test("API failure offers retry and a delayed response shows loading", async ({
       body: '{"code":"SEARCH_UNAVAILABLE"}',
     }),
   );
-  await page.goto("/tennis/players");
+  await page.goto("/tennis/players?q=Roger");
   await expect(page.getByRole("alert")).toBeVisible();
   await page.unroute("**/tennis/api/v1/players?**");
   if (process.env.E2E_MOCK_API === "1") await mockPlayers(page);

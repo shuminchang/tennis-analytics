@@ -63,7 +63,7 @@ export default function PlayerDetailPage() {
             <div>
               <p className="eyebrow">{t("detailEdition")}</p>
               <h1 id="detail-title" ref={heading} tabIndex={-1}>{name}</h1>
-              <p className="detail-identity"><span className="tour-tag">{player.tour}</span> #{player.playerId}</p>
+              <p className="detail-identity"><span className="tour-tag">{player.tour}</span></p>
             </div>
             <span className="detail-monogram" aria-hidden="true">{[player.nameFirst, player.nameLast].filter(Boolean).map((part) => Array.from(part!)[0]).join("") || "—"}</span>
           </header>

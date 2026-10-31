@@ -1,3 +1,4 @@
+import SortableTable from "../features/SortableTable";
 import type { FormEvent } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useSearchParams } from "react-router-dom";
@@ -51,17 +52,17 @@ export default function MatchHistory({ tour, playerId }: { tour: string; playerI
       : <>
           <p className="match-scroll-note">{t("matchScroll")}</p>
           <div className="table-scroll" tabIndex={0} role="region" aria-label={t("matchTable")}>
-            <table><caption className="sr-only">{t("matchTable")}</caption>
+            <SortableTable scope="page"><caption className="sr-only">{t("matchTable")}</caption>
               <thead><tr>{["matchDate", "matchEvent", "matchRound", "matchOpponent", "matchResult", "matchScore"].map(key => <th scope="col" key={key}>{t(key)}</th>)}</tr></thead>
               <tbody>{query.data.items.map(row => <tr key={row.id}>
-                <td>{new Intl.DateTimeFormat(i18n.language, { timeZone: "UTC" }).format(new Date(`${row.tournamentDate}T00:00:00Z`))}</td>
+                <td data-sort-value={row.tournamentDate}>{new Intl.DateTimeFormat(i18n.language, { timeZone: "UTC" }).format(new Date(`${row.tournamentDate}T00:00:00Z`))}</td>
                 <td><strong>{row.tournamentName || t("missing")}</strong><small className="match-meta">{row.sourceLevel || t("missing")} · {row.surface || t("missing")}</small></td>
                 <td>{row.round}</td>
                 <td>{row.opponent.visible ? <Link className="player-link" to={opponentLink(row.opponent.playerId)}>{[row.opponent.nameFirst, row.opponent.nameLast].filter(Boolean).join(" ") || t("unnamed")}</Link> : t("matchOpponentUnavailable")}</td>
                 <td>{t(`matchResult_${row.result}`)}{row.status !== "RECORDED" && <small className="match-meta">{t(`matchStatus_${row.status}`)}</small>}</td>
                 <td>{row.score || t("missing")}{row.scoreNeedsReview && <small className="match-meta">{t("matchScoreReview")}</small>}</td>
               </tr>)}</tbody>
-            </table>
+            </SortableTable>
           </div>
           <nav className="pagination" aria-label={t("matchPagination")}>
             <button className="secondary" disabled={page === 0} onClick={() => navigate(page - 1)}>{t("previous")}</button>

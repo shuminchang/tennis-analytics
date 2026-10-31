@@ -35,6 +35,8 @@ test("serve profiles expose weighted values, full-window heatmap and CSV provena
   await expect(page.getByRole("img")).toHaveCount(2);
   for (const plot of await page.getByRole("img").all()) await expect(plot.locator("canvas").first()).toBeVisible();
   await expect(page.getByRole("img").first()).toHaveAttribute("aria-busy", "false");
+  const plot = (await page.locator(".research-observation-plot .explorer-canvas").boundingBox())!;
+  expect(plot.height).toBeGreaterThanOrEqual(420);expect(plot.width/plot.height).toBeLessThan(2);
   const download = page.waitForEvent("download");
   await page.getByRole("button", { name: /CSV/ }).click();
   const file = await download; const csv = await fs.readFile((await file.path())!, "utf8");
@@ -80,6 +82,9 @@ test("advanced pairwise N, constant blanks, real hexagons and PNG exports", asyn
   const image = await download;const png = await fs.readFile((await image.path())!);
   await image.saveAs("test-results/research-export.png");
   expect(png.subarray(0, 8).toString("hex")).toBe("89504e470d0a1a0a");expect(png.length).toBeGreaterThan(10000);
+  const matrix=(await page.locator(".research-matrix-plot .explorer-canvas").boundingBox())!;expect(matrix.height).toBeGreaterThanOrEqual(480);
+  const hex = (await page.locator(".research-hex .explorer-canvas").boundingBox())!;
+  expect(hex.height).toBeGreaterThanOrEqual(480);expect(hex.width/hex.height).toBeLessThan(2);
   await page.screenshot({ path: "test-results/research-workbench-desktop.png", fullPage: true });
   await page.setViewportSize({ width: 390, height: 844 });
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();

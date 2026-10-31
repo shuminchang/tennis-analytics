@@ -1,3 +1,4 @@
+import SortableTable from "../features/SortableTable";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -35,14 +36,14 @@ export default function RankingHistory({ tour, playerId }: { tour: string; playe
       : !query.data.items.length ? <div className="state"><p>{t("rankingEmpty")}</p></div>
       : <>
           <div className="table-scroll" tabIndex={0} role="region" aria-label={t("rankingTitle")}>
-            <table><caption className="sr-only">{t("rankingTitle")}</caption>
+            <SortableTable scope="page"><caption className="sr-only">{t("rankingTitle")}</caption>
               <thead><tr><th scope="col">{t("rankingDate")}</th><th scope="col">{t("rankingRank")}</th><th scope="col">{t("rankingPoints")}</th></tr></thead>
               <tbody>{query.data.items.map((row) => <tr key={row.date}>
-                <td>{new Intl.DateTimeFormat(i18n.language, { timeZone: "UTC" }).format(new Date(`${row.date}T00:00:00Z`))}</td>
-                <td>{row.rank.toLocaleString(i18n.language)}</td>
-                <td>{row.points === null ? t("missing") : row.points.toLocaleString(i18n.language)}</td>
+                <td data-sort-value={row.date}>{new Intl.DateTimeFormat(i18n.language, { timeZone: "UTC" }).format(new Date(`${row.date}T00:00:00Z`))}</td>
+                <td data-sort-value={row.rank}>{row.rank.toLocaleString(i18n.language)}</td>
+                <td data-sort-value={row.points}>{row.points === null ? t("missing") : row.points.toLocaleString(i18n.language)}</td>
               </tr>)}</tbody>
-            </table>
+            </SortableTable>
           </div>
           <nav className="pagination" aria-label={t("rankingPagination")}>
             <button className="secondary" disabled={page === 0} onClick={() => navigate(page - 1)}>{t("previous")}</button>

@@ -45,7 +45,7 @@ def wait_url(url, process):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--spec", choices=["player-search.spec.ts", "visualizations.spec.ts", "research.spec.ts"])
+    parser.add_argument("--spec", choices=["player-search.spec.ts", "visualizations.spec.ts", "research.spec.ts", "ui-refinements.spec.ts"])
     options = parser.parse_args()
     run("timeout", "15s", "docker", "version")
     if not JAR.exists():

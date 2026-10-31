@@ -1,3 +1,4 @@
+import SortableTable from "../features/SortableTable";
 import { useMemo } from "react";
 import type { FormEvent } from "react";
 import { useSearchParams, Link } from "react-router-dom";
@@ -21,7 +22,7 @@ export default function PlayerSearchPage() {
   const query = useQuery({
     queryKey: ["players", search.q, search.tour, search.page, search.size],
     queryFn: ({ signal }) => fetchPlayers(search, signal),
-    enabled: search.valid,
+    enabled: search.valid && !!search.q,
     retry: false,
     staleTime: 30000,
   });
@@ -37,7 +38,6 @@ export default function PlayerSearchPage() {
                 .filter(Boolean)
                 .join(" ") || t("unnamed")}
             </Link>
-            <span>#{row.original.playerId}</span>
           </div>
         ),
       },
@@ -172,7 +172,7 @@ export default function PlayerSearchPage() {
         <div className="results-heading" aria-live="polite">
           <h2 id="results-title">
             {t("results")}{" "}
-            {query.data && !query.isFetching && (
+            {search.q && query.data && !query.isFetching && (
               <span className="result-count">
                 {t("count", { count: query.data.total })}
               </span>
@@ -186,6 +186,8 @@ export default function PlayerSearchPage() {
           <div className="state" role="alert">
             {t("invalid")}
           </div>
+        ) : !search.q ? (
+          <div className="state"><p>{i18n.language === "en" ? "Enter a player name to search." : "請輸入球員姓名後搜尋。"}</p></div>
         ) : query.isPending || query.isFetching ? (
           <div className="state loading" role="status">
             <span className="loading-ball" />
@@ -214,7 +216,7 @@ export default function PlayerSearchPage() {
             role="region"
             aria-label={t("tableCaption")}
           >
-            <table>
+            <SortableTable scope="page">
               <caption className="sr-only">{t("tableCaption")}</caption>
               <thead>
                 {table.getHeaderGroups().map((group) => (
@@ -234,7 +236,7 @@ export default function PlayerSearchPage() {
                 {table.getRowModel().rows.map((row) => (
                   <tr key={row.id}>
                     {row.getVisibleCells().map((cell) => (
-                      <td key={cell.id}>
+                      <td key={cell.id} data-sort-value={cell.column.id === "name" ? [cell.row.original.nameFirst, cell.row.original.nameLast].filter(Boolean).join(" ") : cell.row.original[cell.column.id as keyof Player]}>
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext(),
@@ -244,10 +246,10 @@ export default function PlayerSearchPage() {
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </SortableTable>
           </div>
         )}
-        {search.valid &&
+        {search.valid && !!search.q &&
           query.data &&
           !query.isFetching &&
           !query.isError &&
@@ -259,7 +261,7 @@ export default function PlayerSearchPage() {
               </Link>
             </div>
           )}
-        {search.valid &&
+        {search.valid && !!search.q &&
           query.data &&
           !query.isFetching &&
           !query.isError &&

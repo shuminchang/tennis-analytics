@@ -25,7 +25,7 @@ const serena: Player = {
   dob: null,
   ioc: "USA",
 };
-function mount(url = "/players") {
+function mount(url = "/players?q=Roger") {
   const client = new QueryClient({
     defaultOptions: { queries: { retry: false } },
   });
@@ -51,8 +51,9 @@ it("submits filters, resets pagination, and renders API data", async () => {
   const fetch = vi.fn().mockResolvedValue(response());
   vi.stubGlobal("fetch", fetch);
   const user = userEvent.setup();
-  mount("/players?page=2");
+  mount("/players?q=Roger&page=2");
   expect(await screen.findByText("Roger Federer")).toBeInTheDocument();
+  await user.clear(screen.getByLabelText("球員姓名"));
   await user.type(screen.getByLabelText("球員姓名"), "Serena");
   await user.selectOptions(screen.getByLabelText("巡迴"), "WTA");
   fetch.mockResolvedValue(response([serena]));
@@ -119,9 +120,9 @@ it("does not request invalid URL filters", () => {
 
 it("offers recovery for an out-of-range page", async () => {
   vi.stubGlobal("fetch", vi.fn().mockResolvedValue(response([], 1)));
-  mount("/players?page=999");
+  mount("/players?q=Roger&page=999");
   expect(await screen.findByText("頁碼超出結果範圍。")).toBeInTheDocument();
-  expect(screen.getByRole("link", { name: "回到第一頁" })).toHaveAttribute("href", "/players?page=0");
+  expect(screen.getByRole("link", { name: "回到第一頁" })).toHaveAttribute("href", "/players?q=Roger&page=0");
 });
 
 it("opens details and returns to the original search filters", async () => {
@@ -176,4 +177,10 @@ it("shows detail loading and permits retry after failure", async () => {
   expect(await screen.findByRole("alert")).toHaveTextContent("暫時無法取得資料");
   await user.click(screen.getByRole("button", { name: "重新載入" }));
   expect(await screen.findByRole("heading", { name: "Roger Federer" })).toBeInTheDocument();
+});
+
+it("does not search or display unnamed players before a name is entered", () => {
+  const fetch=vi.fn();vi.stubGlobal("fetch",fetch);mount("/players");
+  expect(screen.getByText("請輸入球員姓名後搜尋。")).toBeInTheDocument();
+  expect(fetch).not.toHaveBeenCalled();expect(screen.queryByRole("table")).not.toBeInTheDocument();
 });

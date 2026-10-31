@@ -1925,3 +1925,15 @@ python3 scripts/ops/budget_stack.py .local/backups/20261029T170402Z-6f9e68/manif
 ```
 
 瀏覽器需Playwright Chromium與系統相依；本機暫解壓libgbm的環境使用上述指令的LD_LIBRARY_PATH前綴，詳 [研究交付／使用指南](21-visualization-research-delivery.md)。受限測量保留target_met/misses，即使延遲未達標仍完成CSP與記憶體量測，不把未達標改成通過。報告：[完整驗收](reports/2026-10-31-visualization-release.json)、[查詢計畫](reports/2026-10-31-research-query-plans.json)。本階段分支feat/visualization-lab，尚未合併main／推送／正式部署；Phase10的正式主機、HTTPS、異地備份與回滾仍需另行驗收。
+
+## 2026-10-31：圖表與資料瀏覽修正
+
+修正圖表比例、Elo整數刻度與軸間距；所有表格提供欄位排序並明示本頁／已載入集合範圍；球員索引空白時不查詢；賽事API一次帶回姓名，圖表及表格不印球員或模型編號。後端446、前端64、Playwright18案及lint/build通過，原始資料與真實候選庫未寫入。瀏覽器暫存函式庫遺失及排序輔助文字造成手機溢出的修正、操作指令與排序限制見 [本輪修正文件](22-ui-refinements.md)。本輪尚未暫存或提交，使用者.vscode/settings.json保持原樣。
+
+### 同日後續補正：圖表高度與姓名選取
+
+補上首頁散點圖及進階配對矩陣高度；確認賽事姓名未提供是8081仍執行舊版後端、回應缺少新欄位，前端改明示重啟後端，不重匯資料。H2H與比較改用具debounce、鍵盤選取及巡迴隔離的姓名搜尋，禁止未選取／重複球員；舊網址仍解析姓名。前端68案、完整瀏覽器20案及lint/build通過。開發服務需終止並重跑 `dev: backend` 後重新整理頁面，操作及限制見 [修正文檔後續補正](22-ui-refinements.md#後續補正首頁圖表舊後端辨識與姓名搜尋)。本輪未暫存／提交，亦未停用使用者既有開發服務。
+
+### 圖表與姓名選取修正提交
+
+使用者已要求 commit，兩輪修正與驗收文件一併提交。前述「未提交」為修正當時狀態；本次提交前核對前端68案、瀏覽器20案、lint/build及既有後端446案通過紀錄，保留.vscode/settings.json，不推送或合併main。
