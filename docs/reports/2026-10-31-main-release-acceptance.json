@@ -463,8 +463,8 @@
   "baseline_browser_tests": 21,
   "model_contract_tests": 3,
   "acceptance_gate_tests": 4,
-  "remote_ci_status": "PENDING_AUTHENTICATION",
-  "remote_repository": "https://github.com/shuminchang/tennis-analytics",
+  "remote_ci_status": "SUCCEEDED",
+  "remote_repository": "git@github.com:shuminchang/tennis-analytics.git",
   "functional_resource_acceptance": "PASSED",
   "latency_slo": "NOT_MET",
   "measurement_scope": "isolated restored real backup; 832 MiB / 1 CPU service quotas, not whole-host or production acceptance",
@@ -473,5 +473,13 @@
     "scripts/ops/budget_stack.py": "52618984e4c22320979d19e5b1852f6a26f77b60c2853e6694bce874ef3365fe",
     "scripts/test/research_proxy_browser.mjs": "608480747db15dce6b1d2ea77e563458ec6ffd9628f9feefaae7315341cb5bd8",
     "scripts/test/release_report_checks.py": "8b917317bc69153fe7a03688e1835bd042d060951c2d4728b211d43916486774"
+  },
+  "remote_ci": {
+    "id": 41215224062,
+    "name": "Verify",
+    "head_sha": "3d316336ede01fe773db12542cab6572318000e8",
+    "status": "completed",
+    "conclusion": "success",
+    "html_url": "https://github.com/shuminchang/tennis-analytics/actions/runs/41215224062"
   }
 }

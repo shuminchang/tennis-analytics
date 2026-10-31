@@ -89,12 +89,33 @@ console及pageerror皆空；登入後勝率操作已由21案實際API端到端�
 原始證據在 `.local/verification/budget-2dba7733/`，未提交備份或帳號憑證。
 備份、容器、應用與測試瀏覽器都在本機；不是正式上線驗收。
 
-## GitHub CI 界線
+## SSH 推送與 GitHub CI
 
 使用者提供並授權使用 `https://github.com/shuminchang/tennis-analytics.git`，
-已設定origin，遠端讀取成功且目前沒有分支。
-WSL的HTTPS推送預檢尚缺GitHub登入；已沿用Windows既有Git Credential Manager作本專案helper，
-但非互動預檢未能完成，沒有讀取、輸出或要求使用者提供密碼／token。
-需操作者完成GitHub瀏覽器登入，才能推送與驗證workflow；本段不是CI通過紀錄。
+遠端讀取確認初始無分支；HTTPS缺少登入，因此依使用者要求改為SSH：
+
+```bash
+# 工作目錄：/home/shumin/tennis-analytics
+git remote set-url origin git@github.com:shuminchang/tennis-analytics.git
+ssh -T git@github.com
+git push -u origin main
+```
+
+SSH首次出現Permission denied(publickey)，檢查確認本機id_rsa公鑰有被送出，
+但GitHub未接受。操作者確認公鑰設定後，回傳
+`Hi shuminchang! You've successfully authenticated, but GitHub does not provide shell access.`。
+這是成功認證；GitHub不提供shell屬正常訊息。
+不讀取私鑰、不要求密碼或token、不重建或覆寫既有金鑰。
+先前HTTPS預檢嘗試的本專案credential helper已移除，SSH不需要該設定。
+
+agent隨後成功推送main並設定追蹤origin/main，提交為
+`3d316336ede01fe773db12542cab6572318000e8`。
+[Verify執行紀錄](https://github.com/shuminchang/tennis-analytics/actions/runs/41215224062)
+已完成且結論為success；[機器紀錄](reports/2026-10-31-github-ci.json)
+保存run、提交SHA及所有步驟結果，不將Dependabot更新工作誤認為Verify。
+遠端Java21／Node／Python環境、模型與驗收契約、維運檢查、Maven verify、
+npm ci／lint／test／build、Playwright與完整合成來源端到端測試皆成功。
+此紀錄驗收應用與工程提交3d31633；後續文件提交也會觸發相同CI。
+工程驗收本機紀錄已另提交3d31633並合併main。
 CI配置保留完整前後端驗證及獨立來源端到端測試，新增release_report_checks。
 正式部署、異地備份、正式主機資源及模型個別特徵增益仍不在本輪完成範圍。
